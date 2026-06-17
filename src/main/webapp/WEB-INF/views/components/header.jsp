@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<header style="background-color: white; border-bottom: 2px solid var(--elementi-principali); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
-    
+<header>
     <div class="logo">
         <a href="HomeServlet" style="text-decoration: none;">
-            <h2 style="color: var(--colore-primario); letter-spacing: 2px;">SÆNDWAVE</h2>
+            <h2>SÆNDWAVE</h2>
         </a>
     </div>
 

@@ -3,10 +3,11 @@
 
 /*font base*/
 h1, h2, h3 { font-family: 'Jost', sans-serif; font-weight: 300; }
+p { font-family: 'Inter', sans-serif; font-weight:200; }
 body { font-family: 'Inter', sans-serif; font-weight: 400; }
 
 /*variabili create con già i colori scelti*/
-root{
+:root{
 --colore-primario : #4134E7;
 --colore-secondario: #6A32E8;
 --sfondo-principale: #D9D9D9;
@@ -36,4 +37,38 @@ h1, h2, h3 {
 main {
     flex: 1; 
     padding: 20px;
+}
+
+p{
+	color: var(--colore-secondario);
+}
+
+header{
+	background-color: var(--sfondo-principale); 
+	border-bottom: 2px solid var(--elementi-principali); 
+	padding: 15px 30px; 
+	display: flex; 
+	justify-content: space-between; 
+	align-items: center;
+}
+
+.herobanner{
+	background-color: var(--sfondo-alternativo); 
+	padding: 50px; 
+	text-align: center; 
+	border-radius: 8px;
+}
+
+.plugin-in-evidenza{
+	margin-top: 40px;
+}
+
+button{
+	background-color: var(--colore-primario); 
+	color: white; 
+	border: none; 
+	padding: 12px 24px; 
+	margin-top: 20px; 
+	cursor: pointer; 
+	border-radius: 4px;
 }
