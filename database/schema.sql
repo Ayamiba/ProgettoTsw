@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS Contenuto;      -- Relazione Ordine-Prodotto
 DROP TABLE IF EXISTS Utilizzo;       -- Relazione MetodoPagamento-Utente
 DROP TABLE IF EXISTS Tipologia;      -- Relazione Prodotto-Categoria
 DROP TABLE IF EXISTS TracciaAudio;
+DROP TABLE IF EXISTS Recensione;
 DROP TABLE IF EXISTS Ordine;
 DROP TABLE IF EXISTS Prodotto;
 DROP TABLE IF EXISTS Categoria;

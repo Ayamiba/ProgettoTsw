@@ -15,7 +15,7 @@ public class OrdineBean implements Serializable {
 
     public OrdineBean() {}
 
-    public OrdineBean(int idOrdine, Date dataOrdine, float totale, String stato, String descrizione, Integer fKTraccia) {
+    public OrdineBean(int idOrdine, Date dataOrdine, float totale, String stato, String descrizione, int fKTraccia) {
         this.idOrdine = idOrdine;
         this.dataOrdine = dataOrdine;
         this.totale = totale;

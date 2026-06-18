@@ -1,4 +1,4 @@
-package model.traccia;
+package model.tracciaAudio;
 
 import java.io.Serializable;
 
