@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS saendwave;
 USE saendwave;
 
+DROP TABLE IF EXISTS Carrello;		 -- Relazione Utente-Prodotto
 DROP TABLE IF EXISTS Contenuto;      -- Relazione Ordine-Prodotto
 DROP TABLE IF EXISTS Utilizzo;       -- Relazione MetodoPagamento-Utente
 DROP TABLE IF EXISTS Tipologia;      -- Relazione Prodotto-Categoria
@@ -62,7 +63,7 @@ CREATE TABLE Ordine (
                         stato VARCHAR(20) NOT NULL,
                         descrizione TEXT,
                         FK_traccia INT NOT NULL,
-                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE SET NULL -- se la traccia viene cancellata l'ordine non si rompe
+                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
 );
 
 -- tabella Recensione
@@ -101,4 +102,13 @@ CREATE TABLE Tipologia (
                            PRIMARY KEY (FK_prodotto, FK_categoria),
                            FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
                            FOREIGN KEY (FK_categoria) REFERENCES Categoria(nome) ON DELETE CASCADE
+);
+
+-- tabella carrello (tra utente e prodotto)
+CREATE TABLE Carrello(
+                         FK_utente VARCHAR(25) NOT NULL,
+                         FK_prodotto INT NOT NULL,
+                         PRIMARY KEY(FK_utente, FK_prodotto),
+                         FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
+                         FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
 );
