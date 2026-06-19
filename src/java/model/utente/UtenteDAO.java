@@ -32,15 +32,13 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 	        	resultSet= statement.executeQuery();
 	        	
 	        	if(resultSet.next()) {
-	        		utente = new UtenteBean();
-	        				resultSet.getString("email");
-	        				resultSet.getString("nome");
-	        				resultSet.getString("cognome");
-	        				resultSet.getString("password");
-	        				resultSet.getTimestamp("data_nascita");
-	        				resultSet.getString("tipo");
-	      
-	            }
+	        	    utente = new UtenteBean();
+	        	    utente.setEmail(resultSet.getString("email"));
+	        	    utente.setNome(resultSet.getString("nome"));
+	        	    utente.setCognome(resultSet.getString("cognome"));
+	        	    utente.setPassword(resultSet.getString("password"));
+	        	    utente.setTipo(resultSet.getString("tipo"));
+	        	}
 	        } finally {
 	            try {
 	                if (resultSet != null) resultSet.close();

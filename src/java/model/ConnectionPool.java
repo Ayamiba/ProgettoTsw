@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ConnectionPool {
-    private static final String JDBC_URL = "jdbc:mysql://db:3306/saendwave"
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/saendwave"
             + "?useUnicode=true&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimecode=false&serverTimezone=UTC";
 
