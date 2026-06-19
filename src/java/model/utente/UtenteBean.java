@@ -1,7 +1,7 @@
 package model.utente;
 
 import java.io.Serializable; //serve a dire che gli oggetti di questa classe possono essere convertiti in un flusso di byte
-import java.sql.date;
+import java.sql.Date;
 
 public class UtenteBean implements Serializable {
     private static final long serialVersionUID = 1L; //serve per dare una versione all'oggetto che viene creato ed evitare che i dati vengano corrotti

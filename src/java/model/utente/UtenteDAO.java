@@ -11,12 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtenteDAO implements DAOInteface<UtenteBean, String> {
+public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 	
 	public UtenteDAO() {}
 	
 	@Override
-	public UtenteBean doRetrieveByKey(String email) {
+	public UtenteBean doRetrieveByKey(String email) throws SQLException {
 		 Connection connection = null;
 	        PreparedStatement statement = null;
 	        ResultSet resultSet = null;
@@ -32,16 +32,43 @@ public class UtenteDAO implements DAOInteface<UtenteBean, String> {
 	        	resultSet= statement.executeQuery();
 	        	
 	        	if(resultSet.next()) {
-	        		utente = new UtenteBean(
-	        				resultSet.getString("email"),
-	        				resultSet.getString("nome"),
-	        				resultSet.getString("cognome"),
-	        				resultSet.getString("password"),
-	        				resultSet.getTimestamp("data_nascita"),
-	        				resultSet.getString("tipo")
-	        				);
-	        	}
-	        } finally {}
-	        
+	        		utente = new UtenteBean();
+	        				resultSet.getString("email");
+	        				resultSet.getString("nome");
+	        				resultSet.getString("cognome");
+	        				resultSet.getString("password");
+	        				resultSet.getTimestamp("data_nascita");
+	        				resultSet.getString("tipo");
+	      
+	            }
+	        } finally {
+	            try {
+	                if (resultSet != null) resultSet.close();
+	            } finally {
+	                try {
+	                    if (statement != null) statement.close();
+	                } finally {
+	                    ConnectionPool.releaseConnection(connection);
+	                }
+	            }
+	        }
+	        return utente;
+	    }
+	
+	@Override
+	public List<UtenteBean> doRetrieveAll() throws SQLException {
+		return new ArrayList<>();
+	}
+
+	@Override
+	public void doSave(UtenteBean entity) throws SQLException {
+	}
+
+	@Override
+	public void doUpdate(UtenteBean entity) throws SQLException {
+	}
+
+	@Override
+	public void doDelete(String key) throws SQLException {
 	}
 }
