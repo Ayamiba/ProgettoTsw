@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class MetodoPagamentoBean implements Serializable{
 	private static final long serializableVersionUID=1L;
 	
-	private long numeroCarta; //orimary key
+	private long numeroCarta; //primary key
 	private int cvv;
 	private String nome;
 	private String cognome;
@@ -33,7 +33,7 @@ public class MetodoPagamentoBean implements Serializable{
 	}
 	
 	public String getCognome() {
-		return cognome
+		return cognome;
 	}
 	
 	//setters
@@ -49,7 +49,7 @@ public class MetodoPagamentoBean implements Serializable{
 		this.nome=nome;
 	}
 	
-	public void setCognome(Sting cognome) {
+	public void setCognome(String cognome) {
 		this.cognome=cognome;
 	}
 }

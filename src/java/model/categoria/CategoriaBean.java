@@ -41,7 +41,7 @@ public class CategoriaBean implements Serializable{
 		this.nome=nome;
 	}
 	
-	public void setStudio_tool(boolean studioTool) {
+	public void setStudioTool(boolean studioTool) {
 		this.studioTool=studioTool;
 	}
 	

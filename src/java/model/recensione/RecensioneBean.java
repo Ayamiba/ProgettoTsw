@@ -1,6 +1,7 @@
 package model.recensione;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class RecensioneBean implements Serializable{
 	private static long serializableVersionUID=1L;
