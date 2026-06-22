@@ -4,7 +4,8 @@ import model.ConnectionPool;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-// per il test di utente complilare con javac model\ConnectionPool.java model\DAOInterface.java model\utente\UtenteBean.java model\utente\UtenteDAO.java model\utente\TestDAOUtente.java
+//per il test di utente complilare con javac model\ConnectionPool.java model\DAOInterface.java model\ utente\UtenteBean.java model\ utente\UtenteDAO.java model\ utente\TestDAOUtente.java
+
 //e fare java -cp ".;C:\lib\mysql-connector-j-8.0.33.jar" model.utente.TestDAOUtente
 public class TestDAOUtente {
 

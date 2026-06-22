@@ -2,7 +2,7 @@ package model.tipologia;
 
 import java.io.Serializable;
 
-public class TipologiaBean implements Srializable{
+public class TipologiaBean implements Serializable{
 	private static long serializableVersionUID=1L;
 	
 	private int fkProdotto; //primary key
