@@ -59,7 +59,7 @@ public class TestDAOUtente {
         // 2. TEST doLogin
         System.out.println("\n--- 2. Test doLogin (Utente Corretto) ---");
         try {
-            UtenteBean loggedUser = utenteDAO.doLogin("luca.verdi@email.it", "verdiPass!");
+            UtenteBean loggedUser = utenteDAO.doRetrieveByLogin("luca.verdi@email.it", "verdiPass!");
             if (loggedUser != null) {
                 System.out.println("[SUCCESS] Login effettuato! Benvenuto " + loggedUser.getNome() + " Nato il: " + loggedUser.getDataNascita() + " [Ruolo: " + loggedUser.getTipo() + "]");
             } else {

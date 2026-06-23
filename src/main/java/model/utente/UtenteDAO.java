@@ -97,15 +97,15 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 		Connection connection = null;
 		PreparedStatement statement = null;
 
-		String query = "INSERT INTO Utente (email, nome, cognome, password, tipo) VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Utente (nome, cognome, email, password, data_nascita, tipo) VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			connection = ConnectionPool.getConnection();
 			statement = connection.prepareStatement(query);
 
-			statement.setString(1, utente.getEmail());
-			statement.setString(2, utente.getNome());
-			statement.setString(3, utente.getCognome());
+			statement.setString(3, utente.getEmail());
+			statement.setString(1, utente.getNome());
+			statement.setString(2, utente.getCognome());
 			statement.setString(4, utente.getPassword());
 			statement.setDate(5, utente.getDataNascita());
 			statement.setString(6, utente.getTipo());
@@ -170,44 +170,57 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 		}
 	}
 	
-	public UtenteBean doLogin(String email, String password) throws SQLException { //esegue una query filtrando contemporaneamente sia per email che per password e restituisce i dati dell utente
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		UtenteBean utente = null;
+	//questo metodo restituisce l'utente se esso è presente, null se non lo è
+	public UtenteBean doRetrieveByLogin(String email, String password) throws SQLException {
+		System.out.println("--- [DEBUG DAO START] ---");
+	    System.out.println("Email ricevuta dal form: '" + email + "'");
+	    System.out.println("Password ricevuta dal form: '" + password + "'");
 
-		String query = "SELECT email, nome, cognome, password, tipo FROM Utente WHERE email = ? AND password = ?";
+	    if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+	        System.out.println("DEBUG DAO: Email o Password vuote! Esco subito.");
+	        return null;
+	    }
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    ResultSet resultSet = null;
+	    UtenteBean utente=null;
 
-		try {
-			connection = ConnectionPool.getConnection();
-			statement = connection.prepareStatement(query);
+	    String query = "SELECT * FROM Utente WHERE email = ? AND password = ?"; //restituisce la riga corrispondente
 
-			statement.setString(1, email);
-			statement.setString(2, password);
+	    try {
+	        connection = ConnectionPool.getConnection();
+	        statement = connection.prepareStatement(query);
+	        
+	        statement.setString(1, email);
+	        statement.setString(2, password);
 
-			resultSet = statement.executeQuery();
+	        resultSet = statement.executeQuery();
 
-			if (resultSet.next()) {
-				utente = new UtenteBean();
+	        // Se nel DB c'è una riga entrerà nell if
+	        if (resultSet.next()) { //se la select produce una riga in output mettiamo a true la variabile
+	            utente = new UtenteBean();
+	            //settiamo tutti i valori di quell'utente nell'oggetto utente
+	            utente = new UtenteBean();
 				utente.setEmail(resultSet.getString("email"));
 				utente.setNome(resultSet.getString("nome"));
 				utente.setCognome(resultSet.getString("cognome"));
 				utente.setPassword(resultSet.getString("password"));
 				utente.setDataNascita(resultSet.getDate("data_nascita"));
 				utente.setTipo(resultSet.getString("tipo"));
-			}
-		} finally {
-			try {
-				if (resultSet != null) resultSet.close();
-			} finally {
-				try {
-					if (statement != null) statement.close();
-				} finally {
-					ConnectionPool.releaseConnection(connection);
-				}
-			}
-		}
-		return utente;
-	}
+	        }
+	        
+	    } finally {
+	        try {
+	            if (resultSet != null) resultSet.close();
+	        } finally {
+	            try {
+	                if (statement != null) statement.close();
+	            } finally {
+	                ConnectionPool.releaseConnection(connection);
+	            }
+	        }
+	    }
 
+	    return utente; // Ritornerà l'utente se viene trovato, 'null' se non trovato
+	}
 }

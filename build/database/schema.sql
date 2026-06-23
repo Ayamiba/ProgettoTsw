@@ -18,10 +18,10 @@ CREATE TABLE Utente (
                         nome VARCHAR(25) NOT NULL,
                         cognome VARCHAR(25) NOT NULL,
                         email VARCHAR(25) PRIMARY KEY,
-                        password VARCHAR(25) NOT NULL,
+                        password VARCHAR(100) NOT NULL,
                         data_nascita DATE NOT NULL,
                         tipo VARCHAR(25) NOT NULL DEFAULT 'utente non registrato',
-                        CHECK (tipo IN ('utente non registrato', 'utente registrato', 'professionista', 'admin'))
+                        CHECK (tipo IN ('utente registrato', 'professionista', 'admin'))
 );
 
 -- tabella MetodoPagamento

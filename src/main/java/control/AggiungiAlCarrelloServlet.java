@@ -1,5 +1,4 @@
-//questa Servlet ci servirà per aggiungere i prodotti al carrello
-//in base al fatto che l'utente sia loggato o meno
+//questa Servlet ci servirà per aggiungere i prodotti al carrello in base al fatto che l'utente sia loggato o meno
 //in LoginServlet poi ci occuperemo di trasferire che cose che stanno nei cookie dell'utente quando si registrerà
 package control;
 import model.carrello.*;
@@ -56,12 +55,12 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 if (vecchioContenuto.isEmpty()) {
                     nuovoContenuto = idProdottoStr;
                 } else {
-                    nuovoContenuto = vecchioContenuto + "-" + idProdottoStr; // Diventa "3-12"
+                    nuovoContenuto = vecchioContenuto + "-" + idProdottoStr; // crea una stringa del tipo 3-6-8 che corrispondono agli id dei prodotti
                 }
                 
                 // Creiamo o aggiorniamo il cookie sul browser dell'utente
                 Cookie cookieCarrello = new Cookie("carrello_ospite", nuovoContenuto);
-                cookieCarrello.setMaxAge(60 * 60 * 24 * 7); // Il carrello dura 7 giorni sul PC dell'ospite
+                cookieCarrello.setMaxAge(60 * 60 * 24 * 7); // Il carrello dura 7 giorni sul browser
                 cookieCarrello.setPath(request.getContextPath()); // Rende il cookie leggibile in tutto il sito
                 
                 response.addCookie(cookieCarrello);
