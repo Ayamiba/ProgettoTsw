@@ -35,8 +35,8 @@ public class CatalogoServlet extends HttpServlet {
 	        System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
 	        e.printStackTrace();
 	    }
-		prodottoDAO=new ProdottoDAO();
-	}
+		prodottoDAO=new ProdottoDAO(); 
+	} 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ProdottoDAO prodottoDAO = new ProdottoDAO();

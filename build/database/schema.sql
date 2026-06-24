@@ -45,7 +45,8 @@ CREATE TABLE Prodotto (
                           ID_prodotto INT AUTO_INCREMENT PRIMARY KEY,
                           nome VARCHAR(100) NOT NULL,
                           prezzo FLOAT NOT NULL,
-                          descrizione TEXT NOT NULL
+                          descrizione TEXT NOT NULL,
+                          immagine VARCHAR(50) NOT NULL
 );
 
 -- tabella Traccia

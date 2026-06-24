@@ -9,6 +9,7 @@ public class ProdottoBean implements Serializable {
     private String nome;
     private float prezzo;
     private String descrizione;
+    private String immagine;
 
     public ProdottoBean() {}
 
@@ -38,6 +39,7 @@ public class ProdottoBean implements Serializable {
     public float getPrezzo() { 
     	return prezzo; 
     	}
+    
     public void setPrezzo(float prezzo) { 
     	this.prezzo = prezzo; 
     	}
@@ -49,6 +51,14 @@ public class ProdottoBean implements Serializable {
     public void setDescrizione(String descrizione) { 
     	this.descrizione = descrizione; 
     	}
+    
+    public String getImmagine() {
+        return immagine;
+    }
+
+    public void setImmagine(String immagine) {
+        this.immagine = immagine;
+    }
 
     @Override
     public String toString() {
