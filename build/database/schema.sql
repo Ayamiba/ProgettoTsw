@@ -5,9 +5,9 @@ DROP TABLE IF EXISTS Carrello;		 -- Relazione Utente-Prodotto
 DROP TABLE IF EXISTS Contenuto;      -- Relazione Ordine-Prodotto
 DROP TABLE IF EXISTS Utilizzo;       -- Relazione MetodoPagamento-Utente
 DROP TABLE IF EXISTS Tipologia;      -- Relazione Prodotto-Categoria
-DROP TABLE IF EXISTS TracciaAudio;
 DROP TABLE IF EXISTS Recensione;
 DROP TABLE IF EXISTS Ordine;
+DROP TABLE IF EXISTS TracciaAudio;
 DROP TABLE IF EXISTS Prodotto;
 DROP TABLE IF EXISTS Categoria;
 DROP TABLE IF EXISTS MetodoPagamento;
@@ -18,7 +18,7 @@ CREATE TABLE Utente (
                         nome VARCHAR(25) NOT NULL,
                         cognome VARCHAR(25) NOT NULL,
                         email VARCHAR(25) PRIMARY KEY,
-                        password VARCHAR(100) NOT NULL,
+                        password VARCHAR(255) NOT NULL,
                         data_nascita DATE NOT NULL,
                         tipo VARCHAR(25) NOT NULL DEFAULT 'utente non registrato',
                         CHECK (tipo IN ('utente registrato', 'professionista', 'admin'))

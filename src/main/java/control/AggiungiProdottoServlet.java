@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part; // Serve per gestire il file caricato
+import javax.servlet.http.Part;
 
 import model.prodotto.ProdottoDAO;
 import model.ConnectionPool;
@@ -17,61 +17,93 @@ import model.prodotto.ProdottoBean;
 
 @WebServlet("/AggiungiProdottoServlet")
 @MultipartConfig(
-	    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-	    maxFileSize = 1024 * 1024 * 10,      // 10MB massimo per singolo file
-	    maxRequestSize = 1024 * 1024 * 50    // 50MB massimo per l'intero form
-	)
-
-public class AggiungiProdottoServlet extends HttpServlet{
-	private static final long serialVersionUID = 1L;
+    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+    maxFileSize = 1024 * 1024 * 10,      // 10MB
+    maxRequestSize = 1024 * 1024 * 50    // 50MB
+)
+public class AggiungiProdottoServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private ProdottoDAO prodottoDAO;
 
     public void init() throws ServletException {
-		super.init();
-		try {
-	        ConnectionPool.init(5);
-	    } catch (SQLException e) {
-	        System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
-	        e.printStackTrace();
-	    }
-		prodottoDAO=new ProdottoDAO(); 
-	} 
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-    	doPost(request, response);
-    }
-    
+        super.init();
+        try {
+            ConnectionPool.init(5);
+        } catch (SQLException e) {
+            System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
+            e.printStackTrace();
+        }
+        prodottoDAO = new ProdottoDAO(); 
+    } 
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/AggiungiProdotto.jsp").forward(request, response);
+    } 
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	//recupero dati dal form
-    	String nome = request.getParameter("nome");
+        request.setCharacterEncoding("UTF-8");
+
+        // 1. Leggiamo i dati dal form
+        String nome = request.getParameter("nome");
         String descrizione = request.getParameter("descrizione");
         float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-        
-        //prendere l'immagine dal form
-     // 2. Gestione del File Immagine
-        Part filePart = request.getPart("foto"); // Prende il campo con nome="foto"' del form
-        String nomeImmagine = filePart.getSubmittedFileName(); // Nome originale del file
-        //viene usata la cartella webapp/img/prodotti
-        // File.separator mette la barra corretta a seconda se sei su Windows (\) o Mac/Linux (/)
-        String uploadPath = request.getServletContext().getRealPath("") + File.separator + "img" + File.separator + "prodotti";
-        File uploadDir = new File(uploadPath);
-        //se la cartella non esiste la crea
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs(); 
+
+        // 2. Gestiamo l'immagine
+        Part filePart = request.getPart("foto");
+        String nomeOriginale = filePart.getSubmittedFileName();
+        String nomeImmagineUnivoco = "default.jpg"; // Nome di sicurezza
+
+        if (nomeOriginale != null && !nomeOriginale.isEmpty()) {
+            String estensione = "";
+            int index = nomeOriginale.lastIndexOf('.');
+            if (index > 0) {
+                estensione = nomeOriginale.substring(index);
+                // Puliamo gli spazi dal nome originale
+                nomeOriginale = nomeOriginale.substring(0, index).replaceAll("\\s+", "_"); 
+            }
+            // Creiamo il nome con i millisecondi
+            nomeImmagineUnivoco = System.currentTimeMillis() + "_" + nomeOriginale + estensione;
+
+            // -------------------------------------------------------------
+            // TECNICA DEL DOPPIO SALVATAGGIO
+            // -------------------------------------------------------------
+            // A. Nel server Tomcat (per vederla subito)
+            String serverPath = request.getServletContext().getRealPath("/img/prodotti");
+            File serverDir = new File(serverPath);
+            if (!serverDir.exists()) serverDir.mkdirs();
+            File serverFile = new File(serverDir, nomeImmagineUnivoco);
+
+            // B. Nel tuo Workspace Eclipse (per non perderla mai)
+            String workspacePath = "C:/Users/gvarr/OneDrive/Desktop/Projects/TSW/ProgettoTsw/src/main/webapp/img/prodotti";
+            File workspaceDir = new File(workspacePath);
+            if (!workspaceDir.exists()) workspaceDir.mkdirs();
+            File workspaceFile = new File(workspaceDir, nomeImmagineUnivoco);
+
+            try (java.io.InputStream input = filePart.getInputStream()) {
+                // Copiamo in entrambe le cartelle
+                java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                java.nio.file.Files.copy(serverFile.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                
+                System.out.println("✅ NUOVO PRODOTTO - MAGIA RIUSCITA!");
+                System.out.println("-> Workspace: " + workspaceFile.getAbsolutePath());
+            } catch (IOException e) {
+                System.out.println("❌ Errore durante il salvataggio dell'immagine.");
+                e.printStackTrace();
+                throw e;
+            }
         }
-        // Scriviamo il file usando il suo nome originale
-        String percorsoCompletoFile = uploadPath + File.separator + nomeImmagine;
-        filePart.write(percorsoCompletoFile);
-        
+
+        // 3. Creiamo il Bean e lo passiamo al DAO
         ProdottoBean nuovoProdotto = new ProdottoBean();
         nuovoProdotto.setNome(nome);
         nuovoProdotto.setDescrizione(descrizione);
         nuovoProdotto.setPrezzo(prezzo);
-        nuovoProdotto.setImmagine(nomeImmagine); 
+        nuovoProdotto.setImmagine(nomeImmagineUnivoco); 
 
         try {
             prodottoDAO.doSave(nuovoProdotto);
-            response.sendRedirect("paginaAdmin.jsp");
+            // Rimando alla pagina di aggiunta con il messaggio di successo!
+            response.sendRedirect("AggiungiProdotto.jsp?messaggio=Prodotto aggiunto con successo!");
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendRedirect("errore500.jsp");

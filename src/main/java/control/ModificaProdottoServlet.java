@@ -85,16 +85,48 @@ public class ModificaProdottoServlet extends HttpServlet {
             prodottoAggiornato.setDescrizione(descrizione);
             prodottoAggiornato.setPrezzo(prezzo);
 
-            // Se ha caricato una nuova foto la salviamo usando il nome modificato univoco
+         // Se ha caricato una nuova foto la salviamo usando la Tecnica del Doppio Salvataggio
             if (nomeImmagineUnivoco != null) {
-            	//String uploadPath = "ProgettoTsw\\src\\main\\webapp\\img\\prodotti";
-            	String uploadPath = "C:" + File.separator +  "img" + File.separator + "prodotti";
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) uploadDir.mkdirs();
+                
+                // -------------------------------------------------------------
+                // PERCORSO 1: Cartella del Server (Per vedere la foto SUBITO)
+                // -------------------------------------------------------------
+                String serverPath = request.getServletContext().getRealPath("/img/prodotti");
+                File serverDir = new File(serverPath);
+                if (!serverDir.exists()) serverDir.mkdirs();
+                File serverFile = new File(serverDir, nomeImmagineUnivoco);
 
-                // Usiamo nomeImmagineUnivoco per la scrittura fisica del file
-                filePart.write(uploadPath + File.separator + nomeImmagineUnivoco);
+                // -------------------------------------------------------------
+                // PERCORSO 2: Il tuo PC (Per NON PERDERE la foto al riavvio)
+                // -------------------------------------------------------------
+                String workspacePath = "C:/Users/gvarr/OneDrive/Desktop/Projects/TSW/ProgettoTsw/src/main/webapp/img/prodotti";
+                File workspaceDir = new File(workspacePath);
+                if (!workspaceDir.exists()) workspaceDir.mkdirs();
+                File workspaceFile = new File(workspaceDir, nomeImmagineUnivoco);
+
+                // Eseguiamo il salvataggio
+                try (java.io.InputStream input = filePart.getInputStream()) {
+                    
+                    // 1. Salviamo prima nel server
+                    java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    
+                    // 2. Poi cloniamo il file dal server al tuo Workspace
+                    java.nio.file.Files.copy(serverFile.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    
+                    // Stampiamo nella console per avere la certezza assoluta
+                    System.out.println("✅ MAGIA RIUSCITA!");
+                    System.out.println("-> Salvata per il web in: " + serverFile.getAbsolutePath());
+                    System.out.println("-> Salvata per sempre in: " + workspaceFile.getAbsolutePath());
+                    
+                } catch (IOException e) {
+                    System.out.println("❌ Errore critico durante il doppio salvataggio.");
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                // Aggiorniamo il Bean con il nome
                 prodottoAggiornato.setImmagine(nomeImmagineUnivoco);
+
             } else {
                 // Altrimenti teniamo quella vecchia
                 prodottoAggiornato.setImmagine(prodottoEsistente.getImmagine());
