@@ -1,4 +1,4 @@
-package control;
+/*package control;
 
 import model.utente.UtenteBean;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 //tutte le servlet e le JSP da proteggere
-@WebFilter(urlPatterns = {"/AdminUpdateProdotto", "/AdminDeleteProdotto", "/AdminAddProdotto", "/paginaAdmin.jsp"})
+@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/AggiungiProdotto.jsp", "/ModificaProdottoServlet", "/ModificaProdotto.jsp","/EliminaProdottoServlet","/EliminaProdotto.jsp"})
 public class AdminFilter implements Filter{
 	//Filterchain serve per dare conferma che il controllo sia andato a buon fine
 	@Override
@@ -46,3 +46,4 @@ public class AdminFilter implements Filter{
         }
 	}
 }
+*/

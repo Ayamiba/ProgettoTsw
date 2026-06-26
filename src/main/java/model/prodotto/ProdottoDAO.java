@@ -281,8 +281,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             statement.setString(1, prodotto.getNome());
             statement.setFloat(2, prodotto.getPrezzo());
             statement.setString(3, prodotto.getDescrizione());
-            statement.setString(5, prodotto.getImmagine());
-            statement.setInt(4, prodotto.getIdProdotto());
+            statement.setString(4, prodotto.getImmagine());
+            statement.setInt(5, prodotto.getIdProdotto());
 
             statement.executeUpdate();
         } finally {
