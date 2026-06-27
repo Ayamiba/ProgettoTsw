@@ -92,9 +92,10 @@ CREATE TABLE Utilizzo (
 
 -- tabella Contenuto (tra ordine e prodotto)
 CREATE TABLE Contenuto (
+						   ID_riga_contenuto INT AUTO_INCREMENT PRIMARY KEY,
                            FK_ordine INT NOT NULL,
                            FK_prodotto INT NOT NULL,
-                           PRIMARY KEY (FK_ordine, FK_prodotto),
+                           posizione_catena INT NOT NULL,
                            FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE,
                            FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE
 );
@@ -110,9 +111,9 @@ CREATE TABLE Tipologia (
 
 -- tabella carrello (tra utente e prodotto)
 CREATE TABLE Carrello(
-                         FK_utente VARCHAR(25) NOT NULL,
-                         FK_prodotto INT NOT NULL,
-                         PRIMARY KEY(FK_utente, FK_prodotto),
-                         FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
-                         FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
+    					   ID_riga_carrello INT AUTO_INCREMENT PRIMARY KEY,
+						   FK_utente VARCHAR(25) NOT NULL,
+						   FK_prodotto INT NOT NULL,
+						   FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
+						   FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
 );

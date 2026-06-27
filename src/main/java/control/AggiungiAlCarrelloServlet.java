@@ -51,11 +51,25 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 }
                 
                 // Uniamo il vecchio contenuto del carrello con il nuovo ID prodotto
-                String nuovoContenuto = "";
-                if (vecchioContenuto.isEmpty()) {
-                    nuovoContenuto = idProdottoStr;
-                } else {
-                    nuovoContenuto = vecchioContenuto + "-" + idProdottoStr; // crea una stringa del tipo 3-6-8 che corrispondono agli id dei prodotti
+                boolean giaPresente = false;
+                if (!vecchioContenuto.isEmpty()) {
+                    String[] idEsistenti = vecchioContenuto.split("-");
+                    for (String id : idEsistenti) {
+                        if (id.equals(idProdottoStr)) {
+                            giaPresente = true;
+                            break;
+                        }
+                    }
+                }
+                
+                String nuovoContenuto = vecchioContenuto;
+                // Aggiungiamo il prodotto al cookie SOLO se non c'era già
+                if (!giaPresente) {
+                    if (vecchioContenuto.isEmpty()) {
+                        nuovoContenuto = idProdottoStr;
+                    } else {
+                        nuovoContenuto = vecchioContenuto + "-" + idProdottoStr;
+                    }
                 }
                 
                 // Creiamo o aggiorniamo il cookie sul browser dell'utente
