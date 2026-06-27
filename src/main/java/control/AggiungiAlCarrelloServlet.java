@@ -36,52 +36,36 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 }
             } else {
                 // CASO B: L'utente è un ospite -> Aggiorniamo o creiamo il COOKIE
-                Cookie[] cookies = request.getCookies();
+            	Cookie[] cookies = request.getCookies();
                 String vecchioContenuto = "";
-                Cookie vecchioCookie = null;
                 
                 if (cookies != null) {
                     for (Cookie c : cookies) {
                         if (c.getName().equals("carrello_ospite")) {
                             vecchioContenuto = c.getValue();
-                            vecchioCookie = c;
                             break;
                         }
                     }
                 }
                 
-                // Uniamo il vecchio contenuto del carrello con il nuovo ID prodotto
-                boolean giaPresente = false;
-                if (!vecchioContenuto.isEmpty()) {
-                    String[] idEsistenti = vecchioContenuto.split("-");
-                    for (String id : idEsistenti) {
-                        if (id.equals(idProdottoStr)) {
-                            giaPresente = true;
-                            break;
-                        }
-                    }
-                }
-                
-                String nuovoContenuto = vecchioContenuto;
-                // Aggiungiamo il prodotto al cookie SOLO se non c'era già
-                if (!giaPresente) {
-                    if (vecchioContenuto.isEmpty()) {
-                        nuovoContenuto = idProdottoStr;
-                    } else {
-                        nuovoContenuto = vecchioContenuto + "-" + idProdottoStr;
-                    }
+                // Concatenazione libera: se c'era già roba, aggiungiamo un trattino e il nuovo ID
+                String nuovoContenuto = "";
+                if (vecchioContenuto.isEmpty()) {
+                    nuovoContenuto = idProdottoStr;
+                } else {
+                    nuovoContenuto = vecchioContenuto + "-" + idProdottoStr;
                 }
                 
                 // Creiamo o aggiorniamo il cookie sul browser dell'utente
                 Cookie cookieCarrello = new Cookie("carrello_ospite", nuovoContenuto);
-                cookieCarrello.setMaxAge(60 * 60 * 24 * 7); // Il carrello dura 7 giorni sul browser
-                cookieCarrello.setPath(request.getContextPath()); // Rende il cookie leggibile in tutto il sito
+                cookieCarrello.setMaxAge(60 * 60 * 24 * 7); // 7 giorni
+                cookieCarrello.setPath(request.getContextPath()); 
                 
                 response.addCookie(cookieCarrello);
             }
         }
         
-        // Una volta aggiunto il prodotto, reindirizziamo l'utente alla schermata del carrello
+        // Reindirizziamo l'utente alla schermata del carrello
         response.sendRedirect("CarrelloServlet");
     }
 

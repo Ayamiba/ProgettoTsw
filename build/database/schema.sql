@@ -67,7 +67,9 @@ CREATE TABLE Ordine (
                         stato VARCHAR(20) NOT NULL,
                         descrizione TEXT,
                         FK_traccia INT NOT NULL,
-                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
+                        FK_metodo_pagamento BIGINT,
+                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT, -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
+                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT --il metodo può essere eliminato dopo aver effettuato l'ordine
 );
 
 -- tabella Recensione
