@@ -13,11 +13,12 @@ public class ProdottoBean implements Serializable {
 
     public ProdottoBean() {}
 
-    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione) {
+    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione, String immagine) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.prezzo = prezzo;
         this.descrizione = descrizione;
+        this.immagine=immagine;
     }
 
     public int getIdProdotto() { 

@@ -24,7 +24,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         ResultSet resultSet = null;
         OrdineBean ordine = null;
 
-        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia FROM Ordine WHERE ID_ordine = ?";
+        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento FROM Ordine WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -41,6 +41,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setStato(resultSet.getString("stato"));
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -59,7 +60,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia FROM Ordine";
+        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento FROM Ordine";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -74,6 +75,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setStato(resultSet.getString("stato"));
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
                 ordini.add(ordine);
             }
         } finally {
@@ -91,7 +93,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO Ordine (ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Ordine (ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -103,6 +105,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setString(4, ordine.getStato());
             statement.setString(5, ordine.getDescrizione());
             statement.setInt(6, ordine.getfKTraccia());
+            statement.setLong(7, ordine.getfKMetodoPagamento());
 
             statement.executeUpdate();
         } finally {
@@ -117,7 +120,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ? WHERE ID_ordine = ?";
+        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ?, FK_metodo_pagamento = ? WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -129,6 +132,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setString(4, ordine.getDescrizione());
             statement.setInt(5, ordine.getfKTraccia());
             statement.setInt(6, ordine.getIdOrdine());
+            statement.setLong(7, ordine.getfKMetodoPagamento());
 
             statement.executeUpdate();
         } finally {

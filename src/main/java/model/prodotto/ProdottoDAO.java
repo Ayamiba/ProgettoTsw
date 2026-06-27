@@ -163,6 +163,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     			prodotto.setNome(resultSet.getString("nome"));
     			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
     			prodotto.setDescrizione(resultSet.getString("descrizione"));
+    			prodotto.setImmagine(resultSet.getString("immagine"));
     			prodotti.add(prodotto);
             }
         } finally {
