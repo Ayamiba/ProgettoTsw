@@ -163,4 +163,77 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             }
         }
     }
-}
+    
+    //questo metodo ci restituisce la lista contenente gli ordini presi dal database con le date in quel range
+    public List <OrdineBean> doRetrieveByIntervalloData(java.sql.Date dataInizio, java.sql.Date dataFine) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<OrdineBean> lista = new ArrayList<>();
+
+        String query = "SELECT * FROM Ordine WHERE data_ordine BETWEEN ? AND ? ORDER BY data_ordine DESC";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, dataInizio);
+            statement.setDate(2, dataFine);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(resultSet.getInt("ID_ordine"));
+                ordine.setDataOrdine(resultSet.getDate("data_ordine"));
+                ordine.setTotale(resultSet.getFloat("totale"));
+                ordine.setStato(resultSet.getString("stato"));
+                ordine.setDescrizione(resultSet.getString("descrizione"));
+                ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                lista.add(ordine);
+            }
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            ConnectionPool.releaseConnection(connection);
+        }
+        return lista;
+    }
+    
+    //questo metodo permette di ottenere una lista contenente gli ordini fatti da un dato utente (passando l'id) usando la struttura del nostro database, quindi passando per metodo pagamento
+    public List<OrdineBean> doRetrieveByCliente(String idCliente) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<OrdineBean> lista = new ArrayList<>();
+        
+        //la query unisce ordine e metodo pagamento per risalire all'utente che ha fatto l ordine
+        String query = "SELECT * FROM Ordine o " +
+                "INNER JOIN metodopagamento m ON o.FK_metodo_pagamento = m.numero_carta " + 
+                "WHERE m.FK_utente = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, idCliente); 
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(resultSet.getInt("ID_ordine"));
+                ordine.setDataOrdine(resultSet.getDate("data_ordine"));
+                ordine.setTotale(resultSet.getFloat("totale"));
+                ordine.setStato(resultSet.getString("stato"));
+                ordine.setDescrizione(resultSet.getString("descrizione"));
+                ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                lista.add(ordine);
+            }
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            ConnectionPool.releaseConnection(connection);
+        }
+        return lista;
+    }
+    
+    }

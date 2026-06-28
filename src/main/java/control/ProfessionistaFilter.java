@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 //tutte le servlet e le JSP da proteggere
-@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/AggiungiProdotto.jsp", "/ModificaProdottoServlet", "/ModificaProdotto.jsp","/EliminaProdottoServlet","/EliminaProdotto.jsp","/VisualizzaOrdiniAdmin.jsp","/VisualizzaOrdiniAdminServlet", "/paginaAdmin.jsp"})
-public class AdminFilter implements Filter{
+@WebFilter(urlPatterns = {"/CheckServlet", "/paginaProfessionista.jsp"})
+public class ProfessionistaFilter implements Filter{
 	//Filterchain serve per dare conferma che il controllo sia andato a buon fine
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)throws IOException, ServletException {
@@ -26,23 +26,24 @@ public class AdminFilter implements Filter{
         //recuperiamo la sessione
         HttpSession sessione= httpRequest.getSession(false);
         //creiamo un booleano isAdmin
-        boolean isAdmin=false;
+        boolean isProfessionista=false;
         
         //se la sessione è diversa da null creiamo un oggetto UtenteBean dal quale recuperiamo il tipo
         if(sessione != null) {
         	UtenteBean utenteCorrente= (UtenteBean) sessione.getAttribute("user");
-        	if(utenteCorrente != null && "admin".equals(utenteCorrente.getTipo())) {
-        		isAdmin= true;
+        	if(utenteCorrente != null && "professionista".equals(utenteCorrente.getTipo())) {
+        		isProfessionista= true;
         	}		  			
         }
-        //Se l'utente non è admin non ha i permessi 
-        if(isAdmin==false) {
+        //Se l'utente non è un professionista non ha i permessi 
+        if(isProfessionista==false) {
         	System.out.println("L'utente non è autorizzato");
         	httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
         }
         else {
-        	//conferma che utente è admin
+        	//conferma che utente è un professionista
         	chain.doFilter(request, response);
         }
 	}
 } 
+

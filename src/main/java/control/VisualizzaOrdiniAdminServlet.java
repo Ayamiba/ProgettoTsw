@@ -45,13 +45,36 @@ public class VisualizzaOrdiniAdminServlet extends HttpServlet{
 
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        request.setCharacterEncoding("UTF-8");
-	        
+	        //nella jsp ci sarà un input type=hidden di name=azione e in base al value chiamaremo un doRetrieve diverso
+	        String azione = request.getParameter("azione"); //azione corrisponderà al value del bottone
 	        List<OrdineBean> listaOrdini=null;
 	        try {
-	        listaOrdini= ordineDAO.doRetrieveAll();
-	        request.setAttribute("listaOrdini", listaOrdini); //per passare alla pagina jsp
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/VisualizzaOrdiniAdmin.jsp");     
-        	dispatcher.forward(request, response);
+	            if (azione == null || azione.equals("tutti")) { //se l'azione è tutti facciamo la doRetrieveAll
+	                listaOrdini = ordineDAO.doRetrieveAll();
+	            } 
+	            else if (azione.equals("filtraDate")) { //se l'azione è filtraDate prendiamo i due parametri e li passiamo a doRetrieveByIntervalloData
+	                String inizioStr = request.getParameter("dataInizio");
+	                String fineStr = request.getParameter("dataFine");
+	                
+	                if (inizioStr != null && !inizioStr.isEmpty() && fineStr != null && !fineStr.isEmpty()) {
+	                    java.sql.Date dataInizio = java.sql.Date.valueOf(inizioStr); // Converte "YYYY-MM-DD" in java.sql.Date
+	                    java.sql.Date dataFine = java.sql.Date.valueOf(fineStr);
+	                    listaOrdini = ordineDAO.doRetrieveByIntervalloData(dataInizio, dataFine);
+	                } else {
+	                    listaOrdini = ordineDAO.doRetrieveAll(); // Se vuoto, mostra tutti
+	                }
+	            } 
+	            else if (azione.equals("filtraCliente")) { //se value è filtra cliente prendermo dal form la mail che l admin ha inserito e la passiamo a doRetrieveByCliente
+	                String idCliente = request.getParameter("idCliente");
+	                if (idCliente != null && !idCliente.trim().isEmpty()) {
+	                    listaOrdini = ordineDAO.doRetrieveByCliente(idCliente.trim());
+	                } else {
+	                    listaOrdini = ordineDAO.doRetrieveAll();
+	                }
+	            }
+
+	            request.setAttribute("listaOrdini", listaOrdini);
+	            request.getRequestDispatcher("/VisualizzaOrdiniAdmin.jsp").forward(request, response);
         } catch (SQLException e) {
         	e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il caricamento del catalogo.");

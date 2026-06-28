@@ -183,4 +183,24 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         }
         return tracce;
     }
+    
+    public void doUpdateCheck(boolean check, int id) throws SQLException{
+    	Connection connection = null;
+        PreparedStatement statement = null;
+
+        String query ="UPDATE TracciaAudio SET `check`= ? WHERE ID_traccia = ?";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+
+            statement.setBoolean(1, check);
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        } finally {
+            try { if (statement != null) statement.close(); } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
+        }
+        }
 }
