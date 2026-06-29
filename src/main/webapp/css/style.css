@@ -159,22 +159,47 @@ button{
 .user-greeting { color: #6A32E8; font-weight: bold; }
 
 .dropdown-suggerimenti {
-	position:absolute;
-	top: 100%;
-	width: 100%;
-	display: none;
-	padding: 10px;
-	max-height: 250px;
-}
-.dropdown-suggerimenti li {
-	padding: 10 px;
-	cursor: pointer;
-	text-align: left;
-}
-dropdown-suggerimenti li:hover {
-	background-color: #f0f0f0;
+    position: absolute;
+    top: 100%; /* Si attacca esattamente sotto la barra */
+    left: 0;
+    width: 100%;
+    display: none; /* Gestito dal JavaScript */
+    
+    /* FIX FONDAMENTALI PER RENDERLO VISIBILE */
+    background-color: white; 
+    z-index: 1000; /* Lo forza a stare "sopra" a tutto il resto della pagina */
+    
+    /* ESTETICA */
+    list-style: none; /* Rimuove i pallini classici delle liste HTML */
+    margin: 0;
+    padding: 0;
+    border: 1.5px solid #e0e0e0;
+    border-top: none; /* Rimuove il bordo alto per fondersi con la barra di ricerca */
+    border-radius: 0 0 20px 20px; 
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+    max-height: 250px;
+    overflow-y: auto; /* Aggiunge la rotellina di scorrimento se ci sono troppi risultati */
 }
 
+.dropdown-suggerimenti li {
+    padding: 12px 20px; /* Corretto lo spazio "10 px" che invalidava il comando */
+    cursor: pointer;
+    text-align: left;
+    color: #333;
+    border-bottom: 1px solid #f4f5f7;
+}
+
+/* Rimuove la linea sotto l'ultimo suggerimento */
+.dropdown-suggerimenti li:last-child {
+    border-bottom: none;
+}
+
+/* Corretto il punto mancante all'inizio della classe */
+.dropdown-suggerimenti li:hover {
+    background-color: #f4f5f7;
+    color: #4134E7;
+    font-weight: 600;
+}
 /* ============================================================
    FOOTER
    ============================================================ */

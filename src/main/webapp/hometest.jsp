@@ -15,7 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sændwave – Homepage</title>
-    
+    <script src="js/Suggerimenti.js"></script>
     <!-- Collegamento al file CSS esterno -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/home.css">
@@ -42,9 +42,10 @@
         </div>
 
         <!-- BARRA DI RICERCA CENTRALE -->
-        <div class="nav-center">
-            <form action="CatalogoServlet" method="GET" class="search-form">
-                <input type="text" name="search" class="search-bar" placeholder="Cerca plugin, equalizzatori, compressori...">
+          <div class="nav-center">
+            <form action="CatalogoServlet" method="GET" class="search-form" id="search-form">
+                <input id="search-input" type="text" name="search" class="search-bar" placeholder="Cerca plugin, equalizzatori, compressori...">
+            <ul id="suggerimenti" class="dropdown-suggerimenti"></ul>
             </form>
         </div>
 
@@ -140,6 +141,7 @@
             <a href="#">Contatti</a>
         </div>
     </footer>
+    
 
 </body>
 </html>

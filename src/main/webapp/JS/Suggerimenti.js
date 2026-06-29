@@ -1,7 +1,13 @@
+// Aspetta che la pagina HTML sia completamente caricata
+document.addEventListener('DOMContentLoaded', () => {
+
     const input = document.getElementById('search-input');
-    const dropdown = document.getElementById('suggestions');
+    const dropdown = document.getElementById('suggerimenti');
     const form = document.getElementById('search-form');
     let timer; // Cronometro Debounce
+
+    // Se per caso siamo in una pagina senza barra di ricerca, il JS si ferma senza dare errori
+    if (!input || !dropdown || !form) return;
 
     input.addEventListener('input', () => { //Funzione per leggere la digitazione dell'utente
         clearTimeout(timer); 
@@ -14,16 +20,17 @@
 
         // Timer di 150ms quando l'utente termina la digitazione
         timer = setTimeout(() => {
-			eseguiAJAX(valore);
-		}, 150);
-	});
-          function eseguiAJAX(test) { //Invio della richiesta asincrona alla Servlet
-            fetch('OttieniSuggerimenti?q=' + encodeURIComponent(testo)) //Invio della query alla Servlet "OttieniSuggerimenti"
-                .then(response => response.json()) //Trasformazione della risposta in un json
-                .then(dati => mostraSuggerimenti(dati)) //Invio dei dati alla funzione per mostrarli all'utente
-                .catch(errore => console.error("Errore AJAX:", errore));
-			}
-			
+            eseguiAJAX(valore);
+        }, 150);
+    });
+
+    function eseguiAJAX(test) { //Invio della richiesta asincrona alla Servlet
+        fetch('OttieniSuggerimenti?q=' + encodeURIComponent(test)) //Invio della query alla Servlet "OttieniSuggerimenti"
+            .then(response => response.json()) //Trasformazione della risposta in un json
+            .then(dati => mostraSuggerimenti(dati)) //Invio dei dati alla funzione per mostrarli all'utente
+            .catch(errore => console.error("Errore AJAX:", errore));
+    }
+            
     function mostraSuggerimenti(lista) { 
         dropdown.innerHTML = ''; //Pulizia vecchi suggerimenti
 
@@ -54,3 +61,5 @@
             dropdown.style.display = 'none';
         }
     });
+
+});

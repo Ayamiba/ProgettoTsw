@@ -18,7 +18,7 @@ public class OttieniSuggerimenti extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final String DB_URL = "jdbc:mysql://localhost:3306/saendwave";
     private final String DB_USER = "root";
-    private final String DB_PASS = "Cicciogamer89!";
+    private final String DB_PASS = "Ayamiba997!";
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setContentType("application/json"); // Settiamo il formato in JSON
@@ -28,7 +28,7 @@ public class OttieniSuggerimenti extends HttpServlet {
     String queryUtente = request.getParameter("q"); // Prende il valore inviato con "OttieniSuggerimenti?q="
     ArrayList<String> risultati = new ArrayList<>(); //Creiamo una lista per i risultati
     if (queryUtente != null && queryUtente.trim().length() >= 2) { //Inviamo la query
-    	String sql = "SELECT prodotto.nome FROM prodotto WHERE prodotto.nome LIKE ? LIMIT 5"; 
+    	String sql = "SELECT nome FROM prodotto WHERE prodotto.nome LIKE ? LIMIT 5"; 
     	try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -38,7 +38,7 @@ public class OttieniSuggerimenti extends HttpServlet {
                 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        risultati.add(rs.getString("nome_prodotto"));
+                        risultati.add(rs.getString("nome"));
                     }
                 }
             }
