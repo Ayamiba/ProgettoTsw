@@ -35,6 +35,7 @@ public class ContenutoBean implements Serializable{
 	public int getPosizioneCatena() {
 		return posizioneCatena;
 	}
+	
 	//setters
 	public void setIdRigaContenuto(int idRigaContenuto) {
 		this.idRigaContenuto=idRigaContenuto;
