@@ -17,6 +17,7 @@
     <title>Sændwave – Homepage</title>
     
     <!-- Collegamento al file CSS esterno -->
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
