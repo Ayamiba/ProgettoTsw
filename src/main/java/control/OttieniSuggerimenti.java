@@ -58,7 +58,7 @@ public class OttieniSuggerimenti extends HttpServlet {
     json.append("]"); // Parentesi quadrata finale
 
     out.print(json.toString()); // Inviamo il risultato 
-    out.flush(); //Svuota il buffer e forza l'invio dei dati
+    out.flush(); //svuota il buffer e forza l'invio dei dati
 }
 }
     
