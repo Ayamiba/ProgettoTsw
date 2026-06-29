@@ -43,8 +43,9 @@
 
         <!-- BARRA DI RICERCA CENTRALE -->
         <div class="nav-center">
-            <form action="CatalogoServlet" method="GET" class="search-form">
-                <input type="text" name="search" class="search-bar" placeholder="Cerca plugin, equalizzatori, compressori...">
+            <form action="CatalogoServlet" method="GET" class="search-form" id="search-form">
+                <input id="search-input" type="text" name="search" class="search-bar" placeholder="Cerca plugin, equalizzatori, compressori...">
+            <ul id="suggerimenti" class="dropdown-suggerimenti"></ul>
             </form>
         </div>
 

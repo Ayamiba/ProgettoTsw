@@ -1,4 +1,4 @@
-@charset "UTF-8";
+		@charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Jost:wght@300;400;500&display=swap');
 
 /*font base*/
@@ -141,7 +141,7 @@ button{
 
 /* Barra di ricerca centrale */
 .nav-center { flex-grow: 1; max-width: 600px; margin: 0 30px; }
-.search-form { display: flex; width: 100%; }
+.search-form { position:relative; display: flex; width: 100%; }
 .search-bar { 
     width: 100%; 
     padding: 12px 20px; 
@@ -157,6 +157,23 @@ button{
 .nav-right a { text-decoration: none; color: #1a1a2e; font-weight: 600; font-size: 0.95em; }
 .nav-right a:hover { color: #4134E7; }
 .user-greeting { color: #6A32E8; font-weight: bold; }
+
+.dropdown-suggerimenti {
+	position:absolute;
+	top: 100%;
+	width: 100%;
+	display: none;
+	padding: 10px;
+	max-height: 250px;
+}
+.dropdown-suggerimenti li {
+	padding: 10 px;
+	cursor: pointer;
+	text-align: left;
+}
+dropdown-suggerimenti li:hover {
+	background-color: #f0f0f0;
+}
 
 /* ============================================================
    FOOTER
