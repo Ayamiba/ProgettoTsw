@@ -15,8 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sændwave – Homepage</title>
-    <script src="js/Suggerimenti.js"></script>
-    <!-- Collegamento al file CSS esterno -->
+<script src="<%= request.getContextPath() %>/js/Suggerimenti.js"></script>    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/home.css">
 </head>
