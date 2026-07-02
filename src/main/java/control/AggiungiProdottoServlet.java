@@ -74,7 +74,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
             File serverFile = new File(serverDir, nomeImmagineUnivoco);
 
             // B. Nel tuo Workspace Eclipse (per non perderla mai)
-            String workspacePath = "C:/Users/gvarr/OneDrive/Desktop/Projects/TSW/ProgettoTsw/src/main/webapp/img/prodotti";
+            String workspacePath = "C:/Users/maria/eclipse-workspace/ProgettoTsw/src/main/webapp/img/prodotti";
             File workspaceDir = new File(workspacePath);
             if (!workspaceDir.exists()) workspaceDir.mkdirs();
             File workspaceFile = new File(workspaceDir, nomeImmagineUnivoco);
@@ -84,7 +84,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
                 java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 java.nio.file.Files.copy(serverFile.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 
-                System.out.println("✅ NUOVO PRODOTTO - MAGIA RIUSCITA!");
+                System.out.println("✅ prodotto aggiunto godo!");
                 System.out.println("-> Workspace: " + workspaceFile.getAbsolutePath());
             } catch (IOException e) {
                 System.out.println("❌ Errore durante il salvataggio dell'immagine.");
@@ -98,7 +98,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
         nuovoProdotto.setNome(nome);
         nuovoProdotto.setDescrizione(descrizione);
         nuovoProdotto.setPrezzo(prezzo);
-        nuovoProdotto.setImmagine(nomeImmagineUnivoco); 
+        nuovoProdotto.setImmagine("img/prodotti/"+nomeImmagineUnivoco); 
 
         try {
             prodottoDAO.doSave(nuovoProdotto);

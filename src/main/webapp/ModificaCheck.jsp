@@ -1,67 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.utente.UtenteBean" %>
+<% UtenteBean utenteloggato = (UtenteBean) session.getAttribute("user"); %>
+
 <!DOCTYPE html>
-<html>
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
-    <title>Area Professionista - Gestione Tracce</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; color: #333; }
-        h2 { color: #0056b3; }
-        
-        /* Stile per i messaggi di notifica di successo/errore */
-        .alert { padding: 12px; margin-bottom: 20px; border-radius: 4px; font-weight: bold; max-width: 500px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        
-        /* Box Form Input Manuale */
-        .form-manuale-box { background: white; padding: 20px; border-radius: 6px; max-width: 500px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .form-manuale { display: flex; flex-direction: column; gap: 15px; }
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        .input-id { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; width: 100%; box-sizing: border-box; }
-        .btn-container { display: flex; gap: 10px; }
-
-        /* Bottoni d'azione */
-        .btn-azione { border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 14px; flex: 1; transition: background 0.2s; color: white; }
-        .btn-approva { background-color: #28a745; }
-        .btn-approva:hover { background-color: #218838; }
-        .btn-disapprova { background-color: #dc3545; }
-        .btn-disapprova:hover { background-color: #c82333; }
-    </style>
-</head>
-<body>
-
-    <h2>Pannello di Controllo Professionista</h2>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sændwave – Area Professionista: Gestione Tracce</title>
     
-    <%-- Mostra il messaggio se la Servlet reindirizza indietro con esito positivo --%>
-    <% 
-        String messaggio = request.getParameter("messaggio");
-        if (messaggio != null && !messaggio.isEmpty()) {
-    %>
-        <div class="alert">
-            <%= messaggio %>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css"> <!-- uso lo stesso css di admin -->
+</head>
+
+<body>
+    <%@ include file="/WEB-INF/views/components/navbar.jsp" %>
+
+    <section class="contenuti-admin">
+        <div class="admin-header">
+            <h1>Pannello di Controllo Professionista</h1>
         </div>
-    <% 
-        } 
-    %>
 
-    <div class="form-manuale-box">
-        <form action="CheckServlet" method="POST" class="form-manuale">
-            
-            <div class="input-group">
-                <label for="idTracciaInput" style="font-weight: bold; font-size: 15px;">ID Traccia Audio:</label>
-                <input type="number" id="idTracciaInput" name="idTraccia" placeholder="Inserisci l'ID della traccia (es. 12)" required class="input-id">
+        <%-- Notifica per l'esito dell'operazione (successo o errore) --%>
+        <% 
+            String messaggio = request.getParameter("messaggio");
+            if (messaggio != null && !messaggio.isEmpty()) { 
+        %>
+            <div class="alert-success" style="background-color: #e2f0d9; color: #385723; border-left: 4px solid #70ad47; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-family: 'Inter', sans-serif; font-weight: 600;">
+                ✨ <%= messaggio %>
             </div>
-
-            <div class="btn-container">
-                <button type="submit" name="nuovoCheck" value="true" class="btn-azione btn-approva">
-                    Approva
-                </button>
+        <% } %>
+        
+        <section class="corpo-admin">
+            <div class="suggerimenti-immagine" style="border-left-color: #6A32E8;">
+                <h3 style="font-size: 1.1em; margin-bottom: 8px; color: #6A32E8; font-weight: 500;">Istruzioni</h3>
+                <p>• Inserisci l'ID della traccia di cui desideri approvare la presa in carico.</p>
+                <p>• L'utente saprà che quest'ultima è stata presa in carico</p>
+            </div>
+            
+            <form action="CheckServlet" method="POST">
                 
-                <button type="submit" name="nuovoCheck" value="false" class="btn-azione btn-disapprova">
-                    Disapprova
-                </button>
-            </div>
-            
-        </form>
-    </div>
+                <div class="form-group">
+                    <label for="idTracciaInput">ID Traccia Audio</label>
+                    <input type="number" id="idTracciaInput" name="idTraccia" class="form-input" placeholder="Inserisci l'ID della traccia (Es. 12)" required>
+                </div>
 
+                <div style="display: flex; gap: 15px; margin-top: 25px;">
+                    
+                    <button type="submit" name="nuovoCheck" value="true" class="btn-admin-submit" style="margin-top: 0; background: #28a745; box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2); flex: 1;">
+                        Approva
+                    </button>
+                    
+                    <button type="submit" name="nuovoCheck" value="false" class="btn-admin-submit" style="margin-top: 0; background: #dc3545; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); flex: 1;">
+                        Disapprova
+                    </button>
+                    
+                </div>
+            </form>
+        </section>
+    </section>
+
+    <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 </body>
+
 </html>

@@ -1,0 +1,57 @@
+.contenuti-admin {
+            display: block; /*va a capo da solo*/
+            width: 100%; /* Occupa tutta la larghezza disponibile sui dispositivi piccoli */
+            max-width: 850px; /* Evita che il form si allarghi troppo su schermi grandi*/
+            margin: 30px auto; /*30px di spazio di margine e auto lo centra*/
+            padding: 0 40px; /*spazio interno */
+        }
+        
+.admin-header {
+    margin-bottom: 25px;     /* Distanzia il titolo principale dal box del form sottostante */
+}
+
+admin-header h1 {
+    font-size: 2em;          /* Imposta la dimensione del font del titolo */
+    margin: 0;               /* Rimuove i margini predefiniti del browser */
+    color: #4134E7;          /* Colore blu del brand*/
+    font-family: 'Jost', sans-serif; /* font che sta pure nello style */
+    font-weight: 500;        /* Spessore del carattere  */
+}
+
+.corpo-admin {
+    background: white;       /* Sfondo totalmente bianco  */
+    padding: 30px;           /* Spazio interno di 30px tra il bordo del box e i moduli del form */
+    border-radius: 12px;     /* Arrotonda gli angoli del box*/
+    width: 100%;             /* Occupa il 100% dello spazio del suo contenitore*/
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06); /* Ombreggiatura leggera per dare profondità */
+}
+
+.suggerimenti-immagine {
+    background-color: #f9f9fb; /* Sfondo grigio chiarissimo per differenziarlo dal resto del foglio bianco */
+    border-left: 4px solid #4134E7; /* Crea una linea viola sul lato sinistro per metterlo in evidenza*/
+    padding: 15px 20px;       /* 15px di spazio sopra/sotto e 20px a destra/sinistra all'interno del box */
+    border-radius: 4px 8px 8px 4px; /* Smussa gli angoli */
+    margin-bottom: 25px;      /* Distanzia i questo blocco dal primo campo di testo del form */
+}
+
+.suggerimenti-immagine p {
+    font-family: 'Inter', sans-serif; /* Font presente anche nello style per tenere le pagine coerenti */
+    font-size: 0.9em;         /* dimensione testo */
+    color: #D5C6B2;              /* Colore preso sempre dallo style */
+    margin: 4px 0;            /* Distanza di 4px tra una riga di consiglio e l'altra */
+}
+
+.form-group { 
+	margin-bottom: 15px; 
+}
+
+.form-group label { /*scritte del form */
+   display: block; 
+   margin-bottom: 5px; 
+}
+        
+.form-group input {  /*per le caselle di input */
+    width: 100%; 
+    padding: 8px; 
+    box-sizing: border-box; 
+}

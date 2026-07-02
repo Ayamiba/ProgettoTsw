@@ -1,4 +1,4 @@
-package control;
+/*package control;
 
 import model.utente.UtenteBean;
 
@@ -45,5 +45,5 @@ public class ProfessionistaFilter implements Filter{
         	chain.doFilter(request, response);
         }
 	}
-} 
+}  */
 

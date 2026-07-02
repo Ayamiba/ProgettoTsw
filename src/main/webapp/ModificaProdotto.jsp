@@ -1,73 +1,94 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.utente.UtenteBean" %>
+<% UtenteBean utenteloggato = (UtenteBean) session.getAttribute("user"); %>
+
 <!DOCTYPE html>
-<html>
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
-    <title>Test Modifica Prodotto</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; }
-        .form-container { max-width: 500px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-submit { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-        .btn-submit:hover { background-color: #0056b3; }
-        .messaggio { padding: 10px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    </style>
-</head>
-<body>
-
-    <h2>Test Modifica Prodotto (Inserimento Manuale ID)</h2>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sændwave – Modifica Prodotto</title>
     
-    <%-- Gestione dinamica dei messaggi di successo o errore inviati dalla Servlet --%>
-    <% 
-        String msg = request.getParameter("messaggio");
-        if (msg != null) { 
-            if (msg.contains("Errore")) {
-    %>
-                <div class="messaggio error"><%= msg %></div>
-    <% 
-            } else {
-    %>
-                <div class="messaggio success"><%= msg %></div>
-    <% 
-            }
-        } 
-    %>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
 
-    <div class="form-container">
-        <form action="ModificaProdottoServlet" method="POST" enctype="multipart/form-data">
+<body>
+    <%@ include file="/WEB-INF/views/components/navbar.jsp" %>
+
+    <section class="contenuti-admin">
+        <div class="admin-header">
+            <h1>Pannello Gestione Admin – Modifica Prodotto</h1>
+        </div>
+
+        <%-- Gestione dinamica dei messaggi di successo o errore --%>
+       <%-- Gestione dinamica dei messaggi di successo o errore (Sincronizzata con la Servlet) --%>
+        <% 
+            String msg = request.getParameter("messaggio");
+            if (msg != null) { 
+                // Se il messaggio inizia con "errore", mostriamo il banner rosso di allerta
+                if (msg.startsWith("errore")) {
+        %>
+                <div class="alert-success" style="background-color: #fde8e8; color: #e53e3e; border-left: 4px solid #e53e3e; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-family: 'Inter', sans-serif; font-weight: 600;">
+                    ⚠️ <%= msg %>
+                </div>
+        <% 
+                } else {
+                // nel caso "Prodotto aggiornato con successo!"), mostriamo il banner verde
+        %>
+                <div class="alert-success" style="background-color: #e2f0d9; color: #385723; border-left: 4px solid #70ad47; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-family: 'Inter', sans-serif; font-weight: 600;">
+                    ✨ <%= msg %>
+                </div>
+        <% 
+                }
+            } 
+        %>
+        
+        <section class="corpo-admin">
+            <div class="suggerimenti-immagine" style="border-left-color: #007bff;">
+                <h3 style="font-size: 1.1em; margin-bottom: 8px; color: #007bff; font-weight: 500;">Aggiornamento Dati Catalogo</h3>
+                <p>• Inserisci l'ID del prodotto esistente per sovrascrivere le sue informazioni nel database.</p>
+                <p>• Se non selezioni una nuova immagine di copertina, il sistema manterrà automaticamente quella già presente.</p>
+            </div>
             
-            <div class="form-group">
-                <label for="idProdotto">ID del Prodotto da Modificare (Esistente nel DB):</label>
-                <input type="number" id="idProdotto" name="idProdotto" placeholder="Es. 1" required>
-            </div>
+            <form action="ModificaProdottoServlet" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                    <label for="idProdotto">ID del Prodotto da Modificare (Esistente nel DB)</label>
+                    <input type="number" id="idProdotto" name="idProdotto" class="form-input" placeholder="Es. 1" required>
+                </div>
 
-            <div class="form-group">
-                <label for="nome">Nuovo Nome:</label>
-                <input type="text" id="nome" name="nome" placeholder="Inserisci il nuovo nome" required>
-            </div>
+                <div class="form-group">
+                    <label for="nome">Nuovo Nome Prodotto</label>
+                    <input type="text" id="nome" name="nome" class="form-input" placeholder="Inserisci il nuovo nome commerciale" required>
+                </div>
 
-            <div class="form-group">
-                <label for="prezzo">Nuovo Prezzo (€):</label>
-                <input type="number" id="prezzo" name="prezzo" step="any" placeholder="Es. 49.99" required>
-            </div>
+                <div class="form-group">
+                    <label for="prezzo">Nuovo Prezzo di Vendita (€)</label>
+                    <input type="number" id="prezzo" name="prezzo" class="form-input" step="0.01" min="0" placeholder="Es. 49.99" required>
+                </div>
 
-            <div class="form-group">
-                <label for="descrizione">Nuova Descrizione:</label>
-                <textarea id="descrizione" name="descrizione" rows="4" placeholder="Aggiorna la descrizione qui..."></textarea>
-            </div>
+                <div class="form-group">
+                    <label for="descrizione">Nuova Descrizione</label>
+                    <textarea id="descrizione" name="descrizione" class="form-input" placeholder="Aggiorna le specifiche tecniche o i dettagli del plugin..."></textarea>
+                </div>
 
-            <div class="form-group">
-                <label for="foto">Nuova Immagine (Lascia vuoto per mantenere la vecchia):</label>
-                <input type="file" id="foto" name="foto" accept="image/*">
-            </div>
+                <div class="form-group">
+                    <label for="foto">Nuova Copertina Prodotto (Opzionale)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="foto" name="foto" class="form-input" accept="image/*">
+                    </div>
+                </div>
 
-            <button type="submit" class="btn-submit">Salva Modifiche nel DB</button>
-        </form>
-    </div>
+                <button type="submit" class="btn-admin-submit" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);">
+                    Salva Modifiche nel DB
+                </button>
+            </form>
+        </section>
+    </section>
 
+    <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-package control;
+/*package control;
 
 import model.utente.UtenteBean;
 
@@ -45,4 +45,4 @@ public class AdminFilter implements Filter{
         	chain.doFilter(request, response);
         }
 	}
-} 
+} */

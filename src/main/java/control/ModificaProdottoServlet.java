@@ -99,7 +99,7 @@ public class ModificaProdottoServlet extends HttpServlet {
                 // -------------------------------------------------------------
                 // PERCORSO 2: Il tuo PC (Per NON PERDERE la foto al riavvio)
                 // -------------------------------------------------------------
-                String workspacePath = "C:/Users/gvarr/OneDrive/Desktop/Projects/TSW/ProgettoTsw/src/main/webapp/img/prodotti";
+                String workspacePath = "C:/Users/maria/eclipse-workspace/ProgettoTsw/src/main/webapp/img/prodotti";
                 File workspaceDir = new File(workspacePath);
                 if (!workspaceDir.exists()) workspaceDir.mkdirs();
                 File workspaceFile = new File(workspaceDir, nomeImmagineUnivoco);
@@ -125,7 +125,7 @@ public class ModificaProdottoServlet extends HttpServlet {
                 }
 
                 // Aggiorniamo il Bean con il nome
-                prodottoAggiornato.setImmagine(nomeImmagineUnivoco);
+                prodottoAggiornato.setImmagine("img/prodotti/"+nomeImmagineUnivoco);
 
             } else {
                 // Altrimenti teniamo quella vecchia
@@ -134,7 +134,7 @@ public class ModificaProdottoServlet extends HttpServlet {
 
             // Facciamo l'update nel DB usando il metodo che sta in prodottoDAO
             prodottoDAO.doUpdate(prodottoAggiornato);
-            response.sendRedirect("ModificaProdotto.jsp?messaggio=Prodotto aggiornato con successo!");
+            response.sendRedirect("ModificaProdotto.jsp?messaggio=Prodotto aggiornato con successo!"); //per fare il controllo dell errore e mostrare dinamicamente la scritts
 
         } catch (SQLException e) {
             e.printStackTrace();

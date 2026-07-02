@@ -18,7 +18,7 @@ public class OttieniSuggerimenti extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final String DB_URL = "jdbc:mysql://localhost:3306/saendwave";
     private final String DB_USER = "root";
-    private final String DB_PASS = "Ayamiba997!";
+    private final String DB_PASS = "pizzaSG06";
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setContentType("application/json"); // Settiamo il formato in JSON

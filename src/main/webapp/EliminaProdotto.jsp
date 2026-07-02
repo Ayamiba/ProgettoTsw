@@ -1,38 +1,56 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.utente.UtenteBean" %>
+<% UtenteBean utenteloggato = (UtenteBean) session.getAttribute("user"); %>
+
 <!DOCTYPE html>
-<html>
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
-    <title>Test Eliminazione Prodotto</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; }
-        .box { max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
-        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-delete { background-color: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
-        .btn-delete:hover { background-color: #bd2130; }
-        .messaggio { padding: 10px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; background-color: #e2f0d9; color: #385723; border: 1px solid #bcd6a5; text-align: center; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sændwave – Elimina Prodotto</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
+    <%@ include file="/WEB-INF/views/components/navbar.jsp" %>
 
-    <h2>Elimina Prodotto</h2>
+    <section class="contenuti-admin">
+        <div class="admin-header">
+            <h1>Pannello Gestione Admin – Rimuovi Prodotto</h1>
+        </div>
 
-    <%-- Mostra il messaggio di esito (successo o errore) rimandato dalla Servlet --%>
-    <% if (request.getParameter("messaggio") != null) { %>
-        <div class="messaggio"><%= request.getParameter("messaggio") %></div>
-    <% } %>
-
-    <div class="box">
-        <form action="EliminaProdottoServlet" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare definitivamente questo prodotto?');">
-            <div class="form-group">
-                <label for="idProdotto">ID Prodotto da cancellare:</label>
-                <input type="number" id="idProdotto" name="idProdotto" placeholder="Inserisci l'ID (es. 5)" required>
+        <%-- Notifica per l'esito dell'operazione (successo o errore) --%>
+        <% if(request.getParameter("messaggio") != null) { %>
+            <div class="alert-success" style="background-color: #fde8e8; color: #e53e3e; border-left: 4px solid #e53e3e; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-family: 'Inter', sans-serif; font-weight: 600;">
+                ⚠️ <%= request.getParameter("messaggio") %>
             </div>
-            <button type="submit" class="btn-delete">Elimina dal Database</button>
-        </form>
-    </div>
+        <% } %>
+        
+        <section class="corpo-admin">
+            <div class="suggerimenti-immagine" style="border-left-color: #dc3545;">
+                <h3 style="font-size: 1.1em; margin-bottom: 8px; color: #dc3545; font-weight: 500;">Avvertenze</h3>
+                <p>• L'inserimento dell'ID comporterà la rimozione definitiva del prodotto dal catalogo.</p>
+                <p>• Prima di procedere, verifica l'ID corretto all'interno della tabella dei prodotti per evitare errori.</p>
+            </div>
+            
+            <form action="EliminaProdottoServlet" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare definitivamente questo prodotto?');">
+                
+                <div class="form-group">
+                    <label for="idProdotto">ID Prodotto da cancellare</label>
+                    <input type="number" id="idProdotto" name="idProdotto" class="form-input" placeholder="Inserisci l'ID numerico (Es. 5)" required>
+                </div>
 
+                <button type="submit" class="btn-admin-submit" style="background: #dc3545; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);">
+                    Elimina dal Database
+                </button>
+            </form>
+        </section>
+    </section>
+
+    <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 </body>
+
 </html>
