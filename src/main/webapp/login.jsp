@@ -24,17 +24,17 @@
             String errore = (String) request.getAttribute("errore");
             if (errore != null) {
         %>
-            <div class="error-message"><%= errore %></div>
+            <div id="error-message" class="error-message"><%= errore %></div>
         <%  } %>
 
-        <form action="LoginServlet" method="POST">
+        <form action="LoginServlet" method="POST" id="loginForm">
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label for="email" id="labelEmail">Email:</label>
                 <input type="email" id="email" name="email" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password" id="labelPassword">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
             
