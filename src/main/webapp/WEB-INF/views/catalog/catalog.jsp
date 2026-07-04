@@ -9,8 +9,6 @@
     String categoriaAttiva = (String) request.getAttribute("categoriaAttiva");
     String prezzoAttivo = (String) request.getAttribute("prezzoAttivo");
     
-    //l'utente viene creato in navbar
-    // Sanificazione delle stringhe nulle per i form
     if (categoriaAttiva == null) categoriaAttiva = "";
     if (prezzoAttivo == null) prezzoAttivo = "";
 %>
@@ -39,8 +37,8 @@
                     <label for="categoria">Categoria</label>
                     <select name="categoria" id="categoria" class="filter-input">
                         <option value="">Tutte le categorie</option>
-                        <option value="effetto" <%= categoriaAttiva.equals("effetto") ? "selected" : "" %>>Effetti VST</option>
-                        <option value="studio_tool" <%= categoriaAttiva.equals("studio_tool") ? "selected" : "" %>>Studio Tools</option>
+                        <option value="Effetto" <%= categoriaAttiva.equals("Effetto") ? "selected" : "" %>>Effetti VST</option>
+                        <option value="Studio Tool" <%= categoriaAttiva.equals("Studio Tool") ? "selected" : "" %>>Studio Tools</option>
                         <option value="bundle" <%= categoriaAttiva.equals("bundle") ? "selected" : "" %>>Bundle Completi</option>
                     </select>
                 </div>

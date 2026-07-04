@@ -10,7 +10,7 @@
     margin-bottom: 25px;     /* Distanzia il titolo principale dal box del form sottostante */
 }
 
-admin-header h1 {
+.admin-header h1 {
     font-size: 2em;          /* Imposta la dimensione del font del titolo */
     margin: 0;               /* Rimuove i margini predefiniti del browser */
     color: #4134E7;          /* Colore blu del brand*/
@@ -54,4 +54,45 @@ admin-header h1 {
     width: 100%; 
     padding: 8px; 
     box-sizing: border-box; 
+}
+
+.filtri-grid{
+	margin: 7px;
+}
+
+.profile-layout {
+	background-color: #D9D9D9;
+    display: flex;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-sidebar {
+    width: 320px;
+    background: #D9D9D9; 
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 2rem;
+    height: fit-content;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.profile-main-content{
+	background: #52ADD4 !important;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	
+}
+
+.admin-welcome-header h1 {
+    font-family: 'Jost', sans-serif;
+    color: #4134E7; /* Titolo principale con il blu del brand */
+    font-size: 2.2rem;
+    margin: 0 0 8px 0;
+}
+
+/* Effetto al passaggio del mouse sui link */
+.action-card:hover {
+    transform: translateY(-5px); /* Solleva leggermente la card */
+    border-color: #4134E7; /* Il bordo diventa del blu del brand */
+    box-shadow: 0 10px 20px rgba(65, 52, 231, 0.08); /* Ombra violacea */
 }

@@ -4,82 +4,105 @@
 <head>
     <meta charset="UTF-8">
     <title>Visualizza Ordini - Admin</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; }
-        h2 { color: #333; }
-        .sezione-filtri { background: #eef2f7; padding: 15px; margin-bottom: 20px; border-radius: 5px; display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; }
-        .filtro-box { display: flex; flex-direction: column; gap: 5px; }
-        .btn-azione { background-color: #007bff; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; }
-        .btn-azione:hover { background-color: #0056b3; }
-        .btn-reset { background-color: #6c757d; }
-        .btn-reset:hover { background-color: #5a6268; }
-        .ordine-box { background: white; padding: 15px; margin-bottom: 15px; border-radius: 5px; border-left: 5px solid #007bff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 600px; }
-        .ordine-id { font-weight: bold; color: #007bff; }
-        .no-ordini { color: #666; font-style: italic; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
+	<%@ include file="/WEB-INF/views/components/navbar.jsp" %>
 
-    <h2>Pannello Controllo Ordini (Admin)</h2>
+   <div class="contenuti-admin">
+        
+        <div class="admin-header">
+            <h1>Pannello Gestione Admin: Visualizza Ordini</h1>
+        </div>
 
-    <div class="sezione-filtri">
-        <form action="VisualizzaOrdiniAdminServlet" method="POST">
-            <input type="hidden" name="azione" value="tutti">
-            <button type="submit" class="btn-azione btn-reset">Mostra Tutti gli Ordini</button>
-        </form>
-
-        <form action="VisualizzaOrdiniAdminServlet" method="POST" class="sezione-filtri" style="padding:0; margin:0; background:none;">
-            <input type="hidden" name="azione" value="filtraDate">
-            <div class="filtro-box">
-                <label>Da data:</label>
-                <input type="date" name="dataInizio" required>
+        <div class="corpo-admin">
+            
+           <div class="suggerimenti-immagine" style="border-left-color: #007bff;">
+                <h3 style="font-size: 1.1em; margin-bottom: 8px; color: #007bff; font-weight: 500;">Aggiornamento Dati Catalogo</h3>
+                <p>• Qui puoi visualizzare gli ordini</p>
+                <p>• Applica il filtro in base alla data o all'id dell'utente </p>
             </div>
-            <div class="filtro-box">
-                <label>A data:</label>
-                <input type="date" name="dataFine" required>
+
+            <div class="filtri-grid">
+                
+                <div class="filtro-sezione" style="display: flex; align-items: center;">
+                    <form action="VisualizzaOrdiniAdminServlet" method="POST" style="width: 100%;">
+                        <input type="hidden" name="azione" value="tutti">
+                        <p style="font-size: 0.9em; color: #666; margin-top: 0;">Visualizza l'intero catalogo degli ordini registrati nel sistema.</p>
+                        <button type="submit" class="btn-brand btn-secondary">Mostra Tutti gli Ordini</button>
+                    </form>
+                </div>
+
+                <div class="filtro-sezione">
+                    <form action="VisualizzaOrdiniAdminServlet" method="POST">
+                        <input type="hidden" name="azione" value="filtraDate">
+                        <div class="form-group">
+                            <label>Da data:</label>
+                            <input type="date" name="dataInizio" required>
+                        </div>
+                        <div class="form-group">
+                            <label>A data:</label>
+                            <input type="date" name="dataFine" required>
+                        </div>
+                        <button type="submit" class="btn-brand">Filtra per Data</button>
+                    </form>
+                </div>
+
+                <div class="filtro-sezione">
+                    <form action="VisualizzaOrdiniAdminServlet" method="POST">
+                        <input type="hidden" name="azione" value="filtraCliente">
+                        <div class="form-group">
+                            <label>ID/Email Cliente:</label>
+                            <input type="text" name="idCliente" placeholder="Es. mario.rossi@email.it" required>
+                        </div>
+                        <button type="submit" class="btn-brand">Filtra per Cliente</button>
+                    </form>
+                </div>
+
             </div>
-            <button type="submit" class="btn-azione">Filtra per Data</button>
-        </form>
 
-        <form action="VisualizzaOrdiniAdminServlet" method="POST" class="sezione-filtri" style="padding:0; margin:0; background:none;">
-            <input type="hidden" name="azione" value="filtraCliente">
-            <div class="filtro-box">
-                <label>ID/Email Cliente:</label>
-                <input type="text" name="idCliente" placeholder="Inserisci identificativo" required>
+            <h2 style="font-family: 'Jost', sans-serif; color: #333; font-size: 1.5em; margin-bottom: 20px;">Risultati Ricerca</h2>
+
+            <div class="ordini-container">
+                <% 
+                java.util.List<model.ordine.OrdineBean> listaOrdini = (java.util.List<model.ordine.OrdineBean>) request.getAttribute("listaOrdini");
+                
+                if (listaOrdini != null && !listaOrdini.isEmpty()) {
+                    for (model.ordine.OrdineBean ordine : listaOrdini) {
+                %>
+                        <div class="ordine-card">
+                            <div class="ordine-header">
+                                Ordine ID: <%= ordine.getIdOrdine() %>
+                            </div>
+                            <div class="ordine-dettaglio">
+                                <strong>Data:</strong> <%= ordine.getDataOrdine() %>
+                            </div>
+                            <div class="ordine-dettaglio">
+                                <strong>Stato:</strong> <%= ordine.getStato() %>
+                            </div>
+                            <div class="ordine-dettaglio">
+                                <strong>Prezzo Totale:</strong> <%= String.format("%.2f", ordine.getTotale()) %> &euro;
+                            </div>
+                            <div class="ordine-dettaglio">
+                                <strong>Descrizione:</strong> <%= ordine.getDescrizione() %>
+                            </div>
+                            <hr>
+                        </div>
+                <% 
+                    }
+                } else if (request.getMethod().equalsIgnoreCase("POST")) {
+                %>
+                    <div class="no-ordini">Nessun ordine corrisponde ai filtri impostati. Modifica i parametri e riprova.</div>
+                <% 
+                } else {
+                %>
+                    <div class="no-ordini">Utilizza i filtri in alto per avviare una ricerca e caricare la lista degli ordini.</div>
+                <% 
+                } 
+                %>
             </div>
-            <button type="submit" class="btn-azione">Filtra per Cliente</button>
-        </form>
-    </div>
 
-    <hr>
-
-    <h3>Risultati Ricerca</h3>
-
-    <% 
-    java.util.List<model.ordine.OrdineBean> listaOrdini = (java.util.List<model.ordine.OrdineBean>) request.getAttribute("listaOrdini");
-    
-    if (listaOrdini != null && !listaOrdini.isEmpty()) {
-        for (model.ordine.OrdineBean ordine : listaOrdini) {
-%>
-            <div class="ordine-box">
-                <div class="ordine-id">Ordine ID: <%= ordine.getIdOrdine() %></div>
-                <div><strong>Data:</strong> <%= ordine.getDataOrdine() %></div>
-                <div><strong>Prezzo Totale:</strong> <%= ordine.getTotale() %> €</div>
-                <div><strong>Stato:</strong> <%= ordine.getStato() %></div>
-                <div><strong>Descrizione:</strong> <%= ordine.getDescrizione() %></div>
-            </div>
-<% 
-        }
-    } else if (request.getMethod().equalsIgnoreCase("POST")) {
-%>
-        <p class="no-ordini">Nessun ordine corrisponde ai filtri impostati.</p>
-<% 
-    } else {
-%>
-        <p class="no-ordini">Utilizza i filtri in alto per caricare la lista degli ordini desiderata.</p>
-<% 
-    } 
-%>
-
+        </div> </div>
 </body>
 </html>

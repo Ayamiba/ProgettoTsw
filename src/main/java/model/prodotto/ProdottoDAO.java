@@ -92,14 +92,14 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         // 1. Il "Bivio" di Java basato sulla tua idea dei TINYINT
         String query = "";
         
-        if ("Effetti".equalsIgnoreCase(nomeCategoria)) {
+        if ("Effetto".equalsIgnoreCase(nomeCategoria)) {
             // Se l'utente clicca "Effetti", cerchiamo dove la colonna effetto è = 1
             query = "SELECT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.effetto = 1";
                     
-        } else if ("StudioTool".equalsIgnoreCase(nomeCategoria)) {
+        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria)) {
             // Se l'utente clicca "StudioTool", cerchiamo dove la colonna studio_tool è = 1
             query = "SELECT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
@@ -196,13 +196,13 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         // 1. Usiamo la stessa logica dei TINYINT per evitare problemi con i nomi
         String query = "";
         
-        if ("Effetti".equalsIgnoreCase(nomeCategoria)) {
+        if ("Effetto".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.effetto = 1 AND Prodotto.prezzo <= ?";
                     
-        } else if ("StudioTool".equalsIgnoreCase(nomeCategoria)) {
+        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
