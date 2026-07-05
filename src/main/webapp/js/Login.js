@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordLabel = document.getElementById('labelPassword');
 
 
-    function validateEmail() {
+    function validateEmail() { // Controlla la validità dell'email inserita dall'utente
         const email = emailInput.value.trim();
         const emailPattern = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function validatePassword() {
+    function validatePassword() { //Controlla la validità della password inserita dall'utente
         const password = passwordInput.value;
         const minLength = 8;
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function updateSubmitButtonState() {
+    function updateSubmitButtonState() { // Evita di cliccare Submit se i parametri di Email e Password non sono corretti
         const isFormValid =
             validateEmail() &&
             validatePassword();

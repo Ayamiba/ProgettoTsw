@@ -24,10 +24,10 @@
             String errore = (String) request.getAttribute("errore");
             if (errore != null) {
         %>
-            <div class="error-message"><%= errore %></div>
+            <div id= "error-message" class="error-message"><%= errore %></div>
         <%  } %>
 
-        <form action="RegistrazioneServlet" method="POST">
+        <form action="RegistrazioneServlet" method="POST" id="registrationForm">
             <div class="form-group">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" required>
@@ -44,12 +44,12 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label id="emailLabel" for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label id="passwordLabel" for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
             
