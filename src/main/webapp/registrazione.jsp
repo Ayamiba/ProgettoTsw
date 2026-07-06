@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    	<script src="<%= request.getContextPath() %>/js/Registrazione.js"></script>   
     <title>Registrazione - E-commerce</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 50px; }
@@ -46,11 +47,13 @@
             <div class="form-group">
                 <label id="emailLabel" for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
+                <span id="email-error" style="display:none; color:red; font-size: 0.9em;"></span>
             </div>
             
             <div class="form-group">
                 <label id="passwordLabel" for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+                <span id="password-error" style="display:none; color:red; font-size: 0.9em;"></span>
             </div>
             
             <button type="submit" class="btn">Registrati</button>

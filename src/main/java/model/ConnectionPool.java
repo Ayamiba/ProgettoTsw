@@ -10,7 +10,7 @@ public class ConnectionPool {
             + "&useLegacyDatetimecode=false&serverTimezone=UTC";
 
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "pizzaSG06";
+    private static final String PASSWORD = "Cicciogamer89!";
 
     private static int INITIAL_POOL_SIZE = 5; //InitialePoolSize è il numero minimo di connessioni aperte
     private static final int MAX_POOL_SIZE = 20; //MaxPoolSize è il numero massimo di connessioni apribili

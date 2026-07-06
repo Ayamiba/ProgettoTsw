@@ -4,14 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const submitButton = form.querySelector('button[type="submit"]');
 
-    const emailError = document.getElementById('error-message');
-    const passwordError = document.getElementById('error-message');
+ 
+    const emailError = document.getElementById('email-error'); 
+    const passwordError = document.getElementById('password-error');
 
     const emailLabel = document.getElementById('emailLabel');
     const passwordLabel = document.getElementById('passwordLabel');
+    
     let emailCheckTimeout = null;
+    let isEmailAvailable = false;
 
-    function showError(element, message, errorDiv, labelElement) { // Gestisce gli errori all'interno del form
+    // --- FUNZIONI DI UTILITÀ ---
+    function showError(element, message, errorDiv, labelElement) {
         element.classList.remove('input-success');
         element.classList.add('input-error');
         if (labelElement) {
@@ -22,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.style.display = 'block';
     }
 
-    function showSuccess(element, labelElement) { // Gestisce il "successo" all'interno del form
+    function showSuccess(element, labelElement) {
         element.classList.remove('input-error');
         element.classList.add('input-success');
         if (labelElement) {
@@ -41,70 +45,58 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.style.display = 'none';
     }
 
-    function validateEmail(callback) { // Validazione email in base al Pattern
+    // --- VALIDAZIONE EMAIL (REGEX) ---
+    function validateEmail(callback) {
         const email = emailInput.value.trim();
-        const emailPattern = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
+        // Regex standard per email
+        const emailRegex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
 
-        if (email === '') { // Controlla che L'email non sia vuota
+        if (email === '') {
             showError(emailInput, 'L\'email non può essere vuota.', emailError, emailLabel);
             if (callback) callback(false);
             return false;
-        } else if (!emailPattern.test(email)) { // Controlla il pattern dell'email
+        } else if (!emailRegex.test(email)) {
             showError(emailInput, 'Formato email non valido.', emailError, emailLabel);
             if (callback) callback(false);
             return false;
         } else {
-            showSuccess(emailInput, emailLabel);
-            hideError(emailInput, emailError, emailLabel);
-
             clearTimeout(emailCheckTimeout);
             emailCheckTimeout = setTimeout(() => {
-                fetch(`./CheckEmailServlet?email=${encodeURIComponent(email)}`) // Verifica se l'email è valida e non presente gia nel DB
-                    .then(response => {
-                        if (!response.ok) { // Gestione errore di connessione
-                            throw new Error(`Errore HTTP! Stato: ${response.status}`);
-                        }
-                        return response.json();
-                    })
+                fetch(`./CheckEmailServlet?email=${encodeURIComponent(email)}`)
+                    .then(response => response.json())
                     .then(data => {
-                        if (data.error) { // Gestione errore logico (es. formato della mail) 
-                            showError(emailInput, data.error, emailError, emailLabel);
-                            if (callback) callback(false);
-                        } else if (!data.available) { // Gestione errore in caso di email gia presente nel DB
-                            showError(emailInput, 'Questa email è già registrata.', emailError, emailLabel);
-                            if (callback) callback(false);
-                        } else { // Non ci sono errori quindi "Success"
+                        if (data.error || !data.available) {
+                            showError(emailInput, data.error || 'Email già registrata.', emailError, emailLabel);
+                            isEmailAvailable = false;
+                        } else {
                             showSuccess(emailInput, emailLabel);
                             hideError(emailInput, emailError, emailLabel);
-                            if (callback) callback(true);
+                            isEmailAvailable = true;
                         }
                         updateSubmitButtonState();
+                        if (callback) callback(isEmailAvailable);
                     })
-                    .catch(error => { // Gestione di errori come perdita di connessione
-                        console.error('Errore durante la verifica email:', error);
-                        showError(emailInput, 'Errore di connessione o del server. Riprova.', emailError, emailLabel);
-                        if (callback) callback(false);
+                    .catch(err => {
+                        showError(emailInput, 'Errore di connessione.', emailError, emailLabel);
+                        isEmailAvailable = false;
                         updateSubmitButtonState();
                     });
             }, 500);
-
             return true;
         }
     }
 
-    function validatePassword() { // Validazione della password
+    // --- VALIDAZIONE PASSWORD (REGEX) ---
+    function validatePassword() {
         const password = passwordInput.value;
-        const minLength = 8;
-        const passwordPattern = /^.{8,}$/;
+        // Regex: min 8 caratteri, almeno una lettera, almeno un numero
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-        if (password === '') { // Gestione password vuota
-            showError(passwordInput, 'La password non può essere vuota.', passwordError, passwordLabel);
+        if (password === '') {
+            showError(passwordInput, 'La password è obbligatoria.', passwordError, passwordLabel);
             return false;
-        } else if (password.length < minLength) { // Gestione password corta
-            showError(passwordInput, `La password deve essere di almeno ${minLength} caratteri.`, passwordError, passwordLabel);
-            return false;
-        } else if (!passwordPattern.test(password)) { // Gestione pattern password
-            showError(passwordInput, `La password deve essere di almeno ${minLength} caratteri.`, passwordError, passwordLabel);
+        } else if (!passwordRegex.test(password)) {
+            showError(passwordInput, 'Min 8 caratteri, almeno una lettera e un numero.', passwordError, passwordLabel);
             return false;
         } else {
             showSuccess(passwordInput, passwordLabel);
@@ -113,45 +105,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    let isEmailAvailable = false;
-
     function updateSubmitButtonState() {
-        const isFormValidExcludingEmail = validatePassword();
-
-        submitButton.disabled = !(isFormValidExcludingEmail && isEmailAvailable);
+        const isPasswordValid = validatePassword();
+        submitButton.disabled = !(isPasswordValid && isEmailAvailable);
     }
 
-    submitButton.disabled = true;
-
-    emailInput.addEventListener('input', () => {
-        validateEmail((isValid) => {
-            isEmailAvailable = isValid;
-            updateSubmitButtonState();
-        });
-    });
-	
-    passwordInput.addEventListener('input', () => {
-        validatePassword();
-        updateSubmitButtonState();
-    });
+    // Event Listeners
+    emailInput.addEventListener('input', () => validateEmail());
+    passwordInput.addEventListener('input', () => updateSubmitButtonState());
 
     form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const isSyncValid = validatePassword();
-
-        if (isSyncValid) {
-            validateEmail((emailIsValid) => {
-                if (emailIsValid) {
-                    form.submit();
-                } else {
-                    console.log('Email non valida o non disponibile. Submit bloccato.');
-                    updateSubmitButtonState();
-                }
-            });
-        } else {
-            console.log('Validazione sincrona fallita. Submit bloccato.');
-            updateSubmitButtonState();
+        if (!isEmailAvailable || !validatePassword()) {
+            event.preventDefault();
         }
     });
 });

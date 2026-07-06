@@ -28,14 +28,12 @@ public class CheckEmailServlet extends HttpServlet {
                 return;
             }
 
-            boolean emailDisponibile = false;
+            
             UtenteDAO dao = new UtenteDAO();
             UtenteBean user= dao.doRetrieveByKey(email);
-            if(user==null){ /* Se l'email non è vuota e non è abbinata a nessun utente allora è disponibile */
-                emailDisponibile = true;
-            }
+            boolean emailDisponibile = (user == null);
 
-            out.print("{\"available\": " + emailDisponibile + "}"); /* Costruzione del JSON */
+            out.print("{\"available\": " + emailDisponibile + ", \"error\": null}"); /* Costruzione del JSON */
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

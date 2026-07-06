@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS Utente;
 CREATE TABLE Utente (
                         nome VARCHAR(25) NOT NULL,
                         cognome VARCHAR(25) NOT NULL,
-                        email VARCHAR(25) PRIMARY KEY,
+                        email VARCHAR(75) PRIMARY KEY,
                         password VARCHAR(255) NOT NULL,
                         data_nascita DATE NOT NULL,
                         tipo VARCHAR(25) NOT NULL DEFAULT 'utente non registrato',
@@ -55,7 +55,7 @@ CREATE TABLE TracciaAudio (
                               nome_file VARCHAR(50) NOT NULL,
                               percorso_file VARCHAR(100) NOT NULL,
                               `check` TINYINT(1) NOT NULL, 
-                              FK_utente VARCHAR(25) NOT NULL, -- La traccia appartiene sempre a un utente
+                              FK_utente VARCHAR(75) NOT NULL, -- La traccia appartiene sempre a un utente
                               FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
 );
 
@@ -85,7 +85,7 @@ CREATE TABLE Recensione(
 
 -- tabella Utilizzo (tra utente e metodo pagamento)
 CREATE TABLE Utilizzo (
-                          FK_utente VARCHAR(25) NOT NULL,
+                          FK_utente VARCHAR(75) NOT NULL,
                           FK_metodopagamento BIGINT NOT NULL,
                           PRIMARY KEY (FK_utente, FK_metodopagamento),
                           FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE,
@@ -114,7 +114,7 @@ CREATE TABLE Tipologia (
 -- tabella carrello (tra utente e prodotto)
 CREATE TABLE Carrello(
     					   ID_riga_carrello INT AUTO_INCREMENT PRIMARY KEY,
-						   FK_utente VARCHAR(25) NOT NULL,
+						   FK_utente VARCHAR(75) NOT NULL,
 						   FK_prodotto INT NOT NULL,
 						   FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
 						   FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
