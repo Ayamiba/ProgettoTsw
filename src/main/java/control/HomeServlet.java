@@ -43,9 +43,8 @@ public class HomeServlet extends HttpServlet {
             // Salviamo la lista nella request per farla leggere alla JSP (allo scriptlet)
             request.setAttribute("ultimiProdotti", ultimiProdotti);
             
-            // Reindirizziamo alla home.jsp (che ora si trova direttamente in webapp)
-            request.getRequestDispatcher("/home.jsp").forward(request, response);
-            
+            // Reindirizziamo alla home.jsp 
+            request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);            
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendRedirect("errore500.jsp");
