@@ -1,4 +1,4 @@
-/*package control;
+package control;
 
 import model.utente.UtenteBean;
 
@@ -38,11 +38,11 @@ public class AdminFilter implements Filter{
         //Se l'utente non è admin non ha i permessi 
         if(isAdmin==false) {
         	System.out.println("L'utente non è autorizzato");
-        	httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
+        	httpResponse.sendRedirect(httpRequest.getContextPath() + "/errore404.jsp");
         }
         else {
         	//conferma che utente è admin
         	chain.doFilter(request, response);
         }
 	}
-} */
+} 

@@ -140,4 +140,22 @@ INSERT INTO `saendwave`.`categoria` (`nome`, `studio_tool`, `effetto`) VALUES ('
 INSERT INTO `saendwave`.`categoria` (`nome`, `studio_tool`, `effetto`) VALUES ('equalizzatore', '1', '1');
 INSERT INTO `saendwave`.`categoria` (`nome`, `studio_tool`, `effetto`) VALUES ('pedaliera', '0', '1');
 
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('1', 'distorsore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('2', 'amplificatore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('2', 'distorsore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('2', 'equalizzatore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('3', 'riverbero');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('4', 'compressore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('5', 'filtro');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('6', 'delay');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('7', 'equalizzatore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'pedaliera');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'delay');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'distorsore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'equalizzatore');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'riverbero');
+INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('9', 'filtro');
+
+INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('906', '5333111111111111', 'Mario', 'Rossi', 'mario.rossi@email.it');
+INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('785', '5333222222222222', 'Carla', 'Fracci', 'carla.fracci@email.it');
 
