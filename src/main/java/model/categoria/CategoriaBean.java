@@ -8,7 +8,6 @@ public class CategoriaBean implements Serializable{
 	private String nome; //primary key
 	private boolean studioTool;
 	private boolean effetto;
-	private String tipo;
 	
 	public CategoriaBean() {}
 	
@@ -16,7 +15,6 @@ public class CategoriaBean implements Serializable{
 		this.nome=nome;
 		this.studioTool=studioTool;
 		this.effetto=effetto;
-		this.tipo=tipo;
 	}
 	
 	//getters
@@ -32,9 +30,6 @@ public class CategoriaBean implements Serializable{
 		return effetto;
 	}
 	
-	public String getTipo() {
-		return tipo;
-	}
 	
 	//ssetters
 	public void setNome(String nome) {
@@ -49,7 +44,4 @@ public class CategoriaBean implements Serializable{
 		this.effetto=effetto;
 	}
 	
-	public void setTipo(String tipo) {
-		this.tipo=tipo;
-	}
 }

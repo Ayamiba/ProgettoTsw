@@ -34,9 +34,13 @@
                        for (ProdottoBean prodotto : ultimiProdotti) { 
                 %>
                            <article class="card">
-                               <img src="img/prodotti/<%= prodotto.getImmagine() %>" 
-                                    alt="<%= prodotto.getNome() %>" 
-                                    onerror="this.onerror=null; this.src='img/placeholder.png';">
+                               <% 
+                      	 String imgPath = prodotto.getImmagine(); //la path corrisponde all'url che sta nel database 
+                       	 if (imgPath == null || imgPath.trim().isEmpty()) {
+                         imgPath = "img/placeholder.png";
+                      			 }
+                  				 %>
+                   			   <img src="<%= imgPath %>" alt="<%= prodotto.getNome() %>">
                                
                                <h3 class="card-title"><%= prodotto.getNome() %></h3>
                                

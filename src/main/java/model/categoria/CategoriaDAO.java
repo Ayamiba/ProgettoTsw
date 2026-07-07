@@ -37,7 +37,6 @@ public class CategoriaDAO implements DAOInterface<CategoriaBean, String> {
                 categoria.setNome(resultSet.getString("nome"));
                 categoria.setStudioTool(resultSet.getBoolean("studio_tool")); 
                 categoria.setEffetto(resultSet.getBoolean("effetto"));
-                categoria.setTipo(resultSet.getString("tipo"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -68,7 +67,6 @@ public class CategoriaDAO implements DAOInterface<CategoriaBean, String> {
                 categoria.setNome(resultSet.getString("nome"));
                 categoria.setStudioTool(resultSet.getBoolean("studio_tool")); // Utilizza setStudioTool in camelCase
                 categoria.setEffetto(resultSet.getBoolean("effetto"));
-                categoria.setTipo(resultSet.getString("tipo"));
                 categorie.add(categoria);
             }
         } finally {
@@ -95,7 +93,6 @@ public class CategoriaDAO implements DAOInterface<CategoriaBean, String> {
             statement.setString(1, categoria.getNome());
             statement.setBoolean(2, categoria.getStudioTool());
             statement.setBoolean(3, categoria.getEffetto());
-            statement.setString(4, categoria.getTipo());
 
             statement.executeUpdate();
         } finally {
@@ -118,7 +115,6 @@ public class CategoriaDAO implements DAOInterface<CategoriaBean, String> {
 
             statement.setBoolean(1, categoria.getStudioTool());
             statement.setBoolean(2, categoria.getEffetto());
-            statement.setString(3, categoria.getTipo());
             statement.setString(4, categoria.getNome());
 
             statement.executeUpdate();

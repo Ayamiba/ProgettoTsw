@@ -70,12 +70,12 @@
                     <p>Inserisci un nuovo prodotto al catalogo compilando il form.</p>
                 </a>
 
-                <a href="VisualizzaProdottiAdminServlet?azione=modifica" class="action-card card-edit">
+                <a href="ModificaProdottoServlet?azione=modifica" class="action-card card-edit">
                     <h3>Modifica Prodotto</h3>
                     <p>Aggiorna i prezzi, sostituisci i file delle immagini o edita le descrizioni dei prodotti esistenti.</p>
                 </a>
 
-                <a href="VisualizzaProdottiAdminServlet?azione=elimina" class="action-card card-delete">
+                <a href="VisualizzaOrdiniAdminServlet?azione=elimina" class="action-card card-delete">
                     <h3>Elimina Prodotto</h3>
                     <p>Rimuovi in maniera permanente o disattiva un articolo per interromperne la vendita.</p>
                 </a>
