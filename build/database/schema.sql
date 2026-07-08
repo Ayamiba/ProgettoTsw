@@ -159,3 +159,5 @@ INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('9',
 INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('906', '5333111111111111', 'Mario', 'Rossi', 'mario.rossi@email.it');
 INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('785', '5333222222222222', 'Carla', 'Fracci', 'carla.fracci@email.it');
 
+INSERT INTO saendwave.utilizzo (FK_utente, FK_metodopagamento) VALUES ('mario.rossi@email.it', '5333111111111111');
+INSERT INTO saendwave.utilizzo (FK_utente, FK_metodopagamento) VALUES ('carla.fracci@email.it', '5333222222222222');

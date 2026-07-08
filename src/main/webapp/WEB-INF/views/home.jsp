@@ -42,7 +42,11 @@
                   				 %>
                    			   <img src="<%= imgPath %>" alt="<%= prodotto.getNome() %>">
                                
-                               <h3 class="card-title"><%= prodotto.getNome() %></h3>
+                               <h3 class="card-title">
+    								<a href="ProdottoServlet?id=<%= prodotto.getIdProdotto() %>" style="text-decoration: none; color: inherit;">
+        								<%= prodotto.getNome() %>
+   									</a>
+								</h3>
                                
                                <p class="card-desc">
                                    <% 

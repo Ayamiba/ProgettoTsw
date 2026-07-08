@@ -80,7 +80,11 @@
                    <img src="<%= imgPath %>" alt="<%= prodotto.getNome() %>">
                    
                    <div class="catalog-card-details">
-                       <h3 class="catalog-card-title"><%= prodotto.getNome() %></h3>
+                       <h3 class="catalog-card-title">
+    						<a href="ProdottoServlet?id=<%= prodotto.getIdProdotto() %>" style="text-decoration: none; color: inherit;">
+       							 <%= prodotto.getNome() %>
+    						</a>
+						</h3>
                        
                        <p class="catalog-card-desc">
                            <% 

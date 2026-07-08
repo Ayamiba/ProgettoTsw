@@ -68,7 +68,7 @@ public class CatalogoServlet extends HttpServlet {
         	request.setAttribute("categoriaAttiva", categoriaScelta);
         	request.setAttribute("prezzoAttivo", prezzoMax >= 0 ? String.valueOf(prezzoMax) : "");
  
-        	RequestDispatcher dispatcher = request.getRequestDispatcher("/catalogoTest.jsp");     
+        	RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/catalog/catalog.jsp");     
         	dispatcher.forward(request, response);
         } catch (SQLException e) {
         	e.printStackTrace();
