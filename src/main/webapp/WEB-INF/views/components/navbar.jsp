@@ -36,8 +36,45 @@
             <span class="user-greeting"><%= utenteLoggato.getNome() %></span>
             <a href="LogoutServlet">Logout</a>
         <% } else { %>
-            <a href="login.jsp">Profilo / Accedi</a>
+            <a href="login.jsp">Accedi / Registrati</a>
+        <% } %>
+    </div>
+    <div class="hamburger-menu" id="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="nav-catalog-mobile">
+            <a href="CatalogoServlet" style="color: var(--colore-primario);">Catalogo</a>
+            <a href="CatalogoServlet?tipo=effetto" class="sub-link">- Effetti</a>
+            <a href="CatalogoServlet?tipo=studio_tool" class="sub-link">- Studio Tools</a>
+            <a href="CatalogoServlet?tipo=bundle" class="sub-link">- Bundle Completi</a>
+        </div>
+        
+        <hr class="mobile-divider">
+        
+        <a href="CarrelloServlet">Carrello</a>
+        <% if (utenteLoggato != null) { %>
+            <a href="profilo.jsp">Profilo</a>
+            <a href="LogoutServlet" style="color: #d9534f;">Logout</a>
+        <% } else { %>
+            <a href="login.jsp">Accedi / Registrati</a>
         <% } %>
     </div>
 </header>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburger = document.getElementById('hamburger-menu');
+        const sidebar = document.getElementById('mobile-sidebar');
+
+        if(hamburger && sidebar) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                sidebar.classList.toggle('active');
+            });
+        }
+    });
+</script>
 

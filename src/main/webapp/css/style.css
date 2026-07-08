@@ -212,3 +212,109 @@ button{
 }
 .footer a { color: #52ADD4; text-decoration: none; font-weight: bold; margin: 0 10px; }
 .footer a:hover { text-decoration: underline; }
+
+/*Nasconsta link hamburger menu in desktop*/
+
+.hamburger-menu { display: none; }
+.mobile-sidebar { display: none; }
+
+/* ============================================================
+   RESPONSIVE MOBILE NAVBAR (Solo sotto i 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+    /* 1. NASCONDIAMO ESPLICITAMENTE I TASTI DESKTOP */
+    .nav-right, 
+    .nav-left .nav-catalog,
+    .desktop-only { 
+        display: none !important; 
+    }
+
+    /* 2. RIORGANIZZIAMO LA NAVBAR IN 2 RIGHE (Logo+Menu sopra, Ricerca sotto) */
+    .navbar { 
+        padding: 10px 20px; 
+        flex-wrap: wrap; /* Permette agli elementi di andare a capo */
+    }
+
+    .nav-left {
+        flex: 1; /* Il logo spinge l'hamburger tutto a destra */
+    }
+
+    /* 3. BARRA DI RICERCA SULLA SECONDA RIGA */
+    .nav-center { 
+        width: 100%; 
+        max-width: 100%; 
+        margin: 15px 0 5px 0; /* Spazio sopra e sotto */
+        order: 3; /* Forza la barra di ricerca ad andare sotto logo e hamburger */
+    }
+    
+    .search-bar { 
+        font-size: 0.9em; 
+        padding: 10px 15px; 
+    }
+
+    /* 4. MOSTRIAMO L'HAMBURGER */
+    .hamburger-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 1001; 
+        margin-top: 5px; /* Allineamento col logo */
+    }
+    .hamburger-menu span {
+        width: 25px;
+        height: 3px;
+        background-color: var(--colore-primario);
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    /* 5. STILE DELLA SIDEBAR SCORREVOLE (Rimane invariato) */
+    .mobile-sidebar {
+        display: flex;
+        position: fixed;
+        top: 0;
+        right: -100%; 
+        width: 250px;
+        height: 100vh;
+        background-color: #ffffff;
+        flex-direction: column;
+        padding: 80px 30px 30px 30px; 
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transition: right 0.4s ease;
+        z-index: 1000;
+        gap: 20px; 
+    }
+    
+    .mobile-sidebar.active { right: 0; }
+
+    .mobile-sidebar a {
+        text-decoration: none; 
+        color: #1a1a2e; 
+        font-weight: 600; 
+        font-size: 1.1em;
+    }
+    .mobile-divider {
+        border: 0;
+        border-top: 1px solid #eee;
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .nav-catalog-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .nav-catalog-mobile .sub-link {
+        font-weight: 400;
+        font-size: 0.95em;
+        color: #555;
+        margin-left: 15px;
+    }
+
+    /* Animazione "X" Hamburger */
+    .hamburger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+    .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+    .hamburger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+}
