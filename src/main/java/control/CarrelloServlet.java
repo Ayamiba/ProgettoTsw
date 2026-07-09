@@ -87,10 +87,13 @@ public class CarrelloServlet extends HttpServlet {
 	            }
 	        }
 	        
-	        // Passa la lista finale alla JSP
+	     // 1. Passa la lista alla pagina carrello.jsp (per la tabella grande centrale)
 	        request.setAttribute("prodottiCarrello", prodottiCarrello); 
 	        
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/carrello.jsp");     
+	        // 2. AGGIUNTA FONDAMENTALE: Salva la lista nella Sessione per la Navbar!
+	        session.setAttribute("carrelloProdotti", prodottiCarrello);
+	        
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/carrello.jsp");     
 	        dispatcher.forward(request, response);
 	        
 	    } catch (SQLException e) {

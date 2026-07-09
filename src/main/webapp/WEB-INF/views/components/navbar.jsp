@@ -1,10 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
+<%@ page import="model.carrello.CarrelloBean" %>
+<%@ page import="model.prodotto.ProdottoBean" %>
+<%@ page import="java.util.List" %>
 <%
     // Recuperiamo l'utente in sessione per mostrare il nome o il tasto login
     UtenteBean utenteLoggato = (UtenteBean) session.getAttribute("user");
+	
+//Recuperiamo la lista dei prodotti effettivi inseriti nel carrello (creata dalle tue Servlet)
+List<ProdottoBean> prodottiNelCarrello = (List<ProdottoBean>) session.getAttribute("carrelloProdotti");
+
+// Contiamo quanti elementi ci sono per mostrare il numerino rosso
+int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.size() : 0;
 %>
 <script src="<%= request.getContextPath() %>/js/Suggerimenti.js"></script>
+<script src="<%= request.getContextPath() %>/js/Navbar.js"></script>
 
 <header class="navbar">
     <div class="nav-left">
@@ -30,7 +40,42 @@
     </div>
 
     <div class="nav-right">
-        <a href="CarrelloServlet">Carrello</a>
+        <div class="cart-wrapper">
+            <a href="CarrelloServlet" class="cart-icon-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart" width="22" height="22">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                
+                <% if (oggettiNelCarrello > 0) { %>
+                    <span class="cart-badge"><%= oggettiNelCarrello %></span>
+                <% } %>
+            </a>
+            <div class="mini-cart-dropdown">
+                <h4>Il tuo Carrello</h4>
+                <div class="mini-cart-items">
+                    <% 
+                        if (oggettiNelCarrello > 0) {
+                            for (ProdottoBean p : prodottiNelCarrello) {
+                    %>
+                                <div class="mini-cart-item">
+                                    <img src="<%= p.getImmagine() %>" onerror="this.src='img/placeholder.png'">
+                                    <div class="mini-item-details">
+                                        <span class="mini-item-name"><%= p.getNome() %></span>
+                                        <span class="mini-item-price">€ <%= String.format("%.2f", p.getPrezzo()) %></span>
+                                    </div>
+                                </div>
+                    <% 
+                            }
+                        } else { 
+                    %>
+                            <p class="empty-cart-msg">Il carrello è vuoto</p>
+                    <% } %>
+                </div>
+                <a href="CarrelloServlet" class="btn-goToCart">Vai al Carrello</a>
+            </div>
+            </div>
         
         <% if (utenteLoggato != null) { %>
             <span class="user-greeting"><%= utenteLoggato.getNome() %></span>
@@ -64,17 +109,4 @@
         <% } %>
     </div>
 </header>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const hamburger = document.getElementById('hamburger-menu');
-        const sidebar = document.getElementById('mobile-sidebar');
-
-        if(hamburger && sidebar) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                sidebar.classList.toggle('active');
-            });
-        }
-    });
-</script>
 
