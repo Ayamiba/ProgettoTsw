@@ -81,7 +81,7 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
             <span class="user-greeting"><%= utenteLoggato.getNome() %></span>
             <a href="LogoutServlet">Logout</a>
         <% } else { %>
-            <a href="login.jsp">Accedi / Registrati</a>
+            <a href="LoginServlet">Accedi / Registrati</a>
         <% } %>
     </div>
     <div class="hamburger-menu" id="hamburger-menu">

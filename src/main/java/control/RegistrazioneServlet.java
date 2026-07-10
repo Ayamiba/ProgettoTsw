@@ -41,7 +41,7 @@ public class RegistrazioneServlet extends HttpServlet {
     
  // Se l'utente clicca sul link "Registrati", gli mostriamo la pagina con il form
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/registrazione.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/auth/registrazione.jsp").forward(request, response);
     }
     //dopo che l'utente conferma il form
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -105,7 +105,7 @@ public class RegistrazioneServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("errore", "Questa email è già registrata! Scegline un'altra.");
-            request.getRequestDispatcher("/registrazione.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/auth/registrazione.jsp").forward(request, response);
         }
     }
     }

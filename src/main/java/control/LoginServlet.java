@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
     
     // Se l'utente arriva qui tramite un link, gli mostriamo la pagina di login
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(request, response);
     }
     
     //quando l'utente preme sul pulsante "Login" i dati vengono inviati qui
@@ -99,7 +99,7 @@ public class LoginServlet extends HttpServlet {
         } else {
            //login fallito
             request.setAttribute("errore", "Email o password non validi. Riprova.");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(request, response);
         }
     }
 } 

@@ -1,0 +1,117 @@
+/* ============================================================
+   PAGINE LOGIN E REGISTRAZIONE
+   ============================================================ */
+.auth-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 40px 20px;
+}
+
+.auth-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.auth-card h2 {
+    color: #1a1a2e;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.auth-card p.subtitle {
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.auth-form label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: -10px; /* Avvicina la label all'input */
+}
+
+.auth-input {
+    padding: 12px 1px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.auth-input:focus {
+    border-color: var(--colore-primario);
+    outline: none;
+}
+
+.auth-btn {
+    background-color: var(--colore-primario);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1.05em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.auth-btn:hover {
+    background-color: var(--colore-secondario);
+}
+
+.auth-error {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 1px solid #ffcdd2;
+}
+
+.auth-switch {
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.auth-switch a {
+    color: var(--colore-primario);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+.input-error {
+    border-color: #c62828 !important; /* Rosso */
+}
+.input-success {
+    border-color: #2e7d32 !important; /* Verde */
+}
+.label-error {
+    color: #c62828 !important;
+}
+.label-success {
+    color: #2e7d32 !important;
+}
