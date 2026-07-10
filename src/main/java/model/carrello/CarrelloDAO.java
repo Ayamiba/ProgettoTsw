@@ -107,4 +107,28 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
 	        }
 	    }
 	}
+	
+	public synchronized boolean doDeleteByUtenteAndProdotto(String emailUtente, int idProdotto) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    int result = 0;
+
+	    String deleteSQL = "DELETE FROM carrello WHERE FK_utente = ? AND FK_prodotto = ?";
+
+	    try {
+	        connection = ConnectionPool.getConnection();
+	        preparedStatement = connection.prepareStatement(deleteSQL);
+	        preparedStatement.setString(1, emailUtente);
+	        preparedStatement.setInt(2, idProdotto);
+
+	        result = preparedStatement.executeUpdate();
+	    } finally {
+	        try {
+	            if (preparedStatement != null) preparedStatement.close();
+	        } finally {
+	            ConnectionPool.releaseConnection(connection);
+	        }
+	    }
+	    return (result != 0);
+	}
 }
