@@ -125,7 +125,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 		Connection connection = null;
 		PreparedStatement statement = null;
 
-		String query = "UPDATE Utente SET nome = ?, cognome = ?, password = ?, tipo = ? WHERE email = ?";
+		String query = "UPDATE Utente SET nome = ?, cognome = ?, password = ?, data_nascita = ?, tipo = ? WHERE email = ?";
 
 		try {
 			connection = ConnectionPool.getConnection();

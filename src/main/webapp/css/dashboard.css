@@ -260,3 +260,144 @@
             margin-bottom: 8px;
             font-size: 0.9em;
         }
+        
+     /* ============================================================
+   PAGINE DI IMPOSTAZIONE (Modifica Profilo, Sicurezza, ecc.)
+   ============================================================ */
+.dash-settings-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    min-height: 60vh;
+}
+
+.dash-settings-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    padding: 35px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    border-top: 4px solid var(--colore-primario);
+}
+
+.dash-settings-card h2 {
+    color: #1a1a2e;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 1.8em;
+}
+
+.dash-settings-card .subtitle {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+/* Griglia per affiancare input (es. Nome e Cognome) */
+.dash-form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.dash-form-row > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dash-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.dash-form-group label, .dash-form-row label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #333;
+}
+
+.dash-input {
+    padding: 12px 15px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: border-color 0.3s;
+    width: 100%;
+}
+
+.dash-input:focus {
+    border-color: var(--colore-primario);
+    outline: none;
+}
+
+.dash-input.readonly {
+    background-color: #f8f9fa;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #eef0f2;
+}
+
+/* Pulsanti di salvataggio e annullamento */
+.dash-buttons-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.dash-btn-save {
+    flex: 2;
+    background-color: var(--colore-primario);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dash-btn-save:hover {
+    background-color: var(--colore-secondario);
+}
+
+.dash-btn-cancel {
+    flex: 1;
+    background-color: #f4f5f7;
+    color: #444;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dash-btn-cancel:hover {
+    background-color: #e0e0e0;
+}
+        .settings-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+        /* Campo in sola lettura */
+        .input-readonly {
+            background-color: #f4f5f7;
+            color: #888;
+            cursor: not-allowed;
+        }
