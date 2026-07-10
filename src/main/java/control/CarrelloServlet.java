@@ -43,7 +43,7 @@ public class CarrelloServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    HttpSession session = request.getSession();
-	    // al login viene salvato l'utente che c'è
+	    // Al login viene salvato l'utente che c'è
 	    model.utente.UtenteBean utenteLoggato = (model.utente.UtenteBean) session.getAttribute("user");
 	    
 	    List<ProdottoBean> prodottiCarrello = new ArrayList<>();

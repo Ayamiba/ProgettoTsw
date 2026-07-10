@@ -86,4 +86,25 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
 	        }
 	    }
 	}
+	public static void doDelete(int idProdotto) throws SQLException {
+		Connection connection = null;
+	    PreparedStatement statement = null;
+	    String query = "DELETE from CARRELLO where FK_prodotto=?";
+	    try {
+	        connection = ConnectionPool.getConnection();
+	        statement = connection.prepareStatement(query);
+	        
+	        statement.setInt(1, idProdotto);
+
+	        // Esegue l'inserimento nel database
+	        statement.executeUpdate();
+	        
+	    } finally {
+	        try {
+	            if (statement != null) statement.close();
+	        } finally {
+	            ConnectionPool.releaseConnection(connection);
+	        }
+	    }
+	}
 }
