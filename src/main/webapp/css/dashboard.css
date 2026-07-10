@@ -351,36 +351,45 @@
     display: flex;
     gap: 15px;
     margin-top: 35px;
+    align-items: stretch; /* FORZA i due elementi ad avere esattamente la stessa altezza */
 }
-
 .dash-btn-save {
     flex: 2;
     background-color: var(--colore-primario);
     color: white;
     border: none;
-    padding: 14px;
     font-size: 1em;
+    font-family: inherit;
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
+    
+    
+    margin: 0; /* Annulla il "margin-top: 20px" del file style.css */
+    height: 50px; /* Altezza blindata */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dash-btn-save:hover {
     background-color: var(--colore-secondario);
 }
-
 .dash-btn-cancel {
     flex: 1;
     background-color: #f4f5f7;
     color: #444;
-    text-align: center;
     text-decoration: none;
-    padding: 14px;
     font-size: 1em;
+    font-family: inherit;
     font-weight: bold;
     border-radius: 6px;
     transition: background-color 0.2s;
+    
+    
+    margin: 0; 
+    height: 50px; /* Altezza identica al bottone blu */
     display: flex;
     justify-content: center;
     align-items: center;
