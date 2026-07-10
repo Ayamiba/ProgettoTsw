@@ -78,11 +78,11 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
             </div>
         
         <% if (utenteLoggato != null) { %>
-            <span class="user-greeting"><%= utenteLoggato.getNome() %></span>
-            <a href="LogoutServlet">Logout</a>
-        <% } else { %>
-            <a href="LoginServlet">Accedi / Registrati</a>
-        <% } %>
+    <a href="ProfiloServlet" class="user-greeting"><%= utenteLoggato.getNome() %></a>
+    <a href="LogoutServlet" style="color: #d9534f; margin-left: 10px;">Logout</a>
+<% } else { %>
+    <a href="LoginServlet">Accedi / Registrati</a>
+<% } %>
     </div>
     <div class="hamburger-menu" id="hamburger-menu">
         <span></span>
@@ -102,7 +102,7 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
         
         <a href="CarrelloServlet">Carrello</a>
         <% if (utenteLoggato != null) { %>
-            <a href="profilo.jsp">Profilo</a>
+            <a href="ProfiloServlet" class="user-greeting">Profilo</a>
             <a href="LogoutServlet" style="color: #d9534f;">Logout</a>
         <% } else { %>
             <a href="login.jsp">Accedi / Registrati</a>

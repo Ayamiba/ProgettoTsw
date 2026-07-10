@@ -200,6 +200,16 @@ button{
     color: #4134E7;
     font-weight: 600;
 }
+
+.user-greeting { 
+    color: var(--colore-secondario); 
+    font-weight: bold; 
+    text-decoration: none; /* Evita che il nome venga sottolineato */
+}
+
+.user-greeting:hover {
+    color: var(--colore-primario); /* Cambia leggermente colore al passaggio del mouse */
+}
 /* ============================================================
    FOOTER
    ============================================================ */

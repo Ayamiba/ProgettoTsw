@@ -20,7 +20,7 @@
     <main class="auth-page-container">
         <div class="auth-card">
             <h2>Bentornato</h2>
-            <p class="subtitle">Accedi per scaricare i tuoi plugin e gestire le licenze.</p>
+            <p class="subtitle">Accedi </p>
 
             <% if (errore != null) { %>
                 <div class="auth-error"><%= errore %></div>

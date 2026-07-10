@@ -1,0 +1,262 @@
+/* ============================================================
+   LAYOUT GENERALE DELLA DASHBOARD
+   ============================================================ */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.dashboard-container h1 {
+    font-size: 2.2em;
+    color: #1a1a2e;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.dashboard-container .subtitle {
+    color: #666;
+    font-size: 1.05em;
+    margin-bottom: 35px;
+}
+
+/* ============================================================
+   IL SISTEMA A GRIGLIA (RESPONSIVE)
+   ============================================================ */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+    align-items: start;
+}
+
+/* Se lo schermo è piccolo (Mobile), le card si impilano a riga singola */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   STILE DELLE CARD (I PANNELLI OPERATIVI)
+   ============================================================ */
+.dash-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    border-top: 4px solid var(--colore-primario); /* Di base usa il viola Sændwave */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dash-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.dash-card h3 {
+    font-size: 1.3em;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* Variant di colore superiore in base alla pagina del ruolo */
+.dash-card.card-admin { border-top-color: #d9534f; }       /* Rosso Amministratore */
+.dash-card.card-pro { border-top-color: #ecc94b; }         /* Oro/Giallo Professionista */
+.dash-card.card-user { border-top-color: var(--colore-primario); } /* Viola Utente */
+
+/* ============================================================
+   TABELLE INTERNE DELLE DASHBOARD (Ordini, Prodotti, Coda)
+   ============================================================ */
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.95em;
+}
+
+.dash-table th, .dash-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f4f5f7;
+}
+
+.dash-table th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+}
+
+.dash-table tr:hover td {
+    background-color: #fafafa;
+}
+
+/* ============================================================
+   BADGES DI STATO (Pronto, In Lavorazione, Sospeso)
+   ============================================================ */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.status-badge.ready {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.pending {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.status-badge.working {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+/* ============================================================
+   BOTTONI E LINK DI AZIONE SPECIALI PER DASHBOARD
+   ============================================================ */
+.dash-btn-download {
+    color: var(--colore-primario);
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dash-btn-download:hover {
+    color: var(--colore-secondario);
+    text-decoration: underline;
+}
+
+/* Form veloci dentro le card (es. aggiunta prodotto o upload traccia) */
+.dash-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.dash-form-group label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #444;
+}
+
+.dash-form-group input, 
+.dash-form-group select, 
+.dash-form-group textarea {
+    padding: 10px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+.dash-form-group input:focus {
+    border-color: var(--colore-primario);
+    outline: none;
+}
+
+/* ============================================================
+   UTENTE
+   ============================================================ */
+   /* Stili specifici interni per ottimizzare i blocchi verticali delle informazioni */
+        .profile-info-block {
+            margin-bottom: 22px;
+        }
+        .profile-info-block:last-of-type {
+            margin-bottom: 10px;
+        }
+        .profile-info-block strong {
+            display: block;
+            font-size: 0.8em;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .profile-info-block span {
+            font-size: 1.05em;
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+        
+        /* Lista di link d'azione verticali e minimali */
+        .dash-actions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 15px;
+        }
+        .dash-link-action {
+            color: var(--colore-primario);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .dash-link-action:hover {
+            color: var(--colore-secondario);
+            text-decoration: underline;
+        }
+        
+        /* Box per il caricamento indipendente dei file audio (Drag & Drop friendly) */
+        .upload-box {
+            border: 2px dashed #eaeaea;
+            border-radius: 8px;
+            padding: 35px 20px;
+            text-align: center;
+            background: #fbfbfb;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .upload-box:hover {
+            border-color: var(--colore-primario);
+            background-color: #f4f3ff;
+        }
+        .upload-box svg {
+            color: #999;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+        .upload-box:hover svg {
+            color: var(--colore-primario);
+        }
+        .upload-box p {
+            font-size: 0.9em;
+            color: #444;
+            margin: 0 0 5px 0;
+        }
+        .file-input-hidden {
+            display: none;
+        }
+        
+        /* Lista tracce cloud veloci */
+        .cloud-tracks-list {
+            margin-top: 25px;
+        }
+        .cloud-track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border: 1px solid #eef0f2;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }

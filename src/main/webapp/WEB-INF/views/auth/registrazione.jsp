@@ -18,7 +18,7 @@
 
     <main class="auth-page-container">
         <div class="auth-card" style="max-width: 550px;"> <h2>Crea il tuo Account</h2>
-            <p class="subtitle">Unisciti a Sændwave per acquistare ed elaborare le tue tracce.</p>
+            <p class="subtitle">Unisciti a Sændwave per elaborare le tue tracce.</p>
 
             <% if (errore != null) { %>
                 <div class="auth-error"><%= errore %></div>
