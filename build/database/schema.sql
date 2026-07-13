@@ -29,7 +29,8 @@ CREATE TABLE MetodoPagamento (
                                  cvv INT NOT NULL,
                                  numero_carta BIGINT PRIMARY KEY,
                                  nome VARCHAR(25) NOT NULL,
-                                 cognome VARCHAR(25) NOT NULL
+                                 cognome VARCHAR(25) NOT NULL,
+                                 scadenza VARCHAR(10) NOT NULL
 );
 
 -- tabella Categoria

@@ -9,14 +9,17 @@ public class MetodoPagamentoBean implements Serializable{
 	private int cvv;
 	private String nome;
 	private String cognome;
+	private String scadenza;
 	
 	public MetodoPagamentoBean() {}
 	
-	public MetodoPagamentoBean(long numeroCarta, int cvv, String nome, String cognome) {
+	public MetodoPagamentoBean(long numeroCarta, int cvv, String nome, String cognome, String scadenza) {
 		this.numeroCarta=numeroCarta;
 		this.cvv=cvv;
 		this.nome=nome;
 		this.cognome=cognome;
+		this.scadenza=scadenza;
+		
 	}
 	
 	//getters 
@@ -36,6 +39,10 @@ public class MetodoPagamentoBean implements Serializable{
 		return cognome;
 	}
 	
+	public String getScadenza() {
+		return scadenza;
+	}
+	
 	//setters
 	public void setNumeroCarta(long numeroCarta) {
 		this.numeroCarta=numeroCarta;
@@ -51,6 +58,10 @@ public class MetodoPagamentoBean implements Serializable{
 	
 	public void setCognome(String cognome) {
 		this.cognome=cognome;
+	}
+	
+	public void setScadenza(String scadenza) {
+		this.scadenza=scadenza;
 	}
 }
     

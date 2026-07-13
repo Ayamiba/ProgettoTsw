@@ -23,7 +23,7 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
         ResultSet resultSet = null;
         MetodoPagamentoBean metodo = null;
 
-        String query = "SELECT numero_carta, cvv, nome, cognome FROM MetodoPagamento WHERE numero_carta = ?";
+        String query = "SELECT numero_carta, cvv, nome, cognome FROM metodopagamento WHERE numero_carta = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -56,7 +56,7 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT numero_carta, cvv, nome, cognome FROM MetodoPagamento";
+        String query = "SELECT numero_carta, cvv, nome, cognome FROM metodopagamento";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -86,7 +86,8 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO MetodoPagamento (numero_carta, cvv, nome, cognome) VALUES (?, ?, ?, ?)";
+        // FIX: Usando INSERT IGNORE evitiamo crash sui duplicati della chiave primaria
+        String query = "INSERT IGNORE INTO metodopagamento (numero_carta, cvv, nome, cognome, scadenza) VALUES (?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -96,6 +97,7 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
             statement.setInt(2, metodo.getCvv());
             statement.setString(3, metodo.getNome());
             statement.setString(4, metodo.getCognome());
+            statement.setString(5, metodo.getScadenza()); 
 
             statement.executeUpdate();
         } finally {
@@ -105,12 +107,50 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
         }
     }
 
+    // IL METODO FONDAMENTALE CON LA JOIN
+    public List<MetodoPagamentoBean> doRetrieveByUtente(String emailUtente) throws SQLException {
+        List<MetodoPagamentoBean> carte = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        // La JOIN unisce la carta al suo utilizzo, filtrando per l'email dell'utente
+        String query = "SELECT mp.numero_carta, mp.cvv, mp.nome, mp.cognome, mp.scadenza " +
+                       "FROM metodopagamento mp " +
+                       "JOIN utilizzo u ON mp.numero_carta = u.FK_metodopagamento " +
+                       "WHERE u.FK_utente = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, emailUtente);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                MetodoPagamentoBean metodo = new MetodoPagamentoBean();
+                metodo.setNumeroCarta(resultSet.getLong("numero_carta"));
+                metodo.setCvv(resultSet.getInt("cvv"));
+                metodo.setNome(resultSet.getString("nome"));
+                metodo.setCognome(resultSet.getString("cognome"));
+                metodo.setScadenza(resultSet.getString("scadenza"));
+                
+                carte.add(metodo);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return carte;
+    }
     @Override
     public void doUpdate(MetodoPagamentoBean metodo) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE MetodoPagamento SET cvv = ?, nome = ?, cognome = ? WHERE numero_carta = ?";
+        String query = "UPDATE metodopagamento SET cvv = ?, nome = ?, cognome = ? WHERE numero_carta = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -136,7 +176,7 @@ public class MetodoPagamentoDAO implements DAOInterface<MetodoPagamentoBean, Lon
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "DELETE FROM MetodoPagamento WHERE numero_carta = ?";
+        String query = "DELETE FROM metodopagamento WHERE numero_carta = ?";
 
         try {
             connection = ConnectionPool.getConnection();

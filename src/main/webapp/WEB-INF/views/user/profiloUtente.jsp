@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
+<%@ page import="model.metodoPagamento.MetodoPagamentoBean" %>
+<%@ page import="model.metodoPagamento.MetodoPagamentoDAO" %>
+<%@ page import="java.util.List" %>
 <% 
     // Recuperiamo l'utente loggato in sessione per estrarre i dati anagrafici
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
@@ -61,14 +64,44 @@
                     </div>
                 </div>
 
-                <div class="dash-card card-user">
+          <div class="dash-card card-user">
                     <h3>Metodi di Pagamento</h3>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Configura le tue carte per accelerare le operazioni di acquisto licenze durante il checkout.</p>
                     
-                    <div style="background: #f8f9fa; border: 1px solid #eef0f2; padding: 14px; border-radius: 6px; display: flex; align-items: center; gap: 12px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #888;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                        <span style="font-size: 0.9em; color: #555; font-weight: 500;">Nessun metodo di pagamento salvato</span>
-                    </div>
+                    <%
+                        // Richiamo il DAO per pescare le carte di questo specifico utente
+                        MetodoPagamentoDAO pagDAO = new MetodoPagamentoDAO();
+                        List<MetodoPagamentoBean> carteUtente = pagDAO.doRetrieveByUtente(utente.getEmail());
+                        
+                        // Controllo se l'utente non ha carte
+                        if (carteUtente == null || carteUtente.isEmpty()) { 
+                    %>
+                        <div style="background: #f8f9fa; border: 1px solid #eef0f2; padding: 14px; border-radius: 6px; display: flex; align-items: center; gap: 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #888;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                            <span style="font-size: 0.9em; color: #555; font-weight: 500;">Nessun metodo di pagamento salvato</span>
+                        </div>
+                    <% } else { %>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <% for(MetodoPagamentoBean carta : carteUtente) { 
+                                // Estraggo le ultime 4 cifre per la grafica
+                                String numCarta = String.valueOf(carta.getNumeroCarta());
+                                String ultimeQuattro = numCarta.substring(Math.max(0, numCarta.length() - 4));
+                            %>
+                                <div style="background: #fbfbfb; border: 1px solid #e0e0e0; padding: 12px 15px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <div style="background: var(--colore-primario); color: white; padding: 6px; border-radius: 4px;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.95em; color: #333;">Carta terminante in <%= ultimeQuattro %></div>
+                                            <div style="font-size: 0.8em; color: #777;">Scadenza: <%= carta.getScadenza() %> • <%= carta.getNome() %> <%= carta.getCognome() %></div>
+                                        </div>
+                                    </div>
+                                    <a href="#" style="color: #d9534f; font-size: 0.85em; font-weight: bold; text-decoration: none;">Rimuovi</a>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
                     
                     <div class="dash-actions-list">
                         <a href="MetodiPagamentoServlet?azione=aggiungi" class="dash-link-action">
