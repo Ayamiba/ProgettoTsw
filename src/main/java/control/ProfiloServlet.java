@@ -28,10 +28,10 @@ public class ProfiloServlet extends HttpServlet {
         String tipo = utente.getTipo().toLowerCase();
 
         if (tipo.equals("admin")) {
-            request.getRequestDispatcher("/WEB-INF/views/admin/profiloAdmin.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/profiloAdmin.jsp").forward(request, response);
             
         } else if (tipo.equals("professionista")) {
-            request.getRequestDispatcher("/WEB-INF/views/pro/profiloProfessionista.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/profiloProfessionista.jsp").forward(request, response);
             
         } else {
             // Caso di default: "utente registrato"

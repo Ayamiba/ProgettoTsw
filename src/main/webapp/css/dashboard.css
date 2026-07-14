@@ -25,13 +25,13 @@
    ============================================================ */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: repeat(2, 1fr); 
     gap: 30px;
     align-items: start;
 }
 
-/* Se lo schermo è piccolo (Mobile), le card si impilano a riga singola */
-@media (max-width: 768px) {
+/* Se lo schermo scende sotto i 900px (Tablet/Mobile), passiamo a una colonna singola */
+@media (max-width: 900px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
