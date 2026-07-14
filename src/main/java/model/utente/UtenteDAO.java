@@ -61,7 +61,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 		Statement statement = null;
 		ResultSet resultSet = null;
 
-		String query = "SELECT email, nome, cognome, password, tipo FROM Utente";
+		String query = "SELECT email, nome, cognome, password, data_nascita, tipo FROM Utente";
 
 		try {
 			connection = ConnectionPool.getConnection();

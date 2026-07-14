@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
 <% 
+    // Recuperiamo l'amministratore loggato in sessione
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
 %>
 <!DOCTYPE html>
@@ -64,9 +65,8 @@
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Promuovi gli utenti a "Professionisti", visualizza le anagrafiche o banna gli account non conformi.</p>
                     
                     <div style="background: #f8f9fa; border: 1px solid #eef0f2; padding: 14px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 0.9em; color: #333; font-weight: 500;">Accesso al database utenti</span>
-                        <a href="#" class="dash-btn-save" style="text-decoration: none; display: inline-flex; width: auto; padding: 8px 15px; margin: 0; height: auto; background-color: #333;">Apri Lista</a>
-                    </div>
+						<a href="GestioneUtentiServlet" class="dash-btn-save" style="text-decoration: none; display: inline-flex; width: auto; padding: 8px 15px; margin: 0; height: auto; background-color: #333;">Apri Lista</a>                    
+					</div>
                 </div>
 
             </div>
@@ -97,6 +97,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <%-- Logica di fallback in attesa della Servlet/DAO Ordini --%>
                             <tr>
                                 <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
                                     Nessun ordine attualmente registrato nel sistema.

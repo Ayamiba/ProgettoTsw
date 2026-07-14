@@ -96,3 +96,37 @@
     border-color: #4134E7; /* Il bordo diventa del blu del brand */
     box-shadow: 0 10px 20px rgba(65, 52, 231, 0.08); /* Ombra violacea */
 }
+
+  /* Tasto rapido per le azioni in tabella */
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+        }
+        .btn-promote { background-color: #ecc94b; color: #333; } /* Oro per i Pro */
+        .btn-ban { background-color: #d9534f; } /* Rosso per i ban */
+        
+        
+        .btn-back {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-back:hover {
+            background-color: #f9fafb;
+            color: #1a1a2e;
+            border-color: #9ca3af;
+        }

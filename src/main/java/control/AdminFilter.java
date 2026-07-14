@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 //tutte le servlet e le JSP da proteggere
-@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/AggiungiProdotto.jsp", "/ModificaProdottoServlet", "/ModificaProdotto.jsp","/EliminaProdottoServlet","/EliminaProdotto.jsp","/VisualizzaOrdiniAdmin.jsp","/VisualizzaOrdiniAdminServlet", "/paginaAdmin.jsp"})
+@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/AggiungiProdotto.jsp", "/ModificaProdottoServlet", "/ModificaProdotto.jsp","/EliminaProdottoServlet","/EliminaProdotto.jsp","/VisualizzaOrdiniAdmin.jsp","/VisualizzaOrdiniAdminServlet", "/paginaAdmin.jsp", "/GestioneUtentiServlet"})
 public class AdminFilter implements Filter{
 	//Filterchain serve per dare conferma che il controllo sia andato a buon fine
 	@Override
