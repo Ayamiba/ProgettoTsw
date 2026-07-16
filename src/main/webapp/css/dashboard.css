@@ -47,6 +47,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     border-top: 4px solid var(--colore-primario); /* Di base usa il viola Sændwave */
     transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
 }
 
 .dash-card:hover {
@@ -410,3 +411,186 @@
             color: #888;
             cursor: not-allowed;
         }
+        
+        /* ============================================================
+   CLASSI DI SUPPORTO PER IL LAYOUT DELLE DASHBOARD
+   ============================================================ */
+/* Colonna flessibile per la griglia */
+.dash-col {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Descrizione interna alle card */
+.card-desc {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Box per stati vuoti (Nessun metodo, Nessun ordine, ecc.) */
+.empty-data-box {
+    background: #f8f9fa;
+    border: 1px solid #eef0f2;
+    padding: 14px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.empty-data-box span {
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 500;
+}
+
+.empty-data-box svg {
+    color: #888;
+}
+
+/* ============================================================
+   LISTA METODI DI PAGAMENTO
+   ============================================================ */
+.payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-item {
+    background: #fbfbfb;
+    border: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.payment-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-icon-wrapper {
+    background: var(--colore-primario);
+    color: white;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.payment-text-title {
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.payment-text-sub {
+    font-size: 0.8em;
+    color: #777;
+}
+
+.btn-text-danger {
+    color: #d9534f;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-text-danger:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   SOVRASCRITTURE PER L'AUDIO CLOUD
+   ============================================================ */
+.upload-box {
+    border: 2px dashed #eaeaea;
+    border-radius: 8px;
+    padding: 20px 15px; /* Modificato: altezza ridotta */
+    text-align: center;
+    background: #fbfbfb;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.upload-box p {
+    font-size: 0.9em;
+    color: #444;
+    margin: 0 0 4px 0; /* Modificato */
+}
+
+.upload-box svg {
+    color: #999;
+    margin-bottom: 8px; /* Modificato */
+    transition: color 0.2s;
+}
+
+.upload-hint {
+    font-size: 0.75em;
+    color: #888;
+}
+
+.cloud-track-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: #fbfbfb;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.cloud-track-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 80%;
+}
+
+.cloud-track-name {
+    font-weight: 500;
+    font-size: 0.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cloud-track-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+
+.btn-play-audio {
+    background: none;
+    border: none;
+    color: var(--colore-primario);
+    font-size: 1.2em; /* Leggermente più grande per visibilità */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra l'icona orizzontalmente */
+    width: 30px;  /* Area cliccabile fissa */
+    height: 30px; /* Area cliccabile fissa */
+    padding: 0;   /* Rimuoviamo padding casuali */
+    transition: color 0.2s, transform 0.1s;
+    line-height: 1; /* Schiaccia gli spazi vuoti del font */
+}
+
+
+.btn-play-audio .play-icon {
+    display: inline-block;
+    transform: translateY(-1px); 
+}
+
+
+.btn-play-audio:active {
+    transform: scale(0.9);
+}

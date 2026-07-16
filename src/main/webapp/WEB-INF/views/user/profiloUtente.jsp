@@ -6,7 +6,6 @@
 <%@ page import="model.tracciaAudio.TracciaAudioDAO" %>
 <%@ page import="java.util.List" %>
 <% 
-    // Recuperiamo l'utente loggato in sessione per estrarre i dati anagrafici
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
 %>
 <!DOCTYPE html>
@@ -18,7 +17,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="<%= request.getContextPath() %>/js/AscoltaAudio.js" defer></script>
-    
 </head>
 <body>
 
@@ -30,7 +28,7 @@
         
         <div class="dashboard-grid">
             
-            <div style="display: flex; flex-direction: column; gap: 30px;">
+            <div class="dash-col">
                 
                 <div class="dash-card card-user">
                     <h3>Informazioni Personali</h3>
@@ -67,40 +65,37 @@
                     </div>
                 </div>
 
-          <div class="dash-card card-user">
+                <div class="dash-card card-user">
                     <h3>Metodi di Pagamento</h3>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Configura le tue carte per accelerare le operazioni di acquisto licenze durante il checkout.</p>
+                    <p class="card-desc">Configura le tue carte per accelerare le operazioni di acquisto licenze durante il checkout.</p>
                     
                     <%
-                        // Richiamo il DAO per pescare le carte di questo specifico utente
                         MetodoPagamentoDAO pagDAO = new MetodoPagamentoDAO();
                         List<MetodoPagamentoBean> carteUtente = pagDAO.doRetrieveByUtente(utente.getEmail());
                         
-                        // Controllo se l'utente non ha carte
                         if (carteUtente == null || carteUtente.isEmpty()) { 
                     %>
-                        <div style="background: #f8f9fa; border: 1px solid #eef0f2; padding: 14px; border-radius: 6px; display: flex; align-items: center; gap: 12px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #888;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                            <span style="font-size: 0.9em; color: #555; font-weight: 500;">Nessun metodo di pagamento salvato</span>
+                        <div class="empty-data-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                            <span>Nessun metodo di pagamento salvato</span>
                         </div>
                     <% } else { %>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div class="payment-list">
                             <% for(MetodoPagamentoBean carta : carteUtente) { 
-                                // Estraggo le ultime 4 cifre per la grafica
                                 String numCarta = String.valueOf(carta.getNumeroCarta());
                                 String ultimeQuattro = numCarta.substring(Math.max(0, numCarta.length() - 4));
                             %>
-                                <div style="background: #fbfbfb; border: 1px solid #e0e0e0; padding: 12px 15px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
-                                    <div style="display: flex; align-items: center; gap: 12px;">
-                                        <div style="background: var(--colore-primario); color: white; padding: 6px; border-radius: 4px;">
+                                <div class="payment-item">
+                                    <div class="payment-info">
+                                        <div class="payment-icon-wrapper">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
                                         </div>
                                         <div>
-                                            <div style="font-weight: 600; font-size: 0.95em; color: #333;">Carta terminante in <%= ultimeQuattro %></div>
-                                            <div style="font-size: 0.8em; color: #777;">Scadenza: <%= carta.getScadenza() %> • <%= carta.getNome() %> <%= carta.getCognome() %></div>
+                                            <div class="payment-text-title">Carta terminante in <%= ultimeQuattro %></div>
+                                            <div class="payment-text-sub">Scadenza: <%= carta.getScadenza() %> • <%= carta.getNome() %> <%= carta.getCognome() %></div>
                                         </div>
                                     </div>
-                                    <a href="#" style="color: #d9534f; font-size: 0.85em; font-weight: bold; text-decoration: none;">Rimuovi</a>
+                                    <a href="#" class="btn-text-danger">Rimuovi</a>
                                 </div>
                             <% } %>
                         </div>
@@ -116,17 +111,17 @@
 
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 30px;">
+            <div class="dash-col">
                 
                <div class="dash-card card-user">
                     <h3>Sændwave Audio Cloud</h3>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Carica in questo spazio i tuoi sample, stems o tracce grezze. I file rimarranno memorizzati nel tuo archivio privato personale per futuri utilizzi, indipendentemente dall'apertura di un ordine commerciale.</p>
+                    <p class="card-desc">Carica in questo spazio i tuoi sample, stems o tracce grezze. I file rimarranno memorizzati nel tuo archivio privato personale per futuri utilizzi, indipendentemente dall'apertura di un ordine commerciale.</p>
                     
                     <form action="CaricaTracciaLiberaServlet" method="POST" enctype="multipart/form-data" id="audioUploadForm">
                         <div class="upload-box" onclick="document.getElementById('audioFile').click()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            <p>Trascina qui il tuo file o clicca per esplorare le cartelle</p>
-                            <span style="font-size: 0.8em; color: #888;">Formati supportati: WAV, AIF, MP3 (Max 50MB)</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <p>Trascina qui il tuo file o clicca per esplorare</p>
+                            <span class="upload-hint">WAV, AIF, MP3 (Max 50MB)</span>
                             <input type="file" id="audioFile" name="tracciaAudio" class="file-input-hidden" accept="audio/*" onchange="document.getElementById('audioUploadForm').submit()">
                         </div>
                     </form>
@@ -135,30 +130,28 @@
                         <h4 style="font-size: 0.95em; color: #1a1a2e; margin-bottom: 12px; font-weight: 600;">I tuoi file in Cloud</h4>
                         
                        <%
-                            // Carichiamo dinamicamente le tracce dell'utente tramite il DAO
                             TracciaAudioDAO tracciaDAO = new TracciaAudioDAO();
                             List<TracciaAudioBean> tracceUtente = tracciaDAO.doRetrieveByUtente(utente.getEmail());
                             
                             if (tracceUtente == null || tracceUtente.isEmpty()) {
                         %>
-                            <p style="font-size: 0.9em; color: #aaa; font-style: italic; margin: 0;">L'archivio cloud è vuoto. Carica la tua prima traccia audio.</p>
+                            <p class="card-desc" style="font-style: italic; margin: 0;">L'archivio cloud è vuoto. Carica la tua prima traccia audio.</p>
                         <% } else { %>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <% for(TracciaAudioBean traccia : tracceUtente) { %>
-                                    <div class="cloud-track-item" style="background: #fbfbfb; border: 1px solid #e0e0e0; padding: 10px 15px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
-                                        <div style="display: flex; align-items: center; gap: 10px; max-width: 70%;">
+                            <div class="payment-list"> <% for(TracciaAudioBean traccia : tracceUtente) { %>
+                                    <div class="cloud-track-item">
+                                        <div class="cloud-track-info">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M9 18V5l12-2v13"></path>
                                                 <circle cx="6" cy="18" r="3"></circle>
                                                 <circle cx="18" cy="16" r="3"></circle>
                                             </svg>
-                                            <span style="font-weight: 500; font-size:0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= traccia.getNomeFile() %>">
+                                            <span class="cloud-track-name" title="<%= traccia.getNomeFile() %>">
                                                 <%= traccia.getNomeFile() %>
                                             </span>
                                         </div>
-                                        <div style="display: flex; align-items: center; gap: 12px;">
-                                            <button type="button" class="btn-play-audio" data-file="<%= traccia.getPercorsoFile() %>" style="background: none; border: none; color: var(--colore-primario, #6f42c1); font-weight: bold; font-size: 0.85em; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                                                <span class="play-icon">▶</span> Ascolta
+                                        <div class="cloud-track-actions">
+                                            <button type="button" class="btn-play-audio" data-file="<%= traccia.getPercorsoFile() %>">
+                                                <span class="play-icon">▶</span>
                                             </button>
                                         </div>
                                     </div>
@@ -172,7 +165,7 @@
                 </div>
 
                 <div class="dash-card card-user">
-                    <h3>Storico Ordini & Licenze</h3>
+                    <h3>Storico Ordini</h3>
                     <table class="dash-table">
                         <thead>
                             <tr>
@@ -183,7 +176,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- Logica di fallback iniziale in attesa dei dati reali dal Database --%>
                             <tr>
                                 <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
                                     Nessun ordine presente nello storico account.

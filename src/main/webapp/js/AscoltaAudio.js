@@ -3,52 +3,45 @@ document.addEventListener("DOMContentLoaded", function() {
     var playButtons = document.querySelectorAll(".btn-play-audio");
     var currentBtn = null;
 
-    // Ciclo standard compatibile con tutti i validatori
     for (var i = 0; i < playButtons.length; i++) {
         playButtons[i].addEventListener("click", function() {
             var fileParam = this.getAttribute("data-file");
-            // Costruiamo l'URL relativo alla servlet
             var url = "AscoltaTracciaServlet?file=" + encodeURIComponent(fileParam);
-            
             var iconSpan = this.querySelector(".play-icon");
 
-            // Caso 1: Clicco sullo stesso pulsante attualmente in riproduzione -> Metti in pausa o riprendi
+            // Caso 1: Mette in pausa o riprende la stessa traccia
             if (currentBtn === this) {
                 if (!player.paused) {
                     player.pause();
                     if (iconSpan) iconSpan.textContent = "▶";
-                    this.childNodes[1].textContent = " Ascolta";
                 } else {
                     player.play();
                     if (iconSpan) iconSpan.textContent = "⏸";
-                    this.childNodes[1].textContent = " Pausa";
                 }
                 return;
             }
 
-            // Caso 2: Clicco su un pulsante diverso mentre un altro suonava -> Resetta il vecchio
+            // Caso 2: Resetta l'icona del pulsante precedente se si cambia traccia
             if (currentBtn !== null) {
                 var prevIcon = currentBtn.querySelector(".play-icon");
                 if (prevIcon) {
                     prevIcon.textContent = "▶";
                 }
-                currentBtn.childNodes[1].textContent = " Ascolta";
             }
 
-            // Carica il nuovo brano ed esegui il play
+            // Riproduce la nuova traccia
             player.src = url;
             player.play();
             
-            // Aggiorna lo stato attuale del nuovo bottone cliccato
+            // Imposta l'icona "Pausa" sul nuovo bottone
             if (iconSpan) {
                 iconSpan.textContent = "⏸";
             }
-            this.childNodes[1].textContent = " Pausa";
             currentBtn = this;
         });
     }
 
-    // Se la traccia finisce da sola, ripristina lo stato del bottone a "Ascolta"
+    // Ripristina l'icona quando la traccia finisce
     if (player) {
         player.addEventListener("ended", function() {
             if (currentBtn !== null) {
@@ -56,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (iconSpan) {
                     iconSpan.textContent = "▶";
                 }
-                currentBtn.childNodes[1].textContent = " Ascolta";
                 currentBtn = null;
             }
         });
