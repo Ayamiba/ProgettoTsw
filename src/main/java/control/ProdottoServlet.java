@@ -15,32 +15,35 @@ public class ProdottoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Recuperiamo l'ID dall'URL
         String idString = request.getParameter("id");
+        String nomeString = request.getParameter("nome"); // Catturiamo il parametro da Javascript!
+        
+        ProdottoDAO prodottoDAO = new ProdottoDAO();
+        ProdottoBean prodotto = null;
 
-        if (idString != null && !idString.trim().isEmpty()) {
-            try {
+        try {
+            // CASO 1: Ricerca classica per ID (es. cliccando dal catalogo)
+            if (idString != null && !idString.trim().isEmpty()) {
                 int id = Integer.parseInt(idString);
-                ProdottoDAO prodottoDAO = new ProdottoDAO();
-                
-                // 2. Cerchiamo il prodotto nel database
-                ProdottoBean prodotto = prodottoDAO.doRetrieveByKey(id);
-
-                if (prodotto != null) {
-                    // 3. Se esiste, lo mettiamo nella request e andiamo alla pagina di dettaglio
-                    request.setAttribute("prodottoSingolo", prodotto);
-                    
-                    // (Opzionale: qui in futuro potresti recuperare anche le RecensioniDAO e TracceAudioDAO)
-                    
-                    request.getRequestDispatcher("/WEB-INF/views/catalog/prodotto.jsp").forward(request, response);
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                prodotto = prodottoDAO.doRetrieveByKey(id);
+            } 
+            // CASO 2: Ricerca per Nome (inviato dalla barra di ricerca JS)
+            else if (nomeString != null && !nomeString.trim().isEmpty()) {
+                prodotto = prodottoDAO.doRetrieveByName(nomeString);
             }
+
+            // Se abbiamo trovato il prodotto (in un modo o nell'altro), andiamo alla pagina di dettaglio
+            if (prodotto != null) {
+                request.setAttribute("prodottoSingolo", prodotto);
+                request.getRequestDispatcher("/WEB-INF/views/catalog/prodotto.jsp").forward(request, response);
+                return;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
-        // 4. Se l'ID non c'è, o non è un numero, o il prodotto non esiste, rimandiamo al catalogo o a un 404
+        // Se l'ID o il Nome non ci sono, o il prodotto non esiste nel DB, rimandiamo al catalogo
         response.sendRedirect("CatalogoServlet");
     }
 

@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Se per caso siamo in una pagina senza barra di ricerca, il JS si ferma senza dare errori
     if (!input || !dropdown || !form) return;
 
-    input.addEventListener('input', () => { //Funzione per leggere la digitazione dell'utente
+    input.addEventListener('input', () => { 
         clearTimeout(timer); 
-        const valore = input.value.trim(); //Eliminazione di spazi accidentali
+        const valore = input.value.trim(); 
 
-        if (valore.length < 2) { // Se l'utente ha scritto poco interrompi
+        if (valore.length < 2) { 
             dropdown.style.display = 'none';
             return;
         }
@@ -24,35 +24,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
-    function eseguiAJAX(test) { //Invio della richiesta asincrona alla Servlet
-        fetch('OttieniSuggerimenti?q=' + encodeURIComponent(test)) //Invio della query alla Servlet "OttieniSuggerimenti"
-            .then(response => response.json()) //Trasformazione della risposta in un json
-            .then(dati => mostraSuggerimenti(dati)) //Invio dei dati alla funzione per mostrarli all'utente
+    function eseguiAJAX(test) { 
+        fetch('OttieniSuggerimenti?q=' + encodeURIComponent(test)) 
+            .then(response => response.json()) 
+            .then(dati => mostraSuggerimenti(dati)) 
             .catch(errore => console.error("Errore AJAX:", errore));
     }
             
     function mostraSuggerimenti(lista) { 
-        dropdown.innerHTML = ''; //Pulizia vecchi suggerimenti
+        dropdown.innerHTML = ''; 
 
-        if (lista.length === 0) { //Se la lista è vuota non far vedere la tendina
+        if (lista.length === 0) { 
             dropdown.style.display = 'none';
             return;
         }
 
-        lista.forEach(elemento => { //Per ogni elemento creiamo un li e ci inseriamo il nomer prodotto
+        lista.forEach(elemento => { 
             const li = document.createElement('li');
             li.textContent = elemento;
             
             li.addEventListener('click', () => { 
-                input.value = elemento;      // Inserisce il testo cliccato nella barra
-                dropdown.style.display = 'none'; // Chiude la tendina
-                form.submit();               // Invia automaticamente la ricerca al CatalogoServlet!
+                input.value = elemento;      
+                dropdown.style.display = 'none'; 
+                
+                // REINDIRIZZAMENTO DIRETTO ALLA PAGINA DEL PRODOTTO
+                // Sostituisci "DettaglioProdottoServlet" con il nome reale della tua Servlet per i singoli prodotti
+                window.location.href = 'ProdottoServlet?nome=' + encodeURIComponent(elemento);
             });
             
             dropdown.appendChild(li);
         });
 
-        dropdown.style.display = 'block'; //Rendiamo visibile al'utente la tendina con i suggerimenti
+        dropdown.style.display = 'block'; 
     }
 
     // Chiude la tendina se si clicca altrove

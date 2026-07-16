@@ -243,6 +243,42 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         }
         return prodotti;
     }
+    
+ // Metodo per trovare un prodotto partendo dal suo nome esatto
+    public ProdottoBean doRetrieveByName(String nome) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        ProdottoBean prodotto = null;
+
+        // Assicurati che i nomi delle colonne corrispondano al tuo DB!
+        String query = "SELECT * FROM Prodotto WHERE nome = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, nome);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                prodotto = new ProdottoBean();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+    			prodotto.setNome(resultSet.getString("nome"));
+    			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+    			prodotto.setDescrizione(resultSet.getString("descrizione"));
+    			prodotto.setImmagine(resultSet.getString("immagine"));
+                // Aggiungi qui gli altri eventuali campi del tuo ProdottoBean (es. formato, requisiti...)
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return prodotto;
+    }
+    
     @Override
     public void doSave(ProdottoBean prodotto) throws SQLException {
         Connection connection = null;
