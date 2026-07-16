@@ -223,4 +223,28 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 
 	    return utente; // Ritornerà l'utente se viene trovato, 'null' se non trovato
 	}
+	
+	public void doUpdateTipo(String email, String nuovoTipo) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
+        // Modifichiamo solo il ruolo dell'utente
+        String query = "UPDATE Utente SET tipo = ? WHERE email = ?";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, nuovoTipo);
+            statement.setString(2, email);
+            
+            statement.executeUpdate();
+            
+        } finally {
+            try { if (statement != null) statement.close(); } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
+        }
+    }
+	
 }
+

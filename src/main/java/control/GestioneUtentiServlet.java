@@ -28,7 +28,7 @@ public class GestioneUtentiServlet extends HttpServlet {
         try {
             ConnectionPool.init(5);
         } catch (SQLException e) {
-            System.out.println("Errore Connection Pool in RegistrazioneServlet!");
+            System.out.println("Errore Connection Pool in GestioneUtentiServlet!");
             e.printStackTrace();
         }
         utenteDAO = new UtenteDAO();
@@ -39,23 +39,38 @@ public class GestioneUtentiServlet extends HttpServlet {
         HttpSession session = request.getSession();
         UtenteBean admin = (UtenteBean) session.getAttribute("user");
 
-        // Controllo di sicurezza vitale: solo gli ADMIN possono accedere a questa Servlet!
+        // Controllo di sicurezza: solo gli ADMIN possono accedere
         if (admin == null || !admin.getTipo().equalsIgnoreCase("admin")) {
             response.sendRedirect("LoginServlet");
             return;
         }
 
-        UtenteDAO utenteDAO = new UtenteDAO();
         try {
-            // Assicurati di avere un metodo doRetrieveAll() nel tuo UtenteDAO!
+        	// 1. GESTIONE DELLE AZIONI (Es. Eliminazione e Promozione)
+            String azione = request.getParameter("azione");
+            
+            if ("elimina".equals(azione)) {
+                String emailDaEliminare = request.getParameter("email");
+                if (emailDaEliminare != null && !emailDaEliminare.equals(admin.getEmail())) {
+                    utenteDAO.doDelete(emailDaEliminare);
+                }
+                
+            } else if ("promuovi".equals(azione)) {
+                String emailDaPromuovere = request.getParameter("email");
+                if (emailDaPromuovere != null) {
+                    utenteDAO.doUpdateTipo(emailDaPromuovere, "professionista");
+                }
+            }
+
+            // 2. RECUPERO DELLA LISTA AGGIORNATA
             List<UtenteBean> listaUtenti = utenteDAO.doRetrieveAll();
             request.setAttribute("listaUtenti", listaUtenti);
             
+            // Reindirizzamento alla JSP
             request.getRequestDispatcher("/WEB-INF/views/user/gestioneUtenti.jsp").forward(request, response);
             
         } catch (SQLException e) {
             e.printStackTrace();
-            // In caso di errore, si torna al profilo
             response.sendRedirect("ProfiloServlet"); 
         }
     }

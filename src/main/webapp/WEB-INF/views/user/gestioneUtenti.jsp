@@ -59,10 +59,9 @@
                         <td style="text-align: right; gap: 8px; display: flex; justify-content: flex-end;">
                             <% if(!u.getTipo().equals("admin")) { %>
                                 <% if(u.getTipo().equals("utente registrato")) { %>
-                                    <a href="#" class="btn-action btn-promote">Promuovi a Pro</a>
+                                    <a href="GestioneUtentiServlet?azione=promuovi&email=<%= u.getEmail() %>" class="btn-action btn-promote" onclick="return confirm('Confermi di voler promuovere l\'utente a Professionista? Avrà accesso alla dashboard di mix/mastering.');">Promuovi a Pro</a>
                                 <% } %>
-                                <a href="#" class="btn-action btn-ban" onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">Elimina</a>
-                            <% } else { %>
+									<a href="GestioneUtentiServlet?azione=elimina&email=<%= u.getEmail() %>" class="btn-action btn-ban" onclick="return confirm('Sei sicuro di voler eliminare questo utente? L\'azione è irreversibile.');">Elimina</a>                            <% } else { %>
                                 <span style="color: #aaa; font-style: italic; font-size: 0.85em; padding: 6px;">Nessuna azione</span>
                             <% } %>
                         </td>
