@@ -2,6 +2,8 @@
 <%@ page import="model.utente.UtenteBean" %>
 <%@ page import="model.metodoPagamento.MetodoPagamentoBean" %>
 <%@ page import="model.metodoPagamento.MetodoPagamentoDAO" %>
+<%@ page import="model.tracciaAudio.TracciaAudioBean" %>
+<%@ page import="model.tracciaAudio.TracciaAudioDAO" %>
 <%@ page import="java.util.List" %>
 <% 
     // Recuperiamo l'utente loggato in sessione per estrarre i dati anagrafici
@@ -15,6 +17,7 @@
     <title>Sændwave – Il Mio Profilo</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script src="<%= request.getContextPath() %>/js/AscoltaAudio.js" defer></script>
     
 </head>
 <body>
@@ -115,9 +118,9 @@
             
             <div style="display: flex; flex-direction: column; gap: 30px;">
                 
-                <div class="dash-card card-user">
+               <div class="dash-card card-user">
                     <h3>Sændwave Audio Cloud</h3>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Carica in questo spazio i tuoi sample, stems o tracce grezze. I file rimarranno memorizzati nel tuo archivio privato personali per futuri utilizzi, indipendentemente dall'apertura di un ordine commerciale.</p>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Carica in questo spazio i tuoi sample, stems o tracce grezze. I file rimarranno memorizzati nel tuo archivio privato personale per futuri utilizzi, indipendentemente dall'apertura di un ordine commerciale.</p>
                     
                     <form action="CaricaTracciaLiberaServlet" method="POST" enctype="multipart/form-data" id="audioUploadForm">
                         <div class="upload-box" onclick="document.getElementById('audioFile').click()">
@@ -131,8 +134,40 @@
                     <div class="cloud-tracks-list">
                         <h4 style="font-size: 0.95em; color: #1a1a2e; margin-bottom: 12px; font-weight: 600;">I tuoi file in Cloud</h4>
                         
-                        <%-- Struttura condizionale pronta per quando collegherai il CloudAudioDAO --%>
-                        <p style="font-size: 0.9em; color: #aaa; font-style: italic; margin: 0;">L'archivio cloud è vuoto. Carica la tua prima traccia audio.</p>
+                       <%
+                            // Carichiamo dinamicamente le tracce dell'utente tramite il DAO
+                            TracciaAudioDAO tracciaDAO = new TracciaAudioDAO();
+                            List<TracciaAudioBean> tracceUtente = tracciaDAO.doRetrieveByUtente(utente.getEmail());
+                            
+                            if (tracceUtente == null || tracceUtente.isEmpty()) {
+                        %>
+                            <p style="font-size: 0.9em; color: #aaa; font-style: italic; margin: 0;">L'archivio cloud è vuoto. Carica la tua prima traccia audio.</p>
+                        <% } else { %>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <% for(TracciaAudioBean traccia : tracceUtente) { %>
+                                    <div class="cloud-track-item" style="background: #fbfbfb; border: 1px solid #e0e0e0; padding: 10px 15px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 10px; max-width: 70%;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9 18V5l12-2v13"></path>
+                                                <circle cx="6" cy="18" r="3"></circle>
+                                                <circle cx="18" cy="16" r="3"></circle>
+                                            </svg>
+                                            <span style="font-weight: 500; font-size:0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= traccia.getNomeFile() %>">
+                                                <%= traccia.getNomeFile() %>
+                                            </span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <button type="button" class="btn-play-audio" data-file="<%= traccia.getPercorsoFile() %>" style="background: none; border: none; color: var(--colore-primario, #6f42c1); font-weight: bold; font-size: 0.85em; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                                <span class="play-icon">▶</span> Ascolta
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% } %>
+                        
+                        <audio id="globalAudioPlayer" style="display: none;"></audio>
+                        
                     </div>
                 </div>
 
