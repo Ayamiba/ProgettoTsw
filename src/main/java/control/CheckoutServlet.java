@@ -21,6 +21,20 @@ import java.util.List;
 @WebServlet("/CheckoutServlet")
 public class CheckoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        
+        // Se l'utente non è loggato, lo mandiamo al login
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("LoginServlet?errore=devi_accedere");
+            return;
+        }
+        
+        // Altrimenti, mostriamo la pagina di Checkout (il file JSP)
+        request.getRequestDispatcher("/WEB-INF/views/user/checkout.jsp").forward(request, response);
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

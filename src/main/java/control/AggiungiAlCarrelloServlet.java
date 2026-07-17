@@ -65,8 +65,7 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
             }
         }
         
-        // Reindirizziamo l'utente alla schermata del carrello
-        response.sendRedirect("CarrelloServlet");
+        response.sendRedirect("CatalogoServlet");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

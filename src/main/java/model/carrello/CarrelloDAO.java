@@ -26,7 +26,7 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione " +
+        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
                 "FROM Prodotto p " +
                 "JOIN Carrello c ON p.ID_prodotto = c.FK_prodotto " +
                 "WHERE c.FK_utente = ?";
@@ -44,6 +44,7 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
                 prodotto.setNome(resultSet.getString("nome"));
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
                 
                 prodottiCarrello.add(prodotto);
             }

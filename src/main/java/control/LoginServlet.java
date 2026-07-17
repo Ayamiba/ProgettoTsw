@@ -93,8 +93,7 @@ public class LoginServlet extends HttpServlet {
                 svuotaCookie.setPath(request.getContextPath());
                 response.addCookie(svuotaCookie);
             }
-            //dopo il login rimandiamo l'utente al catalogo
-            response.sendRedirect("CatalogoServlet"); 
+            response.sendRedirect("ProfiloServlet"); 
             
         } else {
            //login fallito
