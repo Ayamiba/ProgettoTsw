@@ -594,3 +594,160 @@
 .btn-play-audio:active {
     transform: scale(0.9);
 }
+
+/* ============================================================
+   CHECKOUT E RIEPILOGO ORDINE
+   ============================================================ */
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.checkout-label {
+    font-weight: 600;
+    font-size: 0.9em;
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.checkout-hint {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Catena Audio - Il fix per le immagini giganti è qui */
+.plugin-chain-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background: #fbfbfb;
+}
+
+.plugin-chain-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.plugin-chain-info img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.plugin-title {
+    display: block;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #1a1a2e;
+}
+
+.pos-label {
+    font-size: 0.8em;
+    margin-right: 10px;
+    color: #555;
+}
+
+.pos-input {
+    width: 60px;
+    padding: 8px;
+    text-align: center;
+    border: 1.5px solid var(--colore-primario);
+    border-radius: 4px;
+    font-weight: bold;
+    outline: none;
+}
+
+/* Box di Selezione (Cloud vs Nuova Traccia) */
+.checkout-option-box {
+    background: #fbfbfb;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.checkout-option-box.highlight {
+    background: #f4f3ff;
+    border-color: var(--colore-primario);
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.radio-label strong {
+    font-size: 1em;
+    color: #333;
+}
+
+.checkout-upload-area {
+    padding: 20px 15px;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Box Riepilogo Pagamento */
+.totals-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+
+.totals-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.totals-row.final-total {
+    font-size: 1.2em;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    color: var(--colore-primario);
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+/* Form inputs e Bottoni Checkout */
+.input-full {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.btn-checkout {
+    width: 100%;
+    height: 50px;
+    font-size: 1.1em;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Classi Utility */
+.d-none { display: none !important; }
+.mt-30 { margin-top: 30px; }
+.mb-25 { margin-bottom: 25px; }
+
+/* Responsive per schermi piccoli */
+@media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr;
+    }
+}
