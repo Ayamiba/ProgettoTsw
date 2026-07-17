@@ -131,4 +131,22 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
 	    }
 	    return (result != 0);
 	}
+	
+	public void doEmptyCarrello(String emailUtente) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
+        String query = "DELETE FROM Carrello WHERE FK_utente = ?";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, emailUtente);
+            statement.executeUpdate();
+        } finally {
+            try { if (statement != null) statement.close(); } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
+        }
+    }
 }

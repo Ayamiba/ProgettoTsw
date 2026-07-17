@@ -114,6 +114,47 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             }
         }
     }
+    
+ // Cambiamo il tipo di ritorno in int per restituire l'ID generato
+    public int doSaveGetId(OrdineBean ordine) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet generatedKeys = null;
+        int idGenerato = -1;
+
+        // Rimuoviamo ID_ordine dalla INSERT perché è AUTO_INCREMENT
+        String query = "INSERT INTO Ordine (data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            // Aggiungiamo Statement.RETURN_GENERATED_KEYS per farci restituire l'ID
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setDate(1, ordine.getDataOrdine());
+            statement.setFloat(2, ordine.getTotale());
+            statement.setString(3, ordine.getStato());
+            statement.setString(4, ordine.getDescrizione());
+            statement.setInt(5, ordine.getfKTraccia());
+            statement.setLong(6, ordine.getfKMetodoPagamento());
+
+            statement.executeUpdate();
+
+            // Recuperiamo l'ID appena creato da MySQL
+            generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                idGenerato = generatedKeys.getInt(1);
+                ordine.setIdOrdine(idGenerato); // Aggiorniamo subito il Bean
+            }
+            
+        } finally {
+            try { if (generatedKeys != null) generatedKeys.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return idGenerato;
+    }
 
     @Override
     public void doUpdate(OrdineBean ordine) throws SQLException {
