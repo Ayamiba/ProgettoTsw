@@ -15,6 +15,7 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
 %>
 <script src="<%= request.getContextPath() %>/js/Suggerimenti.js"></script>
 <script src="<%= request.getContextPath() %>/js/Navbar.js"></script>
+<script src="<%= request.getContextPath() %>/js/AjaxCart.js"></script>
 
 <header class="navbar">
     <div class="nav-left">

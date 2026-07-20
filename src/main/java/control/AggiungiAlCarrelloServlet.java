@@ -21,6 +21,7 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         model.utente.UtenteBean utenteLoggato = (model.utente.UtenteBean) session.getAttribute("user"); //se session.getAttribute è uguale a null significa che l'utente non è loggato
         
         String idProdottoStr = request.getParameter("idProdotto"); // Riceve l'id del prodotto cliccato
+        boolean isAjax = "true".equals(request.getParameter("ajax"));
         
         if (idProdottoStr != null && !idProdottoStr.trim().isEmpty()) {
             if (utenteLoggato != null) {
@@ -63,6 +64,13 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 
                 response.addCookie(cookieCarrello);
             }
+        }
+        
+        if (isAjax) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"success\": true}");
+            return; // Termina qui l'esecuzione!
         }
         
         response.sendRedirect("CatalogoServlet");

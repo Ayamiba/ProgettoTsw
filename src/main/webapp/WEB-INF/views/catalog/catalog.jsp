@@ -101,7 +101,7 @@
                            € <%= String.format("%.2f", prodotto.getPrezzo()) %>
                        </span>
                        
-                       <form action="AggiungiAlCarrelloServlet" method="POST">
+						<form action="AggiungiAlCarrelloServlet" method="POST" class="ajax-cart-form">
                            <input type="hidden" name="idProdotto" value="<%= prodotto.getIdProdotto() %>">
                            <button type="submit" class="btn">Aggiungi al Carrello</button>
                        </form>
