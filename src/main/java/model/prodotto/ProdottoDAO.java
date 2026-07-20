@@ -279,6 +279,46 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotto;
     }
     
+ // Metodo per estrarre tutti i prodotti acquistati all'interno di uno specifico ordine
+    public List<ProdottoBean> doRetrieveProdottiByOrdine(int idOrdine) throws java.sql.SQLException {
+        java.sql.Connection connection = null;
+        java.sql.PreparedStatement statement = null;
+        java.sql.ResultSet resultSet = null;
+        List<ProdottoBean> prodotti = new java.util.ArrayList<>();
+
+        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
+                       "FROM Prodotto p " +
+                       "JOIN Contenuto c ON p.ID_prodotto = c.FK_prodotto " +
+                       "WHERE c.FK_ordine = ? " +
+                       "ORDER BY c.posizione_catena ASC";
+
+        try {
+            connection = model.ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
+            
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ProdottoBean prodotto = new ProdottoBean();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNome(resultSet.getString("nome"));
+                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
+                
+                prodotti.add(prodotto);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    model.ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return prodotti;
+    }
+    
     @Override
     public void doSave(ProdottoBean prodotto) throws SQLException {
         Connection connection = null;

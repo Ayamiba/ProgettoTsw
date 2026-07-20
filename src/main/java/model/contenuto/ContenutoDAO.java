@@ -71,6 +71,8 @@ public class ContenutoDAO {
         return listaContenuti;
     }
     
+    
+    
  // Metodo per svuotare completamente il carrello di un utente dopo l'acquisto
     public void doEmptyCarrello(String emailUtente) throws java.sql.SQLException {
         java.sql.Connection connection = null;
