@@ -81,6 +81,39 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         return tracce;
     }
 
+ // Salva una nuova traccia e restituisce l'ID generato dal database
+    public int doSaveGetId(TracciaAudioBean traccia) throws java.sql.SQLException {
+        java.sql.Connection connection = null;
+        java.sql.PreparedStatement statement = null;
+        java.sql.ResultSet generatedKeys = null;
+        int idGenerato = -1;
+
+        String query = "INSERT INTO TracciaAudio (nome_file, percorso_file, check, FK_utente) VALUES (?, ?, ?, ?)";
+
+        try {
+            connection = model.ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS);
+            
+            statement.setString(1, traccia.getNomeFile());
+            statement.setString(2, traccia.getPercorsoFile());
+            statement.setBoolean(3, traccia.isCheck());
+            statement.setString(4, traccia.getfKUtente());
+
+            statement.executeUpdate();
+            generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                idGenerato = generatedKeys.getInt(1);
+            }
+        } finally {
+            try { if (generatedKeys != null) generatedKeys.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    model.ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return idGenerato;
+    }
+    
     @Override
     public void doSave(TracciaAudioBean traccia) throws SQLException { //fa una insert con la nuova traccia
         Connection connection = null;
