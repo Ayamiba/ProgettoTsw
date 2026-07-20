@@ -4,6 +4,8 @@
 <%@ page import="model.metodoPagamento.MetodoPagamentoDAO" %>
 <%@ page import="model.tracciaAudio.TracciaAudioBean" %>
 <%@ page import="model.tracciaAudio.TracciaAudioDAO" %>
+<%@ page import="model.ordine.OrdineBean" %>
+<%@ page import="model.ordine.OrdineDAO" %>
 <%@ page import="java.util.List" %>
 <% 
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
@@ -173,14 +175,43 @@
                                 <th>Data</th>
                                 <th>Stato</th>
                                 <th>Totale</th>
+                                <th style="text-align: center;">PDF</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                    Nessun ordine presente nello storico account.
-                                </td>
-                            </tr>
+                            <%
+                                OrdineDAO ordineDAO = new OrdineDAO();
+                                List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
+                                
+                                if (ordiniUtente == null || ordiniUtente.isEmpty()) {
+                            %>
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                        Nessun ordine presente nello storico account.
+                                    </td>
+                                </tr>
+                            <% } else { 
+                                for(OrdineBean ordine : ordiniUtente) { 
+                                    // Determina la classe CSS per il badge di stato
+                                    String statoClasse = "pending";
+                                    if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                                    else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+                            %>
+                                <tr>
+                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                    <td><%= ordine.getDataOrdine() %></td>
+                                    <td>
+                                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
+                                    </td>
+                                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                                    <td style="text-align: center;">
+                                        <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <%  } 
+                               } %>
                         </tbody>
                     </table>
                 </div>

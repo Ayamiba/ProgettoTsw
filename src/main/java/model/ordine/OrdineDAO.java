@@ -87,6 +87,45 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         }
         return ordini;
     }
+    
+ // Metodo per estrarre tutti gli ordini di uno specifico utente (unendo Ordine e TracciaAudio)
+    public List<OrdineBean> doRetrieveByUtente(String emailUtente) throws java.sql.SQLException {
+        java.sql.Connection connection = null;
+        java.sql.PreparedStatement statement = null;
+        java.sql.ResultSet resultSet = null;
+        List<OrdineBean> ordini = new java.util.ArrayList<>();
+
+        // Join tra Ordine e TracciaAudio per risalire alla mail dell'utente
+        String query = "SELECT o.* FROM Ordine o " +
+                       "JOIN TracciaAudio t ON o.FK_traccia = t.ID_traccia " +
+                       "WHERE t.FK_utente = ? ORDER BY o.data_ordine DESC";
+
+        try {
+            connection = model.ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, emailUtente);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(resultSet.getInt("ID_ordine"));
+                ordine.setDataOrdine(resultSet.getDate("data_ordine"));
+                ordine.setTotale(resultSet.getFloat("totale"));
+                ordine.setStato(resultSet.getString("stato"));
+                ordine.setDescrizione(resultSet.getString("descrizione"));
+                ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordini.add(ordine);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    model.ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return ordini;
+    }
 
     @Override
     public void doSave(OrdineBean ordine) throws SQLException {
