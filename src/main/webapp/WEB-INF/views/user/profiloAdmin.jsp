@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
+<%@ page import="model.ordine.OrdineBean" %>
+<%@ page import="model.ordine.OrdineDAO" %>
+<%@ page import="java.util.List" %>
 <% 
     // Recuperiamo l'amministratore loggato in sessione
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
@@ -65,8 +68,8 @@
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Promuovi gli utenti a "Professionisti", visualizza le anagrafiche o banna gli account non conformi.</p>
                     
                     <div style="background: #f8f9fa; border: 1px solid #eef0f2; padding: 14px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
-						<a href="GestioneUtentiServlet" class="dash-btn-save" style="text-decoration: none; display: inline-flex; width: auto; padding: 8px 15px; margin: 0; height: auto; background-color: #333;">Apri Lista</a>                    
-					</div>
+                        <a href="GestioneUtentiServlet" class="dash-btn-save" style="text-decoration: none; display: inline-flex; width: auto; padding: 8px 15px; margin: 0; height: auto; background-color: #333;">Apri Lista</a>                    
+                    </div>
                 </div>
 
             </div>
@@ -84,33 +87,59 @@
                 </div>
 
                 <div class="dash-card card-admin">
-                    <h3>Registro Ordini Globale</h3>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Visualizza tutti gli ordini effettuati sulla piattaforma da qualsiasi utente.</p>
+                    <h3>Registro Ordini Globale (Ultimi 5)</h3>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Visualizza gli ordini più recenti effettuati sulla piattaforma.</p>
                     
                     <table class="dash-table">
                         <thead>
                             <tr>
                                 <th>Cod.</th>
-                                <th>Cliente</th>
+                                <th>Data</th>
                                 <th>Stato</th>
                                 <th>Totale</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- Logica di fallback in attesa della Servlet/DAO Ordini --%>
-                            <tr>
-                                <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                    Nessun ordine attualmente registrato nel sistema.
-                                </td>
-                            </tr>
+                            <%
+                                OrdineDAO ordineDAO = new OrdineDAO();
+                                List<OrdineBean> tuttiOrdini = ordineDAO.doRetrieveAll(); // Recupera tutti gli ordini
+                                
+                                if (tuttiOrdini == null || tuttiOrdini.isEmpty()) {
+                            %>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                        Nessun ordine attualmente registrato nel sistema.
+                                    </td>
+                                </tr>
+                            <%  } else { 
+                                    int count = 0;
+                                    for(OrdineBean ordine : tuttiOrdini) { 
+                                        if(count >= 5) break; // Mostra solo gli ultimi 5 nella dashboard principale
+                                        count++;
+                                        
+                                        // Assegna il colore del badge in base allo stato
+                                        String statoClasse = "pending";
+                                        if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                                        else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+                            %>
+                                <tr>
+                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                    <td><%= ordine.getDataOrdine() %></td>
+                                    <td>
+                                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
+                                    </td>
+                                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                                </tr>
+                            <%      } 
+                                } %>
                         </tbody>
                     </table>
                     
                     <div style="margin-top: 15px; text-align: right;">
-                        <a href="#" class="dash-link-action" style="color: #d9534f; display: inline-flex; justify-content: flex-end;">
-                            Vedi storico completo &rarr;
-                        </a>
-                    </div>
+    					<a href="GestioneOrdiniServlet" class="dash-link-action" style="color: #d9534f; display: inline-flex; justify-content: flex-end;">
+        					Vedi storico completo &rarr;
+    					</a>
+					</div>
                 </div>
 
             </div>
