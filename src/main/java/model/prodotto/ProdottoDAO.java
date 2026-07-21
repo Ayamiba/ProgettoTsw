@@ -89,33 +89,31 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         
-        // 1. Il "Bivio" di Java basato sulla tua idea dei TINYINT
         String query = "";
         
-        if ("Effetto".equalsIgnoreCase(nomeCategoria)) {
-            // Se l'utente clicca "Effetti", cerchiamo dove la colonna effetto è = 1
-            query = "SELECT Prodotto.* FROM Prodotto " +
+        // Aggiunto DISTINCT per eliminare i duplicati e controlli per i valori minuscoli della JSP
+        if ("Effetto".equalsIgnoreCase(nomeCategoria) || "effetto".equalsIgnoreCase(nomeCategoria)) {
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.effetto = 1";
                     
-        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria)) {
-            // Se l'utente clicca "StudioTool", cerchiamo dove la colonna studio_tool è = 1
-            query = "SELECT Prodotto.* FROM Prodotto " +
+        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria) || "studio_tool".equalsIgnoreCase(nomeCategoria)) {
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.studio_tool = 1";
                     
+        } else if ("bundle".equalsIgnoreCase(nomeCategoria)) {
+            // Se cerchi i bundle, cerca la parola "bundle" nel nome o nella descrizione
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE nome LIKE '%bundle%' OR descrizione LIKE '%bundle%'";
         } else {
-            // Se la categoria non è nessuna delle due (o c'è un errore), restituisci una lista vuota per sicurezza
             return prodotti; 
         }
         
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
-            
-            // Non serve più lo statement.setString() perché l'1 è già scritto fisso nella query!
             resultSet = statement.executeQuery();
             
             while (resultSet.next()) {
@@ -151,14 +149,12 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
-            
-            statement.setFloat(1, prezzoMax); // Usiamo setFloat invece di setString!
+            statement.setFloat(1, prezzoMax); 
             
             resultSet = statement.executeQuery();
             
             while(resultSet.next()) {
             	ProdottoBean prodotto = new ProdottoBean();
-    			
     			prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
     			prodotto.setNome(resultSet.getString("nome"));
     			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
@@ -167,22 +163,11 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     			prodotti.add(prodotto);
             }
         } finally {
-        	try {
-				if (resultSet != null) {
-					resultSet.close();
-					}
-			}
-			finally {
-				try {
-					if (statement != null) {
-						statement.close();
-						}
-				}
-				finally {
+        	try { if (resultSet != null) resultSet.close(); } finally {
+				try { if (statement != null) statement.close(); } finally {
 					ConnectionPool.releaseConnection(connection);
-					}
+				}
 			}
-            
         }
         return prodotti;
     }
@@ -193,33 +178,30 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         
-        // 1. Usiamo la stessa logica dei TINYINT per evitare problemi con i nomi
         String query = "";
         
-        if ("Effetto".equalsIgnoreCase(nomeCategoria)) {
-            query = "SELECT Prodotto.* FROM Prodotto " +
+        // Aggiunto DISTINCT e controlli per la JSP
+        if ("Effetto".equalsIgnoreCase(nomeCategoria) || "effetto".equalsIgnoreCase(nomeCategoria)) {
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.effetto = 1 AND Prodotto.prezzo <= ?";
                     
-        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria)) {
-            query = "SELECT Prodotto.* FROM Prodotto " +
+        } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria) || "studio_tool".equalsIgnoreCase(nomeCategoria)) {
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
                     "WHERE Categoria.studio_tool = 1 AND Prodotto.prezzo <= ?";
                     
+        } else if ("bundle".equalsIgnoreCase(nomeCategoria)) {
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE (nome LIKE '%bundle%' OR descrizione LIKE '%bundle%') AND prezzo <= ?";
         } else {
-            // Se la categoria non esiste, ritorno vuoto
             return prodotti;
         }
         
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
-            
-            // Attenzione: ora c'è solo UN punto interrogativo nella query (quello del prezzo).
-            // Il TINYINT (1) lo abbiamo già scritto a mano nella query sopra.
-            // Quindi usiamo setFloat(1, prezzoMax) e non più setFloat(2)
             statement.setFloat(1, prezzoMax);
             
             resultSet = statement.executeQuery();
@@ -244,14 +226,13 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotti;
     }
     
- // Metodo per trovare un prodotto partendo dal suo nome esatto
+    // Metodo per trovare un prodotto partendo dal suo nome esatto
     public ProdottoBean doRetrieveByName(String nome) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         ProdottoBean prodotto = null;
 
-        // Assicurati che i nomi delle colonne corrispondano al tuo DB!
         String query = "SELECT * FROM Prodotto WHERE nome = ?";
 
         try {
@@ -267,7 +248,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
     			prodotto.setDescrizione(resultSet.getString("descrizione"));
     			prodotto.setImmagine(resultSet.getString("immagine"));
-                // Aggiungi qui gli altri eventuali campi del tuo ProdottoBean (es. formato, requisiti...)
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -279,7 +259,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotto;
     }
     
- // Metodo per estrarre tutti i prodotti acquistati all'interno di uno specifico ordine
+    // Metodo per estrarre tutti i prodotti acquistati all'interno di uno specifico ordine
     public List<ProdottoBean> doRetrieveProdottiByOrdine(int idOrdine) throws java.sql.SQLException {
         java.sql.Connection connection = null;
         java.sql.PreparedStatement statement = null;

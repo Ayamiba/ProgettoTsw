@@ -37,7 +37,7 @@
                     <label for="categoria">Categoria</label>
                     <select name="categoria" id="categoria" class="filter-input">
                         <option value="">Tutte le categorie</option>
-                        <option value="Effetto" <%= categoriaAttiva.equals("Effetto") ? "selected" : "" %>>Effetti VST</option>
+                        <option value="Effetto" <%= categoriaAttiva.equals("Effetto") ? "selected" : "" %>>Effetti </option>
                         <option value="Studio Tool" <%= categoriaAttiva.equals("Studio Tool") ? "selected" : "" %>>Studio Tools</option>
                         <option value="bundle" <%= categoriaAttiva.equals("bundle") ? "selected" : "" %>>Bundle Completi</option>
                     </select>
