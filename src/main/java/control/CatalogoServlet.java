@@ -22,31 +22,32 @@ import javax.servlet.RequestDispatcher;
 
 @WebServlet ("/CatalogoServlet")
 public class CatalogoServlet extends HttpServlet {
-	private static long serialVersionUID= 1L;
-	
-	private ProdottoDAO prodottoDAO;
-	private static final int itemPerPage=6; //Elementi caricati in una pagina (caricati != mostrati)
-	
-	public void init() throws ServletException {
-		super.init();
-		try {
-	        ConnectionPool.init(5);
-	    } catch (SQLException e) {
-	        System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
-	        e.printStackTrace();
-	    }
-		prodottoDAO=new ProdottoDAO(); 
-	} 
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ProdottoDAO prodottoDAO = new ProdottoDAO();
+    private static long serialVersionUID= 1L;
+    
+    private ProdottoDAO prodottoDAO;
+    private static final int itemPerPage=6; //Elementi caricati in una pagina (caricati != mostrati)
+    
+    public void init() throws ServletException {
+        super.init();
+        try {
+            ConnectionPool.init(5);
+        } catch (SQLException e) {
+            System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
+            e.printStackTrace();
+        }
+        prodottoDAO=new ProdottoDAO(); 
+    } 
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ProdottoDAO prodottoDAO = new ProdottoDAO();
         List<ProdottoBean> listaProdotti = null;
         
         String categoriaScelta = request.getParameter("categoria");
+        String sottoCategoriaScelta = request.getParameter("sottoCategoria"); // NUOVO PARAMETRO
         String prezzoMaxStr = request.getParameter("prezzoMax");
         
         try {
-        	float prezzoMax = -1; // -1 indica che non c'è nessun filtro prezzo attivo
+            float prezzoMax = -1; // -1 indica che non c'è nessun filtro prezzo attivo
             
             if (prezzoMaxStr != null && !prezzoMaxStr.trim().isEmpty()) {
                 try {
@@ -55,28 +56,24 @@ public class CatalogoServlet extends HttpServlet {
                     prezzoMax = -1; 
                 }
             }
-            if (categoriaScelta != null && !categoriaScelta.trim().isEmpty() && prezzoMax >= 0) {
-                listaProdotti = prodottoDAO.doRetrieveByCategoriaAndPrezzo(categoriaScelta, prezzoMax);
-        	} else if (categoriaScelta != null && !categoriaScelta.trim().isEmpty()) {
-        		listaProdotti = prodottoDAO.doRetrieveByCategoria(categoriaScelta);
-        	} else if (prezzoMax >= 0) {
-                listaProdotti = prodottoDAO.doRetrieveByPrezzoMax(prezzoMax);
-            } else {
-            	listaProdotti = prodottoDAO.doRetrieveAll();
-            }
-        	request.setAttribute("prodotti", listaProdotti);
-        	request.setAttribute("categoriaAttiva", categoriaScelta);
-        	request.setAttribute("prezzoAttivo", prezzoMax >= 0 ? String.valueOf(prezzoMax) : "");
+            
+            // CHIAMATA ALL'UNICO METODO UNIVERSALE!
+            listaProdotti = prodottoDAO.doRetrieveByAllFilters(categoriaScelta, sottoCategoriaScelta, prezzoMax);
+            
+            request.setAttribute("prodotti", listaProdotti);
+            request.setAttribute("categoriaAttiva", categoriaScelta);
+            request.setAttribute("sottoCategoriaAttiva", sottoCategoriaScelta); // Salviamo per la JSP
+            request.setAttribute("prezzoAttivo", prezzoMax >= 0 ? String.valueOf(prezzoMax) : "");
  
-        	RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/catalog/catalog.jsp");     
-        	dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/catalog/catalog.jsp");     
+            dispatcher.forward(request, response);
         } catch (SQLException e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il caricamento del catalogo.");
         }
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 }

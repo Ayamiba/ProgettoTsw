@@ -4,12 +4,14 @@
 <%@ page import="model.utente.UtenteBean" %>
 
 <%
-    // Recupero dei dati passati da CatalogoServlet [cite: 1]
+    // Recupero dei dati passati da CatalogoServlet
     List<ProdottoBean> prodotti = (List<ProdottoBean>) request.getAttribute("prodotti");
     String categoriaAttiva = (String) request.getAttribute("categoriaAttiva");
+    String sottoCategoriaAttiva = (String) request.getAttribute("sottoCategoriaAttiva");
     String prezzoAttivo = (String) request.getAttribute("prezzoAttivo");
     
     if (categoriaAttiva == null) categoriaAttiva = "";
+    if (sottoCategoriaAttiva == null) sottoCategoriaAttiva = "";
     if (prezzoAttivo == null) prezzoAttivo = "";
 %>
 
@@ -34,12 +36,28 @@
             <form action="CatalogoServlet" method="GET">
                 
                 <div class="filter-group">
-                    <label for="categoria">Categoria</label>
+                    <label for="categoria">Categoria Principale</label>
                     <select name="categoria" id="categoria" class="filter-input">
                         <option value="">Tutte le categorie</option>
-                        <option value="Effetto" <%= categoriaAttiva.equals("Effetto") ? "selected" : "" %>>Effetti </option>
+                        <option value="Effetto" <%= categoriaAttiva.equals("Effetto") ? "selected" : "" %>>Effetti</option>
                         <option value="Studio Tool" <%= categoriaAttiva.equals("Studio Tool") ? "selected" : "" %>>Studio Tools</option>
                         <option value="bundle" <%= categoriaAttiva.equals("bundle") ? "selected" : "" %>>Bundle Completi</option>
+                    </select>
+                </div>
+
+                <!-- NUOVO FILTRO SOTTOCATEGORIA -->
+                <div class="filter-group">
+                    <label for="sottoCategoria">Tipologia Plugin</label>
+                    <select name="sottoCategoria" id="sottoCategoria" class="filter-input">
+                        <option value="">Tutte le tipologie</option>
+                        <option value="amplificatore" <%= sottoCategoriaAttiva.equals("amplificatore") ? "selected" : "" %>>Amplificatore</option>
+                        <option value="compressore" <%= sottoCategoriaAttiva.equals("compressore") ? "selected" : "" %>>Compressore</option>
+                        <option value="delay" <%= sottoCategoriaAttiva.equals("delay") ? "selected" : "" %>>Delay</option>
+                        <option value="distorsore" <%= sottoCategoriaAttiva.equals("distorsore") ? "selected" : "" %>>Distorsore</option>
+                        <option value="equalizzatore" <%= sottoCategoriaAttiva.equals("equalizzatore") ? "selected" : "" %>>Equalizzatore</option>
+                        <option value="filtro" <%= sottoCategoriaAttiva.equals("filtro") ? "selected" : "" %>>Filtro</option>
+                        <option value="pedaliera" <%= sottoCategoriaAttiva.equals("pedaliera") ? "selected" : "" %>>Pedaliera</option>
+                        <option value="riverbero" <%= sottoCategoriaAttiva.equals("riverbero") ? "selected" : "" %>>Riverbero</option>
                     </select>
                 </div>
 
@@ -51,12 +69,13 @@
 
                 <button type="submit" class="btn" style="width: 100%;">Applica Filtri</button>
                 
-                <% if (!categoriaAttiva.isEmpty() || !prezzoAttivo.isEmpty()) { %>
+                <% if (!categoriaAttiva.isEmpty() || !sottoCategoriaAttiva.isEmpty() || !prezzoAttivo.isEmpty()) { %>
                     <a href="CatalogoServlet" class="reset-filters-btn">Azzera Filtri</a>
                 <% } %>
             </form>
         </aside>
 
+<!-- IL RESTO DEL TUO CATALOGO RIMANE IDENTICO -->
         <section class="catalog-content">
             <div class="catalog-header">
                 <h1>Shop Catalogo</h1>
