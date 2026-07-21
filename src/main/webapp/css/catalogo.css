@@ -108,6 +108,10 @@
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     height: fit-content;
+    position: sticky;
+    top: 100px; 
+    align-self: flex-start; 
+    max-height: calc(100vh - 120px); 
 }
 
 .filters-title {
