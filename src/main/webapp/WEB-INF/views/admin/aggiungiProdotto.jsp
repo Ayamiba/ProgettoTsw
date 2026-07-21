@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.utente.UtenteBean" %>
+<% 
+    UtenteBean utenteloggato = (UtenteBean) session.getAttribute("user"); 
+%>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuovo Prodotto - Sændwave Admin</title>
+    
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
+    
+    <style>
+        .form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
+        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+    </style>
+</head>
+<body>
+
+    <jsp:include page="/WEB-INF/views/components/navbar.jsp" />
+
+    <main class="dashboard-container">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h1 style="color: #d9534f; margin-bottom: 5px;">Inserisci Nuovo Prodotto</h1>
+                <p class="subtitle" style="margin: 0;">Aggiungi un plugin o tool alla vetrina del catalogo.</p>
+            </div>
+            <a href="ProfiloServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
+        </div>
+
+        <% if(request.getParameter("messaggio") != null) { %>
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+                ✨ <strong>Successo!</strong> <%= request.getParameter("messaggio") %>
+            </div>
+        <% } %>
+
+        <div class="dashboard-grid">
+            <div class="dash-col" style="flex: 2;">
+                <div class="dash-card card-admin">
+                    <form action="AggiungiProdottoServlet" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form-group">
+                            <label for="nome">Nome Prodotto</label>
+                            <input type="text" id="nome" name="nome" class="form-input" placeholder="Es. Equalizzatore Valvolare" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prezzo">Prezzo di Vendita (€)</label>
+                            <input type="number" id="prezzo" name="prezzo" class="form-input" step="0.01" min="0" placeholder="Es. 49.99" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descrizione">Descrizione Dettagliata</label>
+                            <textarea id="descrizione" name="descrizione" class="form-input" placeholder="Inserisci le specifiche tecniche o le caratteristiche principali del plugin..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foto">Copertina Prodotto (JPG/PNG)</label>
+                            <input type="file" id="foto" name="foto" class="form-input" accept="image/*" required style="padding: 7px;">
+                        </div>
+
+                        <div style="text-align: right; margin-top: 20px;">
+                            <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px;">Pubblica nel Catalogo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="dash-col" style="flex: 1;">
+                <div class="dash-card card-admin" style="background: #f8f9fa;">
+                    <h3 style="color: #4134E7;">Linee Guida Copertina</h3>
+                    <ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-top: 15px;">
+                        <li>Usa formati standard come <strong>PNG</strong> o <strong>JPG</strong>.</li>
+                        <li>Risoluzione quadrata raccomandata: <strong>800x800 pixel</strong>.</li>
+                        <li>Uno sfondo trasparente o bianco garantisce la resa ottimale all'interno del catalogo.</li>
+                        <li>Il file non deve superare i <strong>2 MB</strong> di peso per non rallentare l'e-commerce.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <jsp:include page="/WEB-INF/views/components/footer.jsp" />
+
+</body>
+</html>

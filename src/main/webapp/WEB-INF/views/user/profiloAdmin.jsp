@@ -81,7 +81,7 @@
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Aggiungi, modifica o rimuovi i prodotti (Plugin, Strumenti Virtuali) e le categorie dal catalogo e-commerce.</p>
                     
                     <div class="dash-actions-list" style="margin-top: 10px; border-top: none; padding-top: 0;">
-                        <a href="#" class="dash-btn-save" style="text-decoration: none; text-align: center; margin-bottom: 10px;">+ Aggiungi Nuovo Prodotto</a>
+                        <a href="AggiungiProdottoServlet" class="dash-btn-save" style="text-decoration: none; text-align: center; margin-bottom: 10px;">+ Aggiungi Nuovo Prodotto</a>
                         <a href="#" class="dash-btn-cancel" style="text-decoration: none; text-align: center;">Modifica Prodotti Esistenti</a>
                     </div>
                 </div>
