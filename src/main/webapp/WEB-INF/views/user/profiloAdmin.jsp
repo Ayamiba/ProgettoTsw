@@ -82,7 +82,7 @@
                     
                     <div class="dash-actions-list" style="margin-top: 10px; border-top: none; padding-top: 0;">
                         <a href="AggiungiProdottoServlet" class="dash-btn-save" style="text-decoration: none; text-align: center; margin-bottom: 10px;">+ Aggiungi Nuovo Prodotto</a>
-                        <a href="#" class="dash-btn-cancel" style="text-decoration: none; text-align: center;">Modifica Prodotti Esistenti</a>
+                        <a href="GestioneCatalogoAdminServlet" class="dash-btn-cancel" style="text-decoration: none; text-align: center;">Modifica Prodotti Esistenti</a>
                     </div>
                 </div>
 

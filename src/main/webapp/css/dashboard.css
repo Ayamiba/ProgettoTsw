@@ -372,6 +372,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 25px;
 }
 
 .dash-btn-save:hover {
@@ -394,6 +395,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 25px;
+    white-space: nowrap;
 }
 
 .dash-btn-cancel:hover {
@@ -750,4 +753,45 @@
     .checkout-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ============================================================
+   AZIONI TABELLA (MODIFICA / ELIMINA)
+   ============================================================ */
+.table-actions {
+    display: flex;
+    align-items: center; /* Allinea verticalmente i due testi al centro esatto */
+    justify-content: center;
+    gap: 15px; /* Spazio tra Modifica ed Elimina */
+}
+
+.table-actions form {
+    display: flex;
+    align-items: center;
+    margin: 0; /* Rimuove i margini invisibili di default del form */
+    padding: 0;
+}
+
+/* ============================================================
+   AZIONI TABELLA (MODIFICA / ELIMINA)
+   ============================================================ */
+.table-actions {
+    display: flex;
+    align-items: center; /* Centra verticalmente gli elementi */
+    justify-content: center;
+    gap: 15px; /* Spazio esatto tra Modifica ed Elimina */
+}
+
+.table-actions form {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Assicura che il bottone nel form sia in asse */
+}
+
+.table-actions button {
+    margin: 0;
+    line-height: normal; /* Evita che altezze di testo strane spingano il bottone */
+    display: flex;
+    align-items: center;
 }
