@@ -31,7 +31,7 @@ public class ProfiloServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/user/profiloAdmin.jsp").forward(request, response);
             
         } else if (tipo.equals("professionista")) {
-            request.getRequestDispatcher("/WEB-INF/views/user/profiloProfessionista.jsp").forward(request, response);
+            request.getRequestDispatcher("ProfiloProfessionistaServlet").forward(request, response);
             
         } else {
             // Caso di default: "utente registrato"

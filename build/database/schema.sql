@@ -64,12 +64,15 @@ CREATE TABLE Ordine (
                         ID_ordine INT AUTO_INCREMENT PRIMARY KEY,
                         data_ordine DATE NOT NULL,
                         totale FLOAT NOT NULL,
-                        stato VARCHAR(20) NOT NULL,
+                        stato VARCHAR(20) NOT NULL DEFAULT 'In attesa',
                         descrizione TEXT,
                         FK_traccia INT NOT NULL,
                         FK_metodo_pagamento BIGINT,
+                        FK_email_professionista VARCHAR(45);
+                        CHECK (stato IN ('In attesa', 'In Lavorazione', 'Completato')),
                         FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT, -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
-                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT -- Il metodo può essere eliminato dopo aver effettuato l'ordine
+                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT; -- Il metodo può essere eliminato dopo aver effettuato l'ordine
+                        FOREIGN KEY (FK_email_professionista) REFERENCES Utente (email) ON DELETE SET NULL
 );
 
 -- tabella Recensione

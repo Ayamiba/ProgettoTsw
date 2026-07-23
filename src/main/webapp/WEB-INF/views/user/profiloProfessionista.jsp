@@ -1,8 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
+<%@ page import="model.ordine.OrdineBean" %>
+<%@ page import="java.util.List" %>
 <% 
     // Recuperiamo il professionista loggato in sessione
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
+    
+    // Recuperiamo le 3 liste di ordini passate dalla Servlet
+    List<OrdineBean> inAttesa = (List<OrdineBean>) request.getAttribute("ordiniInAttesa");
+    
+    List<OrdineBean> inLavorazione = (List<OrdineBean>) request.getAttribute("ordiniInLavorazione");
+    List<OrdineBean> completati = (List<OrdineBean>) request.getAttribute("ordiniCompletati");
 %>
 <!DOCTYPE html>
 <html lang="it">
@@ -18,9 +26,17 @@
     <jsp:include page="/WEB-INF/views/components/navbar.jsp" />
 
     <main class="dashboard-container">
+        
         <h1 style="color: #c79a00;">Area Lavoro Professionisti</h1>
         <p class="subtitle">Bentornato in studio, <%= utente.getNome() %>. Gestisci la tua coda di mix e mastering e consegna i file finali.</p>
         
+        <%-- Notifica di Sistema --%>
+        <% if(request.getParameter("messaggio") != null) { %>
+            <div style="background-color: #fff9e6; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #c79a00; font-weight: bold;">
+                🔔 <%= request.getParameter("messaggio") %>
+            </div>
+        <% } %>
+
         <div class="dashboard-grid">
             
             <div class="dash-col">
@@ -68,8 +84,14 @@
                         
                         <div class="dash-form-group" style="margin-bottom: 15px;">
                             <label for="idOrdine">Seleziona Ordine in carico:</label>
-                            <select id="idOrdine" name="idOrdine" class="dash-input" style="width: 100%;">
-                                <option value="" disabled selected>Nessun ordine attualmente in lavorazione</option>
+                            <select id="idOrdine" name="idOrdine" class="dash-input" style="width: 100%;" required>
+                                <% if (inLavorazione == null || inLavorazione.isEmpty()) { %>
+                                    <option value="" disabled selected>Nessun ordine attualmente in lavorazione</option>
+                                <% } else { 
+                                       for(OrdineBean ordine : inLavorazione) { %>
+                                        <option value="<%= ordine.getIdOrdine() %>">Ordine #<%= ordine.getIdOrdine() %> - del <%= ordine.getDataOrdine() %></option>
+                                <%     } 
+                                   } %>
                             </select>
                         </div>
 
@@ -77,7 +99,9 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px; color: #c79a00;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                             <p>Trascina qui il file Master/Mix o esplora</p>
                             <span class="upload-hint">WAV (24-bit/44.1kHz consigliato)</span>
-                            <input type="file" id="fileFinito" name="tracciaFinita" class="file-input-hidden" accept=".wav,.aif,.mp3" onchange="/*document.getElementById('consegnaUploadForm').submit()*/">
+                            
+                            <!-- Sblocco il form submission al caricamento del file (rimuovo i commenti dallo script in linea) -->
+                            <input type="file" id="fileFinito" name="tracciaFinita" class="file-input-hidden" accept=".wav,.aif,.mp3" onchange="document.getElementById('consegnaUploadForm').submit();" required>
                         </div>
                     </form>
                 </div>
@@ -100,12 +124,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- Logica di fallback --%>
-                            <tr>
-                                <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                    Nessuna traccia in attesa di elaborazione al momento.
-                                </td>
-                            </tr>
+                            <% if (inAttesa == null || inAttesa.isEmpty()) { %>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                        Nessuna traccia in attesa di elaborazione al momento.
+                                    </td>
+                                </tr>
+                            <% } else { 
+                                   for(OrdineBean ordine : inAttesa) { %>
+                                <tr>
+                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                    <td>Mix & Mastering</td>
+                                    <td><%= ordine.getDataOrdine() %></td>
+                                    <td>
+                                        <form action="AccettaLavoroServlet" method="POST" style="margin: 0;">
+                                            <input type="hidden" name="idOrdine" value="<%= ordine.getIdOrdine() %>">
+                                            <button type="submit" class="dash-btn-save" style="background-color: #c79a00; height: 35px; padding: 0 15px; font-size: 0.85em;">Prendi in Carico</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <%     }
+                               } %>
                         </tbody>
                     </table>
                 </div>
@@ -118,17 +157,28 @@
                         <thead>
                             <tr>
                                 <th>Cod. Ordine</th>
-                                <th>Cliente</th>
+                                <th>Traccia Collegata</th>
                                 <th>Data Consegna</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                    Nessun lavoro completato finora.
-                                </td>
-                            </tr>
+                            <% if (completati == null || completati.isEmpty()) { %>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                        Nessun lavoro completato finora.
+                                    </td>
+                                </tr>
+                            <% } else { 
+                                   for(OrdineBean ordine : completati) { %>
+                                <tr>
+                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                    <td>Traccia #<%= ordine.getfKTraccia() %></td>
+                                    <td><%= ordine.getDataOrdine() %></td>
+                                    <td><span class="status-badge ready">Completato</span></td>
+                                </tr>
+                            <%     }
+                               } %>
                         </tbody>
                     </table>
                 </div>

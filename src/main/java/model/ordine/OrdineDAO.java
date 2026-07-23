@@ -126,6 +126,114 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         }
         return ordini;
     }
+    
+ // Metodo per permettere al professionista di prendere in carico un ordine
+    public boolean accettaOrdine(int idOrdine, String emailProfessionista) throws java.sql.SQLException {
+        java.sql.Connection connection = null;
+        java.sql.PreparedStatement statement = null;
+        int result = 0;
+
+        // La query aggiorna l'ordine se è ancora 'In attesa'
+        String query = "UPDATE ordine SET stato = 'In Lavorazione', FK_email_professionista = ? WHERE ID_ordine = ? AND stato = 'In attesa'";
+
+        try {
+            connection = model.ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            
+            statement.setString(1, emailProfessionista);
+            statement.setInt(2, idOrdine);
+            
+            result = statement.executeUpdate();
+            
+        } finally {
+            try { if (statement != null) statement.close(); } finally {
+                model.ConnectionPool.releaseConnection(connection);
+            }
+        }
+        
+        // Ritorna true se l'aggiornamento è andato a buon fine (almeno 1 riga modificata)
+        return result > 0;
+    }
+    
+ // 2. Estrae gli ordini di uno specifico professionista in base allo stato
+    public List<OrdineBean> doRetrieveByProfessionistaAndStato(String emailProfessionista, String stato) throws java.sql.SQLException {
+        java.sql.Connection connection = null;
+        java.sql.PreparedStatement statement = null;
+        java.sql.ResultSet resultSet = null;
+        List<OrdineBean> ordini = new java.util.ArrayList<>();
+
+        String query = "SELECT * FROM ordine WHERE FK_email_professionista = ? AND stato = ? ORDER BY data_ordine DESC";
+
+        try {
+            connection = model.ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            
+            // Passiamo l'email (String) invece di un ID intero
+            statement.setString(1, emailProfessionista);
+            statement.setString(2, stato);
+            
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(resultSet.getInt("ID_ordine"));
+                ordine.setDataOrdine(resultSet.getDate("data_ordine"));
+                ordine.setTotale(resultSet.getFloat("totale"));
+                ordine.setStato(resultSet.getString("stato"));
+                ordine.setDescrizione(resultSet.getString("descrizione"));
+                ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setfkEmailProfessionista(resultSet.getString("FK_email_professionista")); 
+                
+                ordini.add(ordine);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    model.ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return ordini;
+    }
+    
+ // Metodo per estrarre tutti gli ordini liberi che non sono ancora stati presi da nessuno
+    public List<OrdineBean> doRetrieveOrdiniInAttesa() throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<OrdineBean> ordini = new ArrayList<>();
+
+        // Cerca ordini In attesa dove non c'è nessuna email assegnata
+        String query = "SELECT * FROM Ordine WHERE stato = 'In attesa' AND (FK_email_professionista IS NULL OR FK_email_professionista = '' OR FK_email_professionista = 'NULL') ORDER BY data_ordine ASC";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(resultSet.getInt("ID_ordine"));
+                ordine.setDataOrdine(resultSet.getDate("data_ordine"));
+                ordine.setTotale(resultSet.getFloat("totale"));
+                ordine.setStato(resultSet.getString("stato"));
+                ordine.setDescrizione(resultSet.getString("descrizione"));
+                ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
+                ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setfkEmailProfessionista(resultSet.getString("FK_email_professionista"));
+                
+                ordini.add(ordine);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return ordini;
+    }
 
     @Override
     public void doSave(OrdineBean ordine) throws SQLException {
