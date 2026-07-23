@@ -30,14 +30,16 @@ CREATE TABLE MetodoPagamento (
                                  numero_carta BIGINT PRIMARY KEY,
                                  nome VARCHAR(25) NOT NULL,
                                  cognome VARCHAR(25) NOT NULL,
-                                 scadenza VARCHAR(10) NOT NULL
+                                 scadenza VARCHAR(10) NOT NULL,
+								 FK_utente VARCHAR(75) NOT NULL, -- Il metodo di pagamento appartiene sempre a un utente
+								 FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
 );
 
 -- tabella Categoria
 CREATE TABLE Categoria (
                            nome VARCHAR(25) PRIMARY KEY,
                            studio_tool TINYINT(1) NOT NULL,
-                           effetto TINYINT(1) NOT NULL,
+                           effetto TINYINT(1) NOT NULL
 );
 
 -- tabella Prodotto
@@ -68,20 +70,22 @@ CREATE TABLE Ordine (
                         descrizione TEXT,
                         FK_traccia INT NOT NULL,
                         FK_metodo_pagamento BIGINT,
-                        FK_email_professionista VARCHAR(45);
+                        FK_email_professionista VARCHAR(45), -- per sapere quale professionista ha preso in carico la traccia
                         CHECK (stato IN ('In attesa', 'In Lavorazione', 'Completato')),
                         FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT, -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
-                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT; -- Il metodo può essere eliminato dopo aver effettuato l'ordine
+                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT, -- Il metodo può essere eliminato dopo aver effettuato l'ordine
                         FOREIGN KEY (FK_email_professionista) REFERENCES Utente (email) ON DELETE SET NULL
 );
 
 -- tabella Recensione
 CREATE TABLE Recensione(
                            FK_ordine INT PRIMARY KEY,
+                           tipo VARCHAR(45) NOT NULL, -- la recensione può essere scritta sia in merito ad ogni prodotto, sia in merito all'ordine
                            voto INT NOT NULL,
                            commento TEXT,
                            data_recensione DATE NOT NULL,
     -- CHECK per il voto da 1 a 5 stelle
+    					   CHECK (tipo IN ('prodotto', 'ordine')),
                            CHECK (voto BETWEEN 1 AND 5),
                            FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE
 );
@@ -160,8 +164,13 @@ INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8',
 INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('8', 'riverbero');
 INSERT INTO `saendwave`.`tipologia` (`FK_prodotto`, `FK_categoria`) VALUES ('9', 'filtro');
 
-INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('906', '5333111111111111', 'Mario', 'Rossi', 'mario.rossi@email.it');
-INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`) VALUES ('785', '5333222222222222', 'Carla', 'Fracci', 'carla.fracci@email.it');
+INSERT INTO `saendwave`.`utente` (`nome`,`cognome`,`email`,`password`,`data_nascita`,`tipo`) VALUES ('Admin','Mary','admin@saendwave.it','KesYRkNecN4kTMEMbCKRg0B49GW16DRsSw5iFxIQYcc=','2006-03-07','admin');
+INSERT INTO `saendwave`.`utente` (`nome`,`cognome`,`email`,`password`,`data_nascita`,`tipo`) VALUES ('Carla','Fracci','carla.fracci@email.it','DsRk2LuPxYjaGMLnYivkABhHMOm9UXzJP8kCZ1/tVKQ=','1936-08-20','utente registrato');
+INSERT INTO `saendwave`.`utente` (`nome`,`cognome`,`email`,`password`,`data_nascita`,`tipo`) VALUES ('Mario','Rossi','mario.rossi@email.it','ew5iMMuTS2sdC1MXpLv3kOqcOKEfLM4O31LO0pnucdE=','1987-09-10','utente registrato');
+INSERT INTO `saendwave`.`utente` (`nome`,`cognome`,`email`,`password`,`data_nascita`,`tipo`) VALUES ('Professionista','Mary','professionista@saendwave.it','KesYRkNecN4kTMEMbCKRg0B49GW16DRsSw5iFxIQYcc=','2006-03-07','professionista');
 
-INSERT INTO saendwave.utilizzo (FK_utente, FK_metodopagamento) VALUES ('mario.rossi@email.it', '5333111111111111');
-INSERT INTO saendwave.utilizzo (FK_utente, FK_metodopagamento) VALUES ('carla.fracci@email.it', '5333222222222222');
+INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`, `scadenza` ) VALUES ('906', '5333111111111111', 'Mario', 'Rossi', 'mario.rossi@email.it','2026-05-30');
+INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cognome`, `Fk_utente`, `scadenza`) VALUES ('785', '5333222222222222', 'Carla', 'Fracci', 'carla.fracci@email.it','2028-08-17');
+
+INSERT INTO `saendwave`.`utilizzo` (FK_utente, FK_metodopagamento) VALUES ('mario.rossi@email.it', '5333111111111111');
+INSERT INTO `saendwave`.`utilizzo` (FK_utente, FK_metodopagamento) VALUES ('carla.fracci@email.it', '5333222222222222');
