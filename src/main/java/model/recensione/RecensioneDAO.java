@@ -87,7 +87,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
     }
     
  // Recupera sia le recensioni del prodotto specifico sia le recensioni degli ordini per il filtro
-    public List<RecensioneBean> doRetrieveByProdotto(int idProdotto) throws SQLException {
+    public List<RecensioneBean> doRetrieveById(int idProdotto) throws SQLException {
         List<RecensioneBean> recensioni = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
@@ -120,6 +120,71 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         return recensioni;
     }
 
+    
+    public List<RecensioneBean> doRetrieveByProdotto() throws SQLException {
+        List<RecensioneBean> recensioniProdotto = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        //quando FK_ordine è null la recensione è riferita al prodotto
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_ordine IS NULL";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+            	RecensioneBean recensione = new RecensioneBean();
+            	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
+                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+                recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
+                recensione.setVoto(resultSet.getInt("voto"));
+                recensione.setCommento(resultSet.getString("commento"));
+                recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+            if (statement != null) try { statement.close(); } catch (SQLException e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return recensioniProdotto;
+    }
+
+    public List<RecensioneBean> doRetrieveByOrdine() throws SQLException {
+        List<RecensioneBean> recensioniOrdine = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        //quando FK_ordine è null la recensione è riferita al prodotto
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_prodotto IS NULL";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+            	RecensioneBean recensione = new RecensioneBean();
+            	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
+                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+                recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
+                recensione.setVoto(resultSet.getInt("voto"));
+                recensione.setCommento(resultSet.getString("commento"));
+                recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+            if (statement != null) try { statement.close(); } catch (SQLException e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return recensioniOrdine;
+    }
+
+    
     @Override
     public void doSave(RecensioneBean recensione) throws SQLException {
         Connection connection = null;
