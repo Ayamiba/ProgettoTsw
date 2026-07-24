@@ -32,7 +32,7 @@ CREATE TABLE MetodoPagamento (
                                  cognome VARCHAR(25) NOT NULL,
                                  scadenza VARCHAR(10) NOT NULL,
 								 FK_utente VARCHAR(75) NOT NULL, -- Il metodo di pagamento appartiene sempre a un utente
-								 FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
+								 FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella Categoria
@@ -58,7 +58,7 @@ CREATE TABLE TracciaAudio (
                               percorso_file VARCHAR(100) NOT NULL,
                               `check` TINYINT(1) NOT NULL, 
                               FK_utente VARCHAR(75) NOT NULL, -- La traccia appartiene sempre a un utente
-                              FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
+                              FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella Ordine
@@ -72,9 +72,9 @@ CREATE TABLE Ordine (
                         FK_metodo_pagamento BIGINT,
                         FK_email_professionista VARCHAR(45), -- per sapere quale professionista ha preso in carico la traccia
                         CHECK (stato IN ('In attesa', 'In Lavorazione', 'Completato')),
-                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT, -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
-                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT, -- Il metodo può essere eliminato dopo aver effettuato l'ordine
-                        FOREIGN KEY (FK_email_professionista) REFERENCES Utente (email) ON DELETE SET NULL
+                        FOREIGN KEY (FK_traccia) REFERENCES TracciaAudio(ID_traccia) ON DELETE RESTRICT ON UPDATE CASCADE, -- la traccia non può essere eliminata se l'utente ha fatto l'ordine
+                        FOREIGN KEY (FK_metodo_pagamento) REFERENCES MetodoPagamento (numero_carta) ON DELETE RESTRICT ON UPDATE CASCADE, -- Il metodo può essere eliminato dopo aver effettuato l'ordine
+                        FOREIGN KEY (FK_email_professionista) REFERENCES Utente (email) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- tabella Recensione
@@ -89,8 +89,8 @@ CREATE TABLE Recensione(
     -- CHECK per il voto da 1 a 5 stelle
     					   CHECK (tipo IN ('prodotto', 'ordine')),
                            CHECK (voto BETWEEN 1 AND 5),
-                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE,
-                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE
+                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE RESTRICT ON UPDATE CASCADE, 
+                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella Utilizzo (tra utente e metodo pagamento)
@@ -98,8 +98,8 @@ CREATE TABLE Utilizzo (
                           FK_utente VARCHAR(75) NOT NULL,
                           FK_metodopagamento BIGINT NOT NULL,
                           PRIMARY KEY (FK_utente, FK_metodopagamento),
-                          FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE,
-                          FOREIGN KEY (FK_metodopagamento) REFERENCES MetodoPagamento(numero_carta) ON DELETE CASCADE
+                          FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE,
+                          FOREIGN KEY (FK_metodopagamento) REFERENCES MetodoPagamento(numero_carta) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella Contenuto (tra ordine e prodotto)
@@ -108,8 +108,8 @@ CREATE TABLE Contenuto (
                            FK_ordine INT NOT NULL,
                            FK_prodotto INT NOT NULL,
                            posizione_catena INT NOT NULL,
-                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE,
-                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE
+                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE ON UPDATE CASCADE,
+                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella tipologia (tra categoria e prodotto)
@@ -117,8 +117,8 @@ CREATE TABLE Tipologia (
                            FK_prodotto INT NOT NULL,
                            FK_categoria VARCHAR(25) NOT NULL,
                            PRIMARY KEY (FK_prodotto, FK_categoria),
-                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
-                           FOREIGN KEY (FK_categoria) REFERENCES Categoria(nome) ON DELETE CASCADE
+                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE,
+                           FOREIGN KEY (FK_categoria) REFERENCES Categoria(nome) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- tabella carrello (tra utente e prodotto)
@@ -126,8 +126,8 @@ CREATE TABLE Carrello(
     					   ID_riga_carrello INT AUTO_INCREMENT PRIMARY KEY,
 						   FK_utente VARCHAR(75) NOT NULL,
 						   FK_prodotto INT NOT NULL,
-						   FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE,
-						   FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE
+						   FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE,
+						   FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO `saendwave`.`prodotto` (`nome`, `prezzo`, `descrizione`, `immagine`) VALUES ('Amp Designer', '2.50', 'Amp Deisgner simula il suono di pù di 20 famosi amplificatori per chitarra e speaker collegati. Ognuno preconfigurato come combinazione di testata, cabinet e equalizzatore. Processa il segnale direttamente riproducendo il suono attraverso questa combinazione. Testata, cabinet ed equalizzatore possono essere combinati in numerosi modi per alterare il suono. Inoltre, vengono simulati microfoni virtuali che catturano il suono direttamente dal cabinet sui quali si può scegliere tipo e posizione rispetto agli speaker.', 'img/prodotti/Amp_Designer.png');
