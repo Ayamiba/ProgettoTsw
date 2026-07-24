@@ -6,25 +6,40 @@ import java.sql.Date;
 public class RecensioneBean implements Serializable{
 	private static long serializableVersionUID=1L;
 	
-	private int fkOrdine; //primary key
+	private int idRecensione;  // Primary Key (Auto-Increment)
+    private Integer fkOrdine;   // Foreign Key (può essere null)
+    private Integer fkProdotto; // Foreign Key (può essere null)
 	private int voto;
 	private String commento;
 	private Date dataRecensione;
+	private String tipo;
 	
 	public RecensioneBean() {}
 	
-	public RecensioneBean(int fkOrdine, int voto, String commento, Date dataRecensione) {
-		this.fkOrdine=fkOrdine;
-		this.voto=voto;
-		this.commento=commento;
-		this.dataRecensione=dataRecensione;
-	}
+	public RecensioneBean(int idRecensione, Integer fkOrdine, Integer fkProdotto, int voto, String commento, Date dataRecensione, String tipo) {
+        this.idRecensione = idRecensione;
+        this.fkOrdine = fkOrdine;
+        this.fkProdotto = fkProdotto;
+        this.voto = voto;
+        this.commento = commento;
+        this.dataRecensione = dataRecensione;
+        this.tipo = tipo;
+    }
 	
 	//getters
-	public int getFkOrdine() {
-		return fkOrdine;
-	}
 	
+	public int getIdRecensione() { 
+		return idRecensione; 
+		}
+	
+    public Integer getFkOrdine() { 
+    	return fkOrdine; 
+    	}
+	
+    public Integer getFkProdotto() { 
+    	return fkProdotto; 
+    	}
+    
 	public int getVoto() {
 		return voto;
 	}
@@ -37,10 +52,23 @@ public class RecensioneBean implements Serializable{
 		return dataRecensione;
 	}
 	
+	public String getTipo() {
+		return tipo;
+	}
+	
 	//setters
-	public void setFkOrdine(int fkOrdine) {
+	
+	public void setIdRecensione(int idRecensione) { 
+		this.idRecensione = idRecensione; 
+		}
+	
+	public void setFkOrdine(Integer fkOrdine) {
 		this.fkOrdine=fkOrdine;
 	}
+	
+	public void setFkProdotto(Integer fkProdotto) { 
+		this.fkProdotto = fkProdotto; 
+		}
 	
 	public void setVoto(int voto) {
 		this.voto=voto;
@@ -52,5 +80,9 @@ public class RecensioneBean implements Serializable{
 	
 	public void setDataRecensione(Date dataRecensione) {
 		this.dataRecensione=dataRecensione;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo=tipo;
 	}
 }

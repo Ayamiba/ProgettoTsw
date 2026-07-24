@@ -79,7 +79,9 @@ CREATE TABLE Ordine (
 
 -- tabella Recensione
 CREATE TABLE Recensione(
-                           FK_ordine INT PRIMARY KEY,
+						   ID_recensione INT AUTO_INCREMENT PRIMARY KEY,
+                           FK_ordine INT ,
+                           FK_prodotto INT,
                            tipo VARCHAR(45) NOT NULL, -- la recensione può essere scritta sia in merito ad ogni prodotto, sia in merito all'ordine
                            voto INT NOT NULL,
                            commento TEXT,
@@ -87,7 +89,8 @@ CREATE TABLE Recensione(
     -- CHECK per il voto da 1 a 5 stelle
     					   CHECK (tipo IN ('prodotto', 'ordine')),
                            CHECK (voto BETWEEN 1 AND 5),
-                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE
+                           FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE CASCADE,
+                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE
 );
 
 -- tabella Utilizzo (tra utente e metodo pagamento)
@@ -185,3 +188,24 @@ VALUES ('2026-03-15', 12.00, 'Completato', 'Mix completo di basso con equalizzaz
 -- 3. Colleghiamo i prodotti dell'ordine (Contenuto)
 INSERT INTO `saendwave`.`contenuto` (`FK_ordine`, `FK_prodotto`, `posizione_catena`) VALUES (LAST_INSERT_ID(), 3, 1);
 INSERT INTO `saendwave`.`contenuto` (`FK_ordine`, `FK_prodotto`, `posizione_catena`) VALUES (LAST_INSERT_ID(), 5, 2);
+
+-- esempio recensioni
+-- Recensione da 5 stelle per l'ordine con ID 1
+INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) 
+VALUES (1, NULL, 5, 'Lavoro fantastico! Il master finale suona benissimo in macchina.', '2026-07-10', 'ordine');
+
+-- Recensione da 4 stelle per l'ordine con ID 2
+INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) 
+VALUES (2, NULL, 4, 'Molto bravi, tempi di consegna rispettati. Solo una piccola sbavatura sui bassi.', '2026-07-15', 'ordine');
+
+-- Recensione da 5 stelle per il prodotto (plug-in) con ID 1
+INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) 
+VALUES (NULL, 1, 5, 'Plug-in eccezionale. L\'interfaccia è super intuitiva e il suono è caldissimo.', '2026-07-20', 'prodotto');
+
+-- Recensione da 3 stelle per il prodotto con ID 2
+INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) 
+VALUES (NULL, 2, 3, 'Fa il suo dovere, ma consuma un po\' troppa CPU sul mio Mac.', '2026-07-22', 'prodotto');
+
+-- Recensione da 5 stelle per il prodotto con ID 3 (senza commento)
+INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) 
+VALUES (NULL, 3, 5, '', '2026-07-23', 'prodotto');
