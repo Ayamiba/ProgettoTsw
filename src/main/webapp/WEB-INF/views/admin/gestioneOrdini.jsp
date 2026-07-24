@@ -25,7 +25,7 @@
                 <h1 style="color: #d9534f; margin-bottom: 5px;">Archivio Ordini Globale</h1>
                 <p class="subtitle" style="margin: 0;">Visualizza e gestisci l'intero storico degli acquisti.</p>
             </div>
-            <a href="ProfiloAdminServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
+            <a href="ProfiloServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
         </div>
 
         <div class="dash-card card-admin">

@@ -167,55 +167,80 @@
                 </div>
 
                 <div class="dash-card card-user">
-                    <h3>Storico Ordini</h3>
-                    <table class="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Codice</th>
-                                <th>Data</th>
-                                <th>Stato</th>
-                                <th>Totale</th>
-                                <th style="text-align: center;">PDF</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                OrdineDAO ordineDAO = new OrdineDAO();
-                                List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
-                                
-                                if (ordiniUtente == null || ordiniUtente.isEmpty()) {
-                            %>
-                                <tr>
-                                    <td colspan="5" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                        Nessun ordine presente nello storico account.
-                                    </td>
-                                </tr>
-                            <% } else { 
-                                for(OrdineBean ordine : ordiniUtente) { 
-                                    // Determina la classe CSS per il badge di stato
-                                    String statoClasse = "pending";
-                                    if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
-                                    else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
-                            %>
-                                <tr>
-                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
-                                    <td><%= ordine.getDataOrdine() %></td>
-                                    <td>
-                                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
-                                    </td>
-                                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
-                                    <td style="text-align: center;">
-                                        <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <%  } 
-                               } %>
-                        </tbody>
-                    </table>
-                </div>
-
+    <h3>Storico Ordini</h3>
+    <table class="dash-table">
+        <thead>
+            <tr>
+                <th>Codice</th>
+                <th>Data</th>
+                <th>Stato</th>
+                <th>Totale</th>
+                <th style="text-align: center;">Download Traccia</th>
+                <th style="text-align: center;">PDF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                OrdineDAO ordineDAO = new OrdineDAO();
+                TracciaAudioDAO tracciaAudioDAO = new TracciaAudioDAO();
+                List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
+                
+                if (ordiniUtente == null || ordiniUtente.isEmpty()) {
+            %>
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                        Nessun ordine presente nello storico account.
+                    </td>
+                </tr>
+            <% } else { 
+                for(OrdineBean ordine : ordiniUtente) { 
+                    String statoClasse = "pending";
+                    if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                    else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+            %>
+                <tr>
+                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                    <td><%= ordine.getDataOrdine() %></td>
+                    <td>
+                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
+                    </td>
+                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                    
+                    <!-- colonna per il download della traccia caricata dal professionista -->
+					<td style="text-align: center;">
+    				<% if ("Completato".equalsIgnoreCase(ordine.getStato())) { 
+        			TracciaAudioBean tracciaPro = null;
+       				try {
+            			// Avvolgiamo la chiamata al DB in un try-catch per evitare l'errore 500
+            			tracciaPro = tracciaAudioDAO.doRetrieveTracciaProfessionistaByOrdine(ordine.getIdOrdine());
+        			} catch (Exception e) {
+            		e.printStackTrace();
+        		}
+        
+        		if (tracciaPro != null) {
+   				 %>
+        		<a href="<%= request.getContextPath() %>/<%= tracciaPro.getPercorsoFile() %>" download class="btn-text-success" style="font-weight: 600; color: #28a745; text-decoration: none;">
+            		🎵 Scarica 
+        		</a>
+    			<%  } else { %>
+        			<span style="color: #aaa;">Non disponibile</span>
+    			<%  } 
+       			} else { %>
+        		<span style="color: #888; font-style: italic; font-size: 0.85em;">In elaborazione...</span>
+    			<% } %>
+				</td>
+                    <!-- COLONNA PDF -->
+                    <td style="text-align: center;">
+                        <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        </a>
+                    </td>
+                </tr>
+            <%  } 
+               } %>
+        </tbody>
+    </table>
+</div>
             </div>
 
         </div>

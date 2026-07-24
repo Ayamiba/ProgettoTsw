@@ -236,4 +236,39 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
             }
         }
         }
+    
+    public TracciaAudioBean doRetrieveTracciaProfessionistaByOrdine(int idOrdine) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        TracciaAudioBean tracciaPro = null;
+
+        // Cerca la traccia collegata all'ordine il cui caricatore ha tipo 'professionista'
+        String query = "SELECT t.* FROM tracciaaudio t " +
+                       "JOIN ordine o ON o.FK_email_professionista = t.FK_utente " +
+                       "JOIN utente u ON u.email = t.FK_utente " +
+                       "WHERE o.ID_ordine = ? AND u.tipo = 'professionista'";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                tracciaPro = new TracciaAudioBean();
+                tracciaPro.setIdTraccia(resultSet.getInt("ID_traccia"));
+                tracciaPro.setNomeFile(resultSet.getString("nome_file"));
+                tracciaPro.setPercorsoFile(resultSet.getString("percorso_file"));
+                tracciaPro.setCheck(resultSet.getBoolean("check"));
+                tracciaPro.setfKUtente(resultSet.getString("FK_utente"));
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException ignored) {}
+            if (statement != null) try { statement.close(); } catch (SQLException ignored) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return tracciaPro;
+    }
 }

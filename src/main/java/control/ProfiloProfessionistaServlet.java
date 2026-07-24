@@ -39,7 +39,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
             // 2. Ordini attualmente in lavorazione da QUESTO professionista (USIAMO getEmail!)
             List<OrdineBean> ordiniInLavorazione = ordineDAO.doRetrieveByProfessionistaAndStato(utente.getEmail(), "In Lavorazione");
             
-            // 3. Storico lavori completati da QUESTO professionista (USIAMO getEmail!)
+            // 3. Storico lavori completati da QUESTO professionista
             List<OrdineBean> ordiniCompletati = ordineDAO.doRetrieveByProfessionistaAndStato(utente.getEmail(), "Completato");
 
             // Passiamo tutto alla JSP

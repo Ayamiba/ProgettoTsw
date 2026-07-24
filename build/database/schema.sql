@@ -174,3 +174,14 @@ INSERT INTO `saendwave`.`metodopagamento` (`cvv`, `numero_carta`, `nome`, `cogno
 
 INSERT INTO `saendwave`.`utilizzo` (FK_utente, FK_metodopagamento) VALUES ('mario.rossi@email.it', '5333111111111111');
 INSERT INTO `saendwave`.`utilizzo` (FK_utente, FK_metodopagamento) VALUES ('carla.fracci@email.it', '5333222222222222');
+
+-- esempio di un ordine completato
+-- 1. Creiamo la traccia audio inviata dal cliente 
+INSERT INTO `saendwave`.`tracciaaudio` (`nome_file`, `percorso_file`, `check`, `FK_utente`) 
+VALUES ('basso_funk_luigi.wav', 'uploads/tracce/basso_funk_luigi.wav', 1, 'mario.rossi@email.it');
+-- 2. Inseriamo l'ordine completato associato al professionista loggato ('professionista@saendwave.it')
+INSERT INTO `saendwave`.`ordine` (`data_ordine`, `totale`, `stato`, `descrizione`, `FK_traccia`, `FK_metodo_pagamento`, `FK_email_professionista`) 
+VALUES ('2026-03-15', 12.00, 'Completato', 'Mix completo di basso con equalizzazione punchy e compressione sidechain.', LAST_INSERT_ID(), 5333111111111111, 'professionista@saendwave.it');
+-- 3. Colleghiamo i prodotti dell'ordine (Contenuto)
+INSERT INTO `saendwave`.`contenuto` (`FK_ordine`, `FK_prodotto`, `posizione_catena`) VALUES (LAST_INSERT_ID(), 3, 1);
+INSERT INTO `saendwave`.`contenuto` (`FK_ordine`, `FK_prodotto`, `posizione_catena`) VALUES (LAST_INSERT_ID(), 5, 2);
