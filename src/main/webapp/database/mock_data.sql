@@ -22,22 +22,15 @@ INSERT INTO `saendwave`.`categoria` (`nome`, `studio_tool`, `effetto`) VALUES ('
 
 INSERT INTO `tipologia` VALUES (1,'amplificatore'),(3,'amplificatore'),(5,'compressore'),(7,'delay'),(9,'delay'),(1,'distorsore'),(2,'distorsore'),(3,'distorsore'),(9,'distorsore'),(1,'equalizzatore'),(3,'equalizzatore'),(8,'equalizzatore'),(9,'equalizzatore'),(6,'filtro'),(9,'filtro'),(10,'filtro'),(9,'pedaliera'),(4,'riverbero'),(9,'riverbero');
 
+INSERT INTO `utente` VALUES ('Admin','Gianni','adminGianni@saendwave.it','hPC6XUfMJVf9I3vsd/2YFGWoNGmheHDDrrioKaRIN2s=','1997-06-11','admin'),('Giovanni','Pro','g.professionista@saendwave.it','Dm3AOGalRYVBDqeaiwb9NvrQp41ILh8Pf08BKmetxF4=','1997-06-11','professionista'),('Mario','Rossi','m.rossi@gmail.com','tbMBeUL7idLBIU7D8zdm9mlS23xUBbjlmsCW0/GNz/I=','1999-08-21','utente registrato');
+
 INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav',0,'m.rossi@gmail.com');
 
-
-INSERT INTO `metodopagamento` VALUES (123,5333111111111111,'MARIO','ROSSI','12/30');
-
+INSERT INTO `metodopagamento` VALUES (123,5333111111111111,'MARIO','ROSSI','12/30','m.rossi@gmail.com');
 
 INSERT INTO `ordine` VALUES (10,'2026-07-20',5.5,'In Lavorazione','Eq spazio voce pulizia, comp rotonditÃ  e potenza, verb per spazialitÃ ',7,5333111111111111,'g.professionista@saendwave.it');
 
-
-INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav',0,'m.rossi@gmail.com');
-
-
-INSERT INTO `utente` VALUES ('Admin','Gianni','adminGianni@saendwave.it','hPC6XUfMJVf9I3vsd/2YFGWoNGmheHDDrrioKaRIN2s=','1997-06-11','admin'),('Giovanni','Pro','g.professionista@saendwave.it','Dm3AOGalRYVBDqeaiwb9NvrQp41ILh8Pf08BKmetxF4=','1997-06-11','professionista'),('Mario','Rossi','m.rossi@gmail.com','tbMBeUL7idLBIU7D8zdm9mlS23xUBbjlmsCW0/GNz/I=','1999-08-21','utente registrato');
-
-
 INSERT INTO `utilizzo` VALUES ('m.rossi@gmail.com',5333111111111111);
 
-INSERT INTO `carrello` VALUES ('g.professionista@saendwave.it',7);
+INSERT INTO `Carrello` (`FK_utente`, `FK_prodotto`) VALUES ('g.professionista@saendwave.it', 7);
 
