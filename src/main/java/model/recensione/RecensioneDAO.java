@@ -23,7 +23,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         ResultSet resultSet = null;
         RecensioneBean recensione = null;
 
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione WHERE ID_recensione = ?";
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo FROM Recensione WHERE ID_recensione = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -40,7 +40,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
-                
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
                 		
             }
         } finally {
@@ -60,7 +60,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione";
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo FROM Recensione";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -75,6 +75,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
                 recensioni.add(recensione);
             }
         } finally {
@@ -94,7 +95,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo "
                      + "FROM Recensione WHERE FK_prodotto = ? ORDER BY data_recensione DESC";
 
         try {
@@ -112,6 +113,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
                 recensioni.add(recensione);
             }
         } finally {
@@ -128,7 +130,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente voto, commento, data_recensione, tipo "
                      + "FROM Recensione WHERE FK_ordine = ? ORDER BY data_recensione DESC";
 
         try {
@@ -146,6 +148,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
                 recensioni.add(recensione);
             }
         } finally {
@@ -156,6 +159,40 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         return recensioni;
     }
 
+    public List<RecensioneBean> doRetrieveByIdUtente(int idUtente) throws SQLException {
+        List<RecensioneBean> recensioni = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo "
+                     + "FROM Recensione WHERE FK_utente = ? ORDER BY data_recensione DESC";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idUtente);
+            
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+            	RecensioneBean recensione = new RecensioneBean();
+            	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
+                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+                recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
+                recensione.setVoto(resultSet.getInt("voto"));
+                recensione.setCommento(resultSet.getString("commento"));
+                recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
+                recensioni.add(recensione);
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+            if (statement != null) try { statement.close(); } catch (SQLException e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return recensioni;
+    }
     
     public List<RecensioneBean> doRetrieveByProdotto() throws SQLException {
         List<RecensioneBean> recensioniProdotto = new ArrayList<>();
@@ -164,7 +201,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         ResultSet resultSet = null;
 
         //quando FK_ordine è null la recensione è riferita al prodotto
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_ordine IS NULL";
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_ordine IS NULL";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -179,6 +216,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
             }
         } finally {
             if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
@@ -195,7 +233,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         ResultSet resultSet = null;
 
         //quando FK_ordine è null la recensione è riferita al prodotto
-        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_prodotto IS NULL";
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo FROM Recensione WHERE FK_prodotto IS NULL";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -211,6 +249,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensione.setFkUtente(resultSet.getString("FK_utente"));
             }
         } finally {
             if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
@@ -226,7 +265,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO Recensione (FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Recensione (FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -234,10 +273,11 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
 
             statement.setInt(1, recensione.getFkOrdine());
             statement.setInt(2, recensione.getFkProdotto());
-            statement.setInt(3, recensione.getVoto());
-            statement.setString(4, recensione.getCommento());
-            statement.setDate(5, recensione.getDataRecensione());
-            statement.setString(6, recensione.getTipo());
+            statement.setString(3, recensione.getFkUtente());
+            statement.setInt(4, recensione.getVoto());
+            statement.setString(5, recensione.getCommento());
+            statement.setDate(6, recensione.getDataRecensione());
+            statement.setString(7, recensione.getTipo());
 
             statement.executeUpdate();
         } finally {
@@ -252,7 +292,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE Recensione SET FK_ordine = ?, FK_prodotto = ?, voto = ?, commento = ?, data_recensione = ?, tipo = ? WHERE ID_recensione = ?";
+        String query = "UPDATE Recensione SET FK_ordine = ?, FK_prodotto = ?, FK_utente= ?, voto = ?, commento = ?, data_recensione = ?, tipo = ? WHERE ID_recensione = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -260,10 +300,11 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
 
             statement.setInt(1, recensione.getFkOrdine());
             statement.setInt(2, recensione.getFkProdotto());
-            statement.setInt(3, recensione.getVoto());
-            statement.setString(4, recensione.getCommento());
-            statement.setDate(5, recensione.getDataRecensione());
-            statement.setString(6, recensione.getTipo());
+            statement.setString(3, recensione.getFkUtente());
+            statement.setInt(4, recensione.getVoto());
+            statement.setString(5, recensione.getCommento());
+            statement.setDate(6, recensione.getDataRecensione());
+            statement.setString(7, recensione.getTipo());
 
             statement.executeUpdate();
         } finally {

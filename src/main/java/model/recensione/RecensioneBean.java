@@ -9,6 +9,7 @@ public class RecensioneBean implements Serializable{
 	private int idRecensione;  // Primary Key (Auto-Increment)
     private Integer fkOrdine;   // Foreign Key (può essere null)
     private Integer fkProdotto; // Foreign Key (può essere null)
+    private String fkUtente;
 	private int voto;
 	private String commento;
 	private Date dataRecensione;
@@ -16,7 +17,7 @@ public class RecensioneBean implements Serializable{
 	
 	public RecensioneBean() {}
 	
-	public RecensioneBean(int idRecensione, Integer fkOrdine, Integer fkProdotto, int voto, String commento, Date dataRecensione, String tipo) {
+	public RecensioneBean(int idRecensione, String fkUtente, Integer fkOrdine, Integer fkProdotto, int voto, String commento, Date dataRecensione, String tipo) {
         this.idRecensione = idRecensione;
         this.fkOrdine = fkOrdine;
         this.fkProdotto = fkProdotto;
@@ -24,6 +25,7 @@ public class RecensioneBean implements Serializable{
         this.commento = commento;
         this.dataRecensione = dataRecensione;
         this.tipo = tipo;
+        this.fkUtente= fkUtente;
     }
 	
 	//getters
@@ -39,6 +41,10 @@ public class RecensioneBean implements Serializable{
     public Integer getFkProdotto() { 
     	return fkProdotto; 
     	}
+    
+    public String getFkUtente() {
+    	return fkUtente;
+    }
     
 	public int getVoto() {
 		return voto;
@@ -69,6 +75,10 @@ public class RecensioneBean implements Serializable{
 	public void setFkProdotto(Integer fkProdotto) { 
 		this.fkProdotto = fkProdotto; 
 		}
+	
+	public void setFkUtente(String fkUtente) {
+		this.fkUtente= fkUtente;
+	}
 	
 	public void setVoto(int voto) {
 		this.voto=voto;

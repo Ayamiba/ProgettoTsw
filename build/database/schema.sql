@@ -82,6 +82,7 @@ CREATE TABLE Recensione(
 						   ID_recensione INT AUTO_INCREMENT PRIMARY KEY,
                            FK_ordine INT ,
                            FK_prodotto INT,
+                           FK_utente VARCHAR(75),
                            tipo VARCHAR(45) NOT NULL, -- la recensione può essere scritta sia in merito ad ogni prodotto, sia in merito all'ordine
                            voto INT NOT NULL,
                            commento TEXT,
@@ -90,7 +91,8 @@ CREATE TABLE Recensione(
     					   CHECK (tipo IN ('prodotto', 'ordine')),
                            CHECK (voto BETWEEN 1 AND 5),
                            FOREIGN KEY (FK_ordine) REFERENCES Ordine(ID_ordine) ON DELETE RESTRICT ON UPDATE CASCADE, 
-                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE
+                           FOREIGN KEY (FK_prodotto) REFERENCES Prodotto(ID_prodotto) ON DELETE CASCADE ON UPDATE CASCADE,
+                           FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE SET NULL
 );
 
 -- tabella Utilizzo (tra utente e metodo pagamento)
