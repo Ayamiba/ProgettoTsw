@@ -87,19 +87,52 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
     }
     
  // Recupera sia le recensioni del prodotto specifico sia le recensioni degli ordini per il filtro
-    public List<RecensioneBean> doRetrieveById(int idProdotto) throws SQLException {
+    public List<RecensioneBean> doRetrieveByIdProdotto(int idProdotto) throws SQLException {
         List<RecensioneBean> recensioni = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
-                     + "FROM Recensione WHERE FK_prodotto = ? OR tipo = 'ordine' ORDER BY data_recensione DESC";
+                     + "FROM Recensione WHERE FK_prodotto = ? OR tipo = 'prodotto' ORDER BY data_recensione DESC";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
             statement.setInt(1, idProdotto);
+            
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+            	RecensioneBean recensione = new RecensioneBean();
+            	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
+                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+                recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
+                recensione.setVoto(resultSet.getInt("voto"));
+                recensione.setCommento(resultSet.getString("commento"));
+                recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+            if (statement != null) try { statement.close(); } catch (SQLException e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return recensioni;
+    }
+
+    public List<RecensioneBean> doRetrieveByIdOrdine(int idOrdine) throws SQLException {
+        List<RecensioneBean> recensioni = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
+                     + "FROM Recensione WHERE FK_ordine = ? OR tipo = 'ordine' ORDER BY data_recensione DESC";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
             
             resultSet = statement.executeQuery();
 
