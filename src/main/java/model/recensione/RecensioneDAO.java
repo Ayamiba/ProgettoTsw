@@ -40,6 +40,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                
                 		
             }
         } finally {
@@ -94,7 +95,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         ResultSet resultSet = null;
 
         String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
-                     + "FROM Recensione WHERE FK_prodotto = ? OR tipo = 'prodotto' ORDER BY data_recensione DESC";
+                     + "FROM Recensione WHERE FK_prodotto = ? ORDER BY data_recensione DESC";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -111,6 +112,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensioni.add(recensione);
             }
         } finally {
             if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
@@ -127,7 +129,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         ResultSet resultSet = null;
 
         String query = "SELECT ID_recensione, FK_ordine, FK_prodotto, voto, commento, data_recensione, tipo "
-                     + "FROM Recensione WHERE FK_ordine = ? OR tipo = 'ordine' ORDER BY data_recensione DESC";
+                     + "FROM Recensione WHERE FK_ordine = ? ORDER BY data_recensione DESC";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -144,6 +146,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
                 recensione.setDataRecensione(resultSet.getDate("data_recensione"));
+                recensioni.add(recensione);
             }
         } finally {
             if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}

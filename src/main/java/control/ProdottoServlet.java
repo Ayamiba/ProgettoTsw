@@ -2,6 +2,8 @@ package control;
 
 import model.prodotto.ProdottoBean;
 import model.prodotto.ProdottoDAO;
+import model.recensione.RecensioneBean;
+import model.recensione.RecensioneDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/ProdottoServlet")
 public class ProdottoServlet extends HttpServlet {
@@ -35,6 +38,18 @@ public class ProdottoServlet extends HttpServlet {
             // Se abbiamo trovato il prodotto (in un modo o nell'altro), andiamo alla pagina di dettaglio
             if (prodotto != null) {
                 request.setAttribute("prodottoSingolo", prodotto);
+                
+                // --- INIZIO NUOVO BLOCCO: GESTIONE RECENSIONI ---
+                RecensioneDAO recensioneDAO = new RecensioneDAO();
+                
+                // Usiamo getIdProdotto() sull'oggetto appena trovato. 
+                // Così funziona perfettamente sia che l'utente abbia cercato per ID o per Nome!
+                List<RecensioneBean> recensioniProdotto = recensioneDAO.doRetrieveByIdProdotto(prodotto.getIdProdotto());
+                
+                // Passiamo la lista alla JSP
+                request.setAttribute("recensioni", recensioniProdotto);
+                // --- FINE NUOVO BLOCCO ---
+
                 request.getRequestDispatcher("/WEB-INF/views/catalog/prodotto.jsp").forward(request, response);
                 return;
             }

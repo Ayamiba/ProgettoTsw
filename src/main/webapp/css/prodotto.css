@@ -37,3 +37,65 @@
             margin-top: 20px;
             width: 100%;
         }
+        
+   /* ============================================================
+   RECENSIONI
+   ============================================================ */
+   
+    .reviews-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .reviews-title {
+            font-size: 1.8em;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .review-card {
+            background: #fbfbfb;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .stars-container {
+            color: #d3d3d3; /* Stelle vuote grigie */
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+        .stars-container .filled {
+            color: #ffc107; /* Stelle piene oro */
+        }
+        .review-date {
+            font-size: 0.85em;
+            color: #888;
+        }
+        .review-comment {
+            font-size: 0.95em;
+            color: #444;
+            line-height: 1.5;
+            font-style: italic;
+        }
+        .no-reviews {
+            color: #777;
+            font-size: 1.1em;
+            text-align: center;
+            padding: 40px 0;
+            background: #fdfdfd;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
