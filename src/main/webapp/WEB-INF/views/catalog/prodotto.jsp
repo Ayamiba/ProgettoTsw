@@ -78,29 +78,40 @@
                     <% for(RecensioneBean r : recensioni) { %>
                         <div style="padding: 15px 0; border-bottom: 1px dashed #eee;">
                             
-                            <!-- Intestazione Recensione: Stelle e Data -->
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <div style="color: #ffc107; font-size: 1.2em; letter-spacing: 2px;">
-                                    <% 
-                                        for(int i = 1; i <= 5; i++) { 
-                                            if(i <= r.getVoto()) {
-                                                out.print("★");
-                                            } else {
-                                                out.print("<span style='color: #e0e0e0;'>★</span>"); // Stella vuota grigia
-                                            }
-                                        } 
-                                    %>
+                            <!-- Intestazione Recensione: Autore, Stelle e Data -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                
+                                <div>
+                                    <!-- Stampa dell'autore o "Utente Anonimo" -->
+                                    <div style="font-weight: bold; color: #333; margin-bottom: 5px; font-size: 1.05em;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px; color: #999;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                        <%= (r.getFkUtente() != null && !r.getFkUtente().isEmpty()) ? r.getFkUtente() : "Utente Anonimo" %>
+                                    </div>
+                                    
+                                    <!-- Sistema Stelle -->
+                                    <div style="color: #ffc107; font-size: 1.1em; letter-spacing: 2px;">
+                                        <% 
+                                            for(int i = 1; i <= 5; i++) { 
+                                                if(i <= r.getVoto()) {
+                                                    out.print("★");
+                                                } else {
+                                                    out.print("<span style='color: #e0e0e0;'>★</span>"); 
+                                                }
+                                            } 
+                                        %>
+                                    </div>
                                 </div>
+                                
                                 <span style="font-size: 0.9em; color: #999;"><%= r.getDataRecensione() %></span>
                             </div>
                             
-                            <!-- Testo della recensione (stile coerente con la descrizione del prodotto) -->
-                            <p style="font-size: 1.05em; color: #555; line-height: 1.6; margin: 0; font-style: italic;">
+                            <!-- Testo della recensione -->
+                            <p style="font-size: 1.05em; color: #555; line-height: 1.6; margin: 0; font-style: italic; padding-top: 5px;">
                                 "<%= (r.getCommento() != null && !r.getCommento().trim().isEmpty()) ? r.getCommento() : "Nessun commento testuale lasciato dall'utente." %>"
                             </p>
                             
                         </div>
-                    <% } %>
+                        <% } %>
                 </div>
             <% } %>
             
