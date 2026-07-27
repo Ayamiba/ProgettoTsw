@@ -81,9 +81,9 @@
 
         <section class="categories-section">
             <div class="cat-grid">
-                <a href="CatalogoServlet?tipo=bundle" class="cat-box bg-bundle">BUNDLE</a>
-                <a href="CatalogoServlet?tipo=effetto" class="cat-box bg-effetti">EFFETTI</a>
-                <a href="CatalogoServlet?tipo=studio_tool" class="cat-box bg-studio">STUDIO TOOLS</a>
+                <a href="CatalogoServlet?categoria=bundle" class="cat-box bg-bundle">BUNDLE</a>
+                <a href="CatalogoServlet?categoria=Effetto" class="cat-box bg-effetti">EFFETTI</a>
+                <a href="CatalogoServlet?categoria=Studio Tool" class="cat-box bg-studio">STUDIO TOOLS</a>
             </div>
         </section>
     </main>

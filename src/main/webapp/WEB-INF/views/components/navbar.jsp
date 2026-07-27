@@ -26,9 +26,9 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
         <div class="nav-catalog">
             <a href="CatalogoServlet">Catalogo &#9662;</a>
             <div class="dropdown">
-                <a href="CatalogoServlet?tipo=effetto">Effetti</a>
-                <a href="CatalogoServlet?tipo=studio_tool">Studio Tools</a>
-                <a href="CatalogoServlet?tipo=bundle">Bundle Completi</a>
+                <a href="CatalogoServlet?categoria=Effetto">Effetti</a>
+                <a href="CatalogoServlet?categoria=Studio Tool">Studio Tools</a>
+                <a href="CatalogoServlet?categoria=bundle">Bundle Completi</a>
             </div>
         </div>
     </div>
@@ -94,9 +94,9 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
     <div class="mobile-sidebar" id="mobile-sidebar">
         <div class="nav-catalog-mobile">
             <a href="CatalogoServlet" style="color: var(--colore-primario);">Catalogo</a>
-            <a href="CatalogoServlet?tipo=effetto" class="sub-link">- Effetti</a>
-            <a href="CatalogoServlet?tipo=studio_tool" class="sub-link">- Studio Tools</a>
-            <a href="CatalogoServlet?tipo=bundle" class="sub-link">- Bundle Completi</a>
+            <a href="CatalogoServlet?categoria=Effetto" class="sub-link">- Effetti</a>
+            <a href="CatalogoServlet?categoria=Studio Tool" class="sub-link">- Studio Tools</a>
+            <a href="CatalogoServlet?categoria=bundle" class="sub-link">- Bundle Completi</a>
         </div>
         
         <hr class="mobile-divider">
