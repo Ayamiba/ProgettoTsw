@@ -108,7 +108,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
             while (resultSet.next()) {
             	RecensioneBean recensione = new RecensioneBean();
             	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
-                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+            	recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
                 recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
@@ -143,7 +143,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
             while (resultSet.next()) {
             	RecensioneBean recensione = new RecensioneBean();
             	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
-                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+            	recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
                 recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
@@ -178,7 +178,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
             while (resultSet.next()) {
             	RecensioneBean recensione = new RecensioneBean();
             	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
-                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+            	recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
                 recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
@@ -211,7 +211,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
             while (resultSet.next()) {
             	RecensioneBean recensione = new RecensioneBean();
             	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
-                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+            	recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
                 recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
@@ -244,7 +244,7 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
             while (resultSet.next()) {
             	RecensioneBean recensione = new RecensioneBean();
             	recensione.setIdRecensione(resultSet.getInt("ID_recensione"));   
-                recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
+            	recensione.setFkOrdine(resultSet.getInt("FK_ordine"));
                 recensione.setFkProdotto(resultSet.getInt("FK_prodotto"));
                 recensione.setVoto(resultSet.getInt("voto"));
                 recensione.setCommento(resultSet.getString("commento"));
@@ -265,14 +265,23 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO Recensione (FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Recensione (FK_ordine, FK_prodotto, FK_utente, voto, commento, data_recensione, tipo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
 
-            statement.setInt(1, recensione.getFkOrdine());
-            statement.setInt(2, recensione.getFkProdotto());
+          //Suddivido i casi in cui una foreign key è null o intero
+            if (recensione.getFkOrdine() == null) {
+                statement.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(1, recensione.getFkOrdine());
+            }
+            if (recensione.getFkProdotto() == null) {
+                statement.setNull(2, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(2, recensione.getFkProdotto());
+            }
             statement.setString(3, recensione.getFkUtente());
             statement.setInt(4, recensione.getVoto());
             statement.setString(5, recensione.getCommento());
@@ -297,9 +306,18 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
-
-            statement.setInt(1, recensione.getFkOrdine());
-            statement.setInt(2, recensione.getFkProdotto());
+            
+            //Suddivido i casi in cui una foreign key è null o intero
+            if (recensione.getFkOrdine() == null) {
+                statement.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(1, recensione.getFkOrdine());
+            }
+            if (recensione.getFkProdotto() == null) {
+                statement.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(1, recensione.getFkProdotto());
+            }
             statement.setString(3, recensione.getFkUtente());
             statement.setInt(4, recensione.getVoto());
             statement.setString(5, recensione.getCommento());

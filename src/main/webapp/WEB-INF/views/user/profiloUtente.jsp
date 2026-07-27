@@ -177,6 +177,7 @@
                 <th>Totale</th>
                 <th style="text-align: center;">Download Traccia</th>
                 <th style="text-align: center;">PDF</th>
+                <th style="text-align: center;">Recensione</th>
             </tr>
         </thead>
         <tbody>
@@ -234,6 +235,17 @@
                         <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         </a>
+                    </td>
+                    <!-- COLONNA RECENSIONE -->
+                    <td style="text-align: center;">
+                        <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
+                            <a href="InviaRecensioneServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
+                               style="background-color: #6f42c1; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85em; font-weight: bold; white-space: nowrap;">
+                                Lascia Recensione
+                            </a>
+                        <% } else { %>
+                            <span style="color: #ccc;">–</span>
+                        <% } %>
                     </td>
                 </tr>
             <%  } 

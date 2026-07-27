@@ -299,7 +299,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotti;
     }
     
- // NUOVO METODO: Gestisce tutte le combinazioni di filtri (Categoria, SottoCategoria, Prezzo)
+ // Gestisce tutte le combinazioni di filtri (Categoria, SottoCategoria, Prezzo)
     public List<ProdottoBean> doRetrieveByAllFilters(String categoria, String sottoCategoria, float prezzoMax) throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
         Connection connection = null;
@@ -368,6 +368,40 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                     ConnectionPool.releaseConnection(connection);
                 }
             }
+        }
+        return prodotti;
+    }
+    
+ // Metodo per ottenere tutti i prodotti acquistati in un determinato ordine
+    public List<ProdottoBean> doRetrieveByOrdine(int idOrdine) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<ProdottoBean> prodotti = new ArrayList<>();
+
+        String query = "SELECT p.* FROM Prodotto p " +
+                       "JOIN contenuto c ON p.ID_prodotto = c.FK_prodotto " +
+                       "WHERE c.FK_ordine = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ProdottoBean prodotto = new ProdottoBean();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNome(resultSet.getString("nome"));
+                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotti.add(prodotto);
+            }
+        } finally {
+            if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+            if (statement != null) try { statement.close(); } catch (SQLException e) {}
+            ConnectionPool.releaseConnection(connection);
         }
         return prodotti;
     }

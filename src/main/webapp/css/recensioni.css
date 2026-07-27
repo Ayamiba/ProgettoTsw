@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+/* 
+   STILI PER LA PAGINA RECENSIONI*/
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.review-form select, 
+.review-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif; /* Mantiene il font base scelto */
+}
+
+.review-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.review-form select:focus, 
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--colore-primario); /* Richiama la variabile del tuo style.css */
+    box-shadow: 0 0 5px rgba(65, 52, 231, 0.2);
+}
+
+.product-review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.product-review-header img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
