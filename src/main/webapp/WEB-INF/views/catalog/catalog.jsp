@@ -89,17 +89,21 @@
        if (prodotti != null && !prodotti.isEmpty()) { 
            for (ProdottoBean prodotto : prodotti) { 
     %>
-               <article class="catalog-card">
+              <article class="catalog-card">
                    <% 
-                       String imgPath = prodotto.getImmagine(); //la path corrisponde all'url che sta nel database 
+                       String imgPath = prodotto.getImmagine(); 
                        if (imgPath == null || imgPath.trim().isEmpty()) {
                            imgPath = "img/placeholder.png";
                        }
                    %>
-                   <img src="<%= imgPath %>" alt="<%= prodotto.getNome() %>">
+                   
+                   <!-- 1. GANCIO IMMAGINE: class="js-prod-img" -->
+                   <img src="<%= imgPath %>" alt="<%= prodotto.getNome() %>" class="js-prod-img">
                    
                    <div class="catalog-card-details">
-                       <h3 class="catalog-card-title">
+                       
+                       <!-- 2. GANCIO NOME: class="catalog-card-title js-prod-name" -->
+                       <h3 class="catalog-card-title js-prod-name">
     						<a href="ProdottoServlet?id=<%= prodotto.getIdProdotto() %>" style="text-decoration: none; color: inherit;">
        							 <%= prodotto.getNome() %>
     						</a>
@@ -116,7 +120,8 @@
                            %>
                        </p>
                        
-                       <span class="catalog-card-price">
+                       <!-- 3. GANCIO PREZZO: class="catalog-card-price js-prod-price" -->
+                       <span class="catalog-card-price js-prod-price">
                            € <%= String.format("%.2f", prodotto.getPrezzo()) %>
                        </span>
                        
