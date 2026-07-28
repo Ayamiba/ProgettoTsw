@@ -21,4 +21,4 @@ function toggleOrdini() {
     } else {
         btn.textContent = 'Mostra altri ordini (' + hiddenRows.length + ')';
     }
-}
+} 

@@ -293,4 +293,4 @@
     <jsp:include page="/WEB-INF/views/components/footer.jsp" />
 
 </body>
-</html>
+</html> 
