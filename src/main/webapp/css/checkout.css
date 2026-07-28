@@ -220,3 +220,71 @@
     gap: 15px;
     justify-content: center;
 }
+
+/* ============================================================
+   RESPONSIVE / MOBILE VIEW PER CHECKOUT E SUCCESSO
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Griglia principale del checkout (già parzialmente gestita) */
+    .checkout-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* I campi affiancati del form (es. scadenza / CVV) si mettono in colonna */
+    .checkout-form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-half {
+        width: 100%;
+    }
+
+    /* Adatta gli elementi della catena audio su schermi ridotti */
+    .plugin-chain-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .plugin-chain-info {
+        width: 100%;
+    }
+
+    /* Sposta l'input della posizione a destra o allinea comodamente */
+    .plugin-chain-item > div:last-child {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    /* Riduce i margini e i padding del box di successo */
+    .success-container {
+        margin: 30px 15px;
+        padding: 30px 20px;
+    }
+
+    .success-title {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Su smartphone molto stretti, i bottoni finali di successo si impilano */
+    .success-container .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .success-container .action-buttons a,
+    .success-container .action-buttons button {
+        width: 100%;
+    }
+    
+    .btn-checkout {
+        height: 45px;
+        font-size: 1em;
+    }
+}

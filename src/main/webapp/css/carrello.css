@@ -58,3 +58,47 @@
             font-weight: bold;
         }
         .btn-remove:hover { text-decoration: underline; }
+        
+        /* ============================================================
+   RESPONSIVE / MOBILE VIEW PER IL CARRELLO (Schermi fino a 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+    .cart-page-container {
+        padding: 15px;
+        margin: 20px 10px;
+        border-radius: 6px;
+    }
+
+    /* Permette alla tabella di scorrere orizzontalmente senza rompere il layout della pagina */
+    .cart-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 15px;
+    }
+
+    .cart-table {
+        min-width: 500px; /* Evita che le colonne si comprimano troppo */
+    }
+
+    .cart-table th, .cart-table td {
+        padding: 10px 8px;
+        font-size: 0.85em;
+    }
+
+    .cart-item-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Il box del totale si espande occupando tutta la larghezza su mobile */
+    .summary-box {
+        max-width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .summary-total {
+        font-size: 1.15em;
+    }
+}

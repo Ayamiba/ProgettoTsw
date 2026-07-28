@@ -516,3 +516,33 @@ button{
 .error-img-bottom {
     margin-top: 35px; /* Distanza tra il pulsante e la seconda immagine */
 }
+
+/* ============================================================
+   OTTIMIZZAZIONI MOBILE AGGIUNTIVE (Navbar, Carrello, Errore)
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Assicura che la barra di ricerca non tocchi i bordi dello schermo */
+    .nav-center {
+        padding: 0 10px;
+    }
+
+    /* Su dispositivi touch disattiva il mini-carrello hover per evitare conflitti */
+    .cart-wrapper:hover .mini-cart-dropdown {
+        display: none; 
+    }
+}
+
+@media (max-width: 480px) {
+    /* Adatta la pagina di errore per smartphone molto stretti */
+    .error-page-wrapper {
+        padding: 30px 15px;
+    }
+
+    .error-page-wrapper h1 {
+        font-size: 3em !important; /* Riduce il titolo del codice di errore (es. 404) */
+    }
+
+    .error-img {
+        max-width: 120px; /* Rimpicciolisce leggermente le immagini di contorno */
+    }
+}

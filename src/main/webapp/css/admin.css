@@ -130,3 +130,136 @@
             color: #1a1a2e;
             border-color: #9ca3af;
         }
+        
+        .contenuti-admin {
+            display: block; /*va a capo da solo*/
+            width: 100%; /* Occupa tutta la larghezza disponibile sui dispositivi piccoli */
+            max-width: 850px; /* Evita che il form si allarghi troppo su schermi grandi*/
+            margin: 30px auto; /*30px di spazio di margine e auto lo centra*/
+            padding: 0 40px; /*spazio interno */
+        }
+        
+.admin-header {
+    margin-bottom: 25px;     /* Distanzia il titolo principale dal box del form sottostante */
+}
+
+.admin-header h1 {
+    font-size: 2em;          /* Imposta la dimensione del font del titolo */
+    margin: 0;               /* Rimuove i margini predefiniti del browser */
+    color: #4134E7;          /* Colore blu del brand*/
+    font-family: 'Jost', sans-serif; /* font che sta pure nello style */
+    font-weight: 500;        /* Spessore del carattere  */
+}
+
+.corpo-admin {
+    background: white;       /* Sfondo totalmente bianco  */
+    padding: 30px;           /* Spazio interno di 30px tra il bordo del box e i moduli del form */
+    border-radius: 12px;     /* Arrotonda gli angoli del box*/
+    width: 100%;             /* Occupa il 100% dello spazio del suo contenitore*/
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06); /* Ombreggiatura leggera per dare profondità */
+}
+
+.suggerimenti-immagine {
+    background-color: #f9f9fb; /* Sfondo grigio chiarissimo per differenziarlo dal resto del foglio bianco */
+    border-left: 4px solid #4134E7; /* Crea una linea viola sul lato sinistro per metterlo in evidenza*/
+    padding: 15px 20px;       /* 15px di spazio sopra/sotto e 20px a destra/sinistra all'interno del box */
+    border-radius: 4px 8px 8px 4px; /* Smussa gli angoli */
+    margin-bottom: 25px;      /* Distanzia i questo blocco dal primo campo di testo del form */
+}
+
+.suggerimenti-immagine p {
+    font-family: 'Inter', sans-serif; /* Font presente anche nello style per tenere le pagine coerenti */
+    font-size: 0.9em;         /* dimensione testo */
+    color: #D5C6B2;              /* Colore preso sempre dallo style */
+    margin: 4px 0;            /* Distanza di 4px tra una riga di consiglio e l'altra */
+}
+
+.form-group { 
+	margin-bottom: 15px; 
+}
+
+.form-group label { /*scritte del form */
+   display: block; 
+   margin-bottom: 5px; 
+}
+        
+.form-group input {  /*per le caselle di input */
+    width: 100%; 
+    padding: 8px; 
+    box-sizing: border-box; 
+}
+
+.filtri-grid{
+	margin: 7px;
+}
+
+.profile-layout {
+	background-color: #D9D9D9;
+    display: flex;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-sidebar {
+    width: 320px;
+    background: #D9D9D9; 
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 2rem;
+    height: fit-content;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.profile-main-content{
+	background: #52ADD4 !important;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	
+}
+
+.admin-welcome-header h1 {
+    font-family: 'Jost', sans-serif;
+    color: #4134E7; /* Titolo principale con il blu del brand */
+    font-size: 2.2rem;
+    margin: 0 0 8px 0;
+}
+
+/* Effetto al passaggio del mouse sui link */
+.action-card:hover {
+    transform: translateY(-5px); /* Solleva leggermente la card */
+    border-color: #4134E7; /* Il bordo diventa del blu del brand */
+    box-shadow: 0 10px 20px rgba(65, 52, 231, 0.08); /* Ombra violacea */
+}
+
+  /* Tasto rapido per le azioni in tabella */
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+        }
+        .btn-promote { background-color: #ecc94b; color: #333; } /* Oro per i Pro */
+        .btn-ban { background-color: #d9534f; } /* Rosso per i ban */
+        
+        
+        .btn-back {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-back:hover {
+            background-color: #f9fafb;
+            color: #1a1a2e;
+            border-color: #9ca3af;
+        }

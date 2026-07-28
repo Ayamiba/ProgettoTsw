@@ -115,3 +115,49 @@
 .label-success {
     color: #2e7d32 !important;
 }
+
+/* ============================================================
+   RESPONSIVE / MOBILE VIEW PER AUTH (Login e Registrazione)
+   ============================================================ */
+@media (max-width: 480px) {
+    .auth-page-container {
+        padding: 20px 10px;
+        min-height: auto; /* Evita spazi vuoti eccessivi in altezza su mobile */
+    }
+
+    .auth-card {
+        padding: 25px 20px; /* Riduce il padding interno per adattarsi agli schermi piccoli */
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .auth-card h2 {
+        font-size: 1.6em;
+    }
+
+    .auth-card p.subtitle {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    .auth-form {
+        gap: 12px;
+    }
+
+    /* PREviene lo zoom automatico su iOS impostando il font a 16px e sistema il padding */
+    .auth-input {
+        font-size: 16px; 
+        padding: 12px 14px;
+    }
+
+    .auth-btn {
+        padding: 12px;
+        font-size: 1em;
+        margin-top: 5px;
+    }
+
+    .auth-switch {
+        margin-top: 20px;
+        font-size: 0.85em;
+    }
+}

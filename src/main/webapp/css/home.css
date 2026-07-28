@@ -215,3 +215,62 @@ main {
         margin-top: 20px;
     }
 }
+
+/* ============================================================
+   OTTIMIZZAZIONI AGGIUNTIVE PER MOBILE E TOUCH DEVICES
+   ============================================================ */
+@media (max-width: 900px) {
+    /* Messa in sicurezza della navbar anche per i tablet in verticale */
+    .navbar {
+        flex-wrap: wrap;
+        padding: 12px 15px;
+    }
+    
+    .nav-center {
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Assicura un margine di sicurezza laterale alla griglia prodotti */
+    .grid {
+        padding: 0 10px;
+        gap: 15px; /* Riduce leggermente lo spazio tra le card */
+    }
+
+    /* Le card occupano il 100% ma lasciano respirare i lati */
+    .card {
+        width: 100%;
+        max-width: 100%; 
+    }
+
+    /* Ottimizzazione dei box delle categorie su smartphone */
+    .cat-grid {
+        gap: 15px;
+    }
+
+    .cat-box {
+        padding: 30px 10px;
+        font-size: 1.25em; /* Riduce leggermente per evitare testi a capo anomali */
+        border-radius: 10px;
+    }
+
+    /* Feedback visivo immediato al tocco (Touch-friendly per smartphone) */
+    .btn:active, 
+    .cat-box:active {
+        transform: scale(0.97);
+    }
+}
+
+@media (max-width: 400px) {
+    /* Per smartphone piccolissimi (es. iPhone SE di vecchia generazione) */
+    .section-title {
+        font-size: 1.5em;
+    }
+    
+    .card-title {
+        font-size: 1em;
+    }
+}

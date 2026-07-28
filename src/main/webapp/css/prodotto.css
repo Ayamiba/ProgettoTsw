@@ -99,3 +99,49 @@
             border-radius: 8px;
             border: 1px dashed #ccc;
         }
+        
+        /* ============================================================
+   RESPONSIVE / MOBILE VIEW PER DETTAGLIO PRODOTTO E RECENSIONI
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Il layout del prodotto passa da affiancato a verticale */
+    .product-detail-container {
+        flex-direction: column;
+        padding: 20px 15px;
+        margin: 20px 10px;
+        gap: 25px;
+    }
+
+    .product-price {
+        font-size: 1.6em;
+        margin: 15px 0;
+    }
+
+    /* Adatta il contenitore delle recensioni */
+    .reviews-container {
+        margin: 30px auto;
+        padding: 0 10px;
+    }
+
+    .reviews-title {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    /* Ottimizza la griglia delle recensioni per tablet e dispositivi medi */
+    .reviews-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Per smartphone molto stretti (es. sotto i 480px), forziamo una colonna unica */
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-card {
+        padding: 15px;
+    }
+}
