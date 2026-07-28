@@ -13,7 +13,7 @@ public class ConnectionPool {
     private static String PASSWORD;
 
     private static int INITIAL_POOL_SIZE = 5; // InitialPoolSize è il numero minimo di connessioni aperte
-    private static final int MAX_POOL_SIZE = 20; // MaxPoolSize è il numero massimo di connessioni apribili
+    private static final int MAX_POOL_SIZE = 100; // MaxPoolSize è il numero massimo di connessioni apribili
 
     private static List<Connection> freeDbConnections; // Lista Di connessioni aperte che verrà riempita
     private static int currentPoolSize = 0; // Teniamo il conto delle connessioni aperte

@@ -50,7 +50,7 @@ public class NostriProfessionistiServlet extends HttpServlet {
             
             // 3. Passo la mappa alla pagina JSP
             request.setAttribute("mappaProfessionisti", mappaProfessionisti);
-            request.getRequestDispatcher("/WEB-INF/catalog/professionisti.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/catalog/professionisti.jsp").forward(request, response);
             
         } catch (SQLException e) {
             e.printStackTrace();
