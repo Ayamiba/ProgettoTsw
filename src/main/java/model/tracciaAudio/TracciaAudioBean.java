@@ -9,18 +9,16 @@ public class TracciaAudioBean implements Serializable {
     private String nomeFile;
     private String percorsoFile;
     private String fKUtente; 
-    private boolean check;   
 
     // Costruttore vuoto 
     public TracciaAudioBean() {}
 
     // Costruttore 
-    public TracciaAudioBean(int idTraccia, String nomeFile, String percorsoFile, String fKUtente, boolean check) {
+    public TracciaAudioBean(int idTraccia, String nomeFile, String percorsoFile, String fKUtente) {
         this.idTraccia = idTraccia;
         this.nomeFile = nomeFile;
         this.percorsoFile = percorsoFile;
         this.fKUtente = fKUtente;
-        this.check = check;
     }
 
     // Getter e Setter
@@ -56,17 +54,8 @@ public class TracciaAudioBean implements Serializable {
     	this.fKUtente = fKUtente; 
     	}
 
-    public boolean isCheck() { 
-    	return check; 
-    	} 
-    
-    public void setCheck(boolean check) { 
-    	this.check = check; 
-    	}
-
     @Override
     public String toString() {
-        return "TracciaAudioBean [idTraccia=" + idTraccia + ", nomeFile=" + nomeFile + ", fKUtente=" + fKUtente
-                + ", check=" + check + "]";
+        return "TracciaAudioBean [idTraccia=" + idTraccia + ", nomeFile=" + nomeFile + ", fKUtente=" + fKUtente + "]";
     }
 }

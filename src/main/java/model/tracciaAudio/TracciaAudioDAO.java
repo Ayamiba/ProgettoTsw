@@ -21,7 +21,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         ResultSet resultSet = null;
         TracciaAudioBean traccia = null;
 
-        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente, `check` FROM TracciaAudio WHERE ID_traccia = ?";
+        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente FROM TracciaAudio WHERE ID_traccia = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -36,7 +36,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
                 traccia.setNomeFile(resultSet.getString("nome_file"));
                 traccia.setPercorsoFile(resultSet.getString("percorso_file"));
                 traccia.setfKUtente(resultSet.getString("FK_utente"));
-                traccia.setCheck(resultSet.getBoolean("check"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -55,7 +54,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente, `check` FROM TracciaAudio";
+        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente FROM TracciaAudio";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -68,7 +67,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
                 traccia.setNomeFile(resultSet.getString("nome_file"));
                 traccia.setPercorsoFile(resultSet.getString("percorso_file"));
                 traccia.setfKUtente(resultSet.getString("FK_utente"));
-                traccia.setCheck(resultSet.getBoolean("check"));
                 tracce.add(traccia);
             }
         } finally {
@@ -88,7 +86,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         java.sql.ResultSet generatedKeys = null;
         int idGenerato = -1;
 
-        String query = "INSERT INTO TracciaAudio (nome_file, percorso_file, check, FK_utente) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO TracciaAudio (nome_file, percorso_file, FK_utente) VALUES (?, ?, ?)";
 
         try {
             connection = model.ConnectionPool.getConnection();
@@ -96,8 +94,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
             
             statement.setString(1, traccia.getNomeFile());
             statement.setString(2, traccia.getPercorsoFile());
-            statement.setBoolean(3, traccia.isCheck());
-            statement.setString(4, traccia.getfKUtente());
+            statement.setString(3, traccia.getfKUtente());
 
             statement.executeUpdate();
             generatedKeys = statement.getGeneratedKeys();
@@ -119,7 +116,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO TracciaAudio (ID_traccia, nome_file, percorso_file, `check`, FK_utente) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO TracciaAudio (ID_traccia, nome_file, percorso_file, FK_utente) VALUES (?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -128,7 +125,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
             statement.setInt(1, traccia.getIdTraccia());
             statement.setString(2, traccia.getNomeFile());
             statement.setString(3, traccia.getPercorsoFile());
-            statement.setBoolean(4, traccia.isCheck());
             statement.setString(5, traccia.getfKUtente());
 
             statement.executeUpdate();
@@ -144,7 +140,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE TracciaAudio SET nome_file = ?, percorso_file = ?, `check` = ?, FK_utente = ? WHERE ID_traccia = ?";
+        String query = "UPDATE TracciaAudio SET nome_file = ?, percorso_file = ?, FK_utente = ? WHERE ID_traccia = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -152,7 +148,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
 
             statement.setString(1, traccia.getNomeFile());
             statement.setString(2, traccia.getPercorsoFile());
-            statement.setBoolean(3, traccia.isCheck());
             statement.setString(4, traccia.getfKUtente());
             statement.setInt(5, traccia.getIdTraccia());
 
@@ -190,7 +185,7 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente, `check` FROM TracciaAudio WHERE FK_utente = ?";
+        String query = "SELECT ID_traccia, nome_file, percorso_file, FK_utente FROM TracciaAudio WHERE FK_utente = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -204,7 +199,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
                 traccia.setNomeFile(resultSet.getString("nome_file"));
                 traccia.setPercorsoFile(resultSet.getString("percorso_file"));
                 traccia.setfKUtente(resultSet.getString("FK_utente"));
-                traccia.setCheck(resultSet.getBoolean("check"));
                 tracce.add(traccia);
             }
         } finally {
@@ -217,25 +211,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
         return tracce;
     }
     
-    public void doUpdateCheck(boolean check, int id) throws SQLException{
-    	Connection connection = null;
-        PreparedStatement statement = null;
-
-        String query ="UPDATE TracciaAudio SET `check`= ? WHERE ID_traccia = ?";
-        
-        try {
-            connection = ConnectionPool.getConnection();
-            statement = connection.prepareStatement(query);
-
-            statement.setBoolean(1, check);
-            statement.setInt(2, id);
-            statement.executeUpdate();
-        } finally {
-            try { if (statement != null) statement.close(); } finally {
-                ConnectionPool.releaseConnection(connection);
-            }
-        }
-        }
     
     public TracciaAudioBean doRetrieveTracciaProfessionistaByOrdine(int idOrdine) throws SQLException {
         Connection connection = null;
@@ -261,7 +236,6 @@ public class TracciaAudioDAO implements DAOInterface<TracciaAudioBean, Integer> 
                 tracciaPro.setIdTraccia(resultSet.getInt("ID_traccia"));
                 tracciaPro.setNomeFile(resultSet.getString("nome_file"));
                 tracciaPro.setPercorsoFile(resultSet.getString("percorso_file"));
-                tracciaPro.setCheck(resultSet.getBoolean("check"));
                 tracciaPro.setfKUtente(resultSet.getString("FK_utente"));
             }
         } finally {

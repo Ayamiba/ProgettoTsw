@@ -56,7 +56,6 @@ CREATE TABLE TracciaAudio (
                               ID_traccia INT AUTO_INCREMENT PRIMARY KEY,
                               nome_file VARCHAR(50) NOT NULL,
                               percorso_file VARCHAR(100) NOT NULL,
-                              `check` TINYINT(1) NOT NULL, 
                               FK_utente VARCHAR(75) NOT NULL, -- La traccia appartiene sempre a un utente
                               FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
