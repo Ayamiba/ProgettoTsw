@@ -7,8 +7,22 @@
 <%@ page import="model.ordine.OrdineBean" %>
 <%@ page import="model.ordine.OrdineDAO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.recensione.RecensioneBean" %>
+<%@ page import="model.recensione.RecensioneDAO" %>
+<%@ page import="java.util.ArrayList" %>
 <% 
     UtenteBean utente = (UtenteBean) session.getAttribute("user"); 
+	//Recupero recensioni effettuate dall'utente
+	RecensioneDAO recensioneDAO = new RecensioneDAO();
+	List<RecensioneBean> tutteRecensioni = recensioneDAO.doRetrieveAll();
+	List<RecensioneBean> recensioniUtente = new ArrayList<>();
+	if (tutteRecensioni != null && utente != null) {
+    	for (RecensioneBean r : tutteRecensioni) {
+        	if (utente.getEmail() != null && utente.getEmail().equalsIgnoreCase(r.getFkUtente())) {
+            	recensioniUtente.add(r);
+        }
+    }
+}
 %>
 <!DOCTYPE html>
 <html lang="it">
@@ -19,6 +33,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="<%= request.getContextPath() %>/js/AscoltaAudio.js" defer></script>
+    <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
 </head>
 <body>
 
@@ -166,87 +181,110 @@
                     </div>
                 </div>
 
-                <div class="dash-card card-user">
-    <h3>Storico Ordini</h3>
-    <table class="dash-table">
-        <thead>
-            <tr>
-                <th>Codice</th>
-                <th>Data</th>
-                <th>Stato</th>
-                <th>Totale</th>
-                <th style="text-align: center;">Download Traccia</th>
-                <th style="text-align: center;">PDF</th>
-                <th style="text-align: center;">Recensione</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-                OrdineDAO ordineDAO = new OrdineDAO();
-                TracciaAudioDAO tracciaAudioDAO = new TracciaAudioDAO();
-                List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
-                
-                if (ordiniUtente == null || ordiniUtente.isEmpty()) {
-            %>
-                <tr>
-                    <td colspan="6" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                        Nessun ordine presente nello storico account.
-                    </td>
-                </tr>
-            <% } else { 
-                for(OrdineBean ordine : ordiniUtente) { 
-                    String statoClasse = "pending";
-                    if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
-                    else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
-            %>
-                <tr>
-                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
-                    <td><%= ordine.getDataOrdine() %></td>
-                    <td>
-                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
-                    </td>
-                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
-                    
-                    <!-- colonna per il download della traccia caricata dal professionista -->
-					<!-- colonna per il download della traccia caricata dal professionista -->
-<td style="text-align: center;">
-    <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
-        <!-- 
-          Puntiamo alla nostra Servlet dedicata! 
-          Sarà lei ad andare nella cartella sicura e forzare il download del file al browser.
-        -->
-        <a href="DownloadLavoroServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
-           class="btn-text-success" 
-           style="font-weight: 600; color: #28a745; text-decoration: none;">
-            🎵 Scarica 
-        </a>
-    <% } else { %>
-        <span style="color: #888; font-style: italic; font-size: 0.85em;">In elaborazione...</span>
-    <% } %>
-</td>
-                    <!-- COLONNA PDF -->
-                    <td style="text-align: center;">
-                        <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        </a>
-                    </td>
-                    <!-- COLONNA RECENSIONE -->
-                    <td style="text-align: center;">
-                        <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
-                            <a href="InviaRecensioneServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
-                               style="background-color: #6f42c1; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85em; font-weight: bold; white-space: nowrap;">
-                                Lascia Recensione
-                            </a>
-                        <% } else { %>
-                            <span style="color: #ccc;">–</span>
-                        <% } %>
-                    </td>
-                </tr>
-            <%  } 
-               } %>
-        </tbody>
-    </table>
-</div>
+<div class="dash-card card-user">
+                    <h3>Storico Ordini</h3>
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Codice</th>
+                                <th>Data</th>
+                                <th>Stato</th>
+                                <th>Totale</th>
+                                <th style="text-align: center;">Download</th>
+                                <th style="text-align: center;">PDF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                OrdineDAO ordineDAO = new OrdineDAO();
+                                List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
+                                
+                                if (ordiniUtente == null || ordiniUtente.isEmpty()) {
+                            %>
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                        Nessun ordine presente nello storico account.
+                                    </td>
+                                </tr>
+                            <% } else { 
+                                int limiteIniziale = 3; // Mostra i primi 3 ordini
+                                for(int i = 0; i < ordiniUtente.size(); i++) { 
+                                    OrdineBean ordine = ordiniUtente.get(i);
+                                    String statoClasse = "pending";
+                                    if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                                    else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+                                    
+                                    String rowClass = (i >= limiteIniziale) ? "order-row-hidden" : "";
+                            %>
+                                <tr class="<%= rowClass %>">
+                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                    <td><%= ordine.getDataOrdine() %></td>
+                                    <td><span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span></td>
+                                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                                    <td style="text-align: center;">
+                                        <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
+                                            <a href="DownloadLavoroServlet?idOrdine=<%= ordine.getIdOrdine() %>" class="btn-text-success" style="font-weight: 600; color: #28a745; text-decoration: none;">🎵 Scarica</a>
+                                        <% } else { %>
+                                            <span style="color: #888; font-style: italic; font-size: 0.85em;">In corso...</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <%  } 
+                               } %>
+                        </tbody>
+                    </table>
+
+                    <% if (ordiniUtente != null && ordiniUtente.size() > 3) { %>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button type="button" id="btnToggleOrders" class="btn-show-more" onclick="toggleOrders()">
+                                Mostra altri ordini (<%= ordiniUtente.size() - 3 %>)
+                            </button>
+                        </div>
+                    <% } %>
+
+                    <!-- SEPARATORE TRA ORDINI E RECENSIONI -->
+                    <hr class="card-divider">
+
+                    <!-- SEZIONE RECENSIONI EFFETTUATE -->
+                    <h3>Storico Recensioni</h3>
+                    <% if (recensioniUtente == null || recensioniUtente.isEmpty()) { %>
+                        <p class="card-desc" style="font-style: italic; margin-bottom: 0;">Non hai ancora rilasciato alcuna recensione.</p>
+                    <% } else { %>
+                        <div class="reviews-inline-list">
+                            <% for(RecensioneBean rec : recensioniUtente) { %>
+                                <div class="review-inline-item">
+                                    <div class="review-inline-content">
+                                        <div class="review-inline-header">
+                                            <strong>
+                                                <% if (rec.getFkOrdine() != null && rec.getFkOrdine() > 0) { %>
+                                                    Ordine #<%= rec.getFkOrdine() %>
+                                                <% } else { %>
+                                                    Recensione
+                                                <% } %>
+                                            </strong>
+                                            <span class="review-stars">
+                                                <% for(int s=0; s<rec.getVoto(); s++) { %>★<% } %><% for(int s=rec.getVoto(); s<5; s++) { %>☆<% } %>
+                                            </span>
+                                            <span class="review-date-sm"><%= rec.getDataRecensione() %></span>
+                                        </div>
+                                        <% if (rec.getCommento() != null && !rec.getCommento().trim().isEmpty()) { %>
+                                            <p class="review-comment-sm"><%= rec.getCommento() %></p>
+                                        <% } %>
+                                    </div>
+                                    <a href="EliminaRecensioneServlet?id=<%= rec.getIdRecensione() %>" 
+                                       class="btn-delete-review" 
+                                       onclick="return confirm('Vuoi davvero eliminare questa recensione?');"
+                                       title="Elimina recensione">&times;</a>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
             </div>
 
         </div>

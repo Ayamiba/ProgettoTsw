@@ -795,3 +795,89 @@
     display: flex;
     align-items: center;
 }
+
+/* Nascondi gli ordini extra */
+.order-row-hidden {
+    display: none;
+}
+
+/* Pulsante Altri Ordini */
+.btn-show-more {
+    background: none;
+    border: none;
+    color: #6f42c1;
+    font-weight: 600;
+    font-size: 0.88em;
+    cursor: pointer;
+    padding: 6px 12px;
+    transition: color 0.2s;
+}
+
+.btn-show-more:hover {
+    text-decoration: underline;
+    color: #59319c;
+}
+
+/* Linea che separa gli ordini e le recensioni */
+.card-divider {
+    border: 0;
+    height: 1px;
+    background: #e9ecef;
+    margin: 22px 0 10px 0;
+}
+
+/* Stili sezione recensioni */
+.reviews-inline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.review-inline-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-inline-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88em;
+}
+
+.review-stars {
+    color: #f39c12;
+    font-size: 0.95em;
+}
+
+.review-date-sm {
+    color: #888;
+    font-size: 0.8em;
+}
+
+.review-comment-sm {
+    margin: 4px 0 0 0;
+    font-size: 0.85em;
+    color: #555;
+}
+
+.btn-delete-review {
+    color: #dc3545;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 0 6px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-delete-review:hover {
+    background: #f8d7da;
+}
