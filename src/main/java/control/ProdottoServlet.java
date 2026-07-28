@@ -39,7 +39,7 @@ public class ProdottoServlet extends HttpServlet {
             if (prodotto != null) {
                 request.setAttribute("prodottoSingolo", prodotto);
                 
-                // --- INIZIO NUOVO BLOCCO: GESTIONE RECENSIONI ---
+                // GESTIONE RECENSIONI ---
                 RecensioneDAO recensioneDAO = new RecensioneDAO();
                 
                 // Usiamo getIdProdotto() sull'oggetto appena trovato. 
@@ -48,11 +48,12 @@ public class ProdottoServlet extends HttpServlet {
                 
                 // Passiamo la lista alla JSP
                 request.setAttribute("recensioni", recensioniProdotto);
-                // --- FINE NUOVO BLOCCO ---
-
+            } else {
+                // Se non è stato trovato, impostiamo l'attributo a null per far mostrare alla JSP "Nessun prodotto trovato"
+                request.setAttribute("prodottoSingolo", null);
+            }
                 request.getRequestDispatcher("/WEB-INF/views/catalog/prodotto.jsp").forward(request, response);
                 return;
-            }
             
         } catch (Exception e) {
             e.printStackTrace();

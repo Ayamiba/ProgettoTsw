@@ -259,6 +259,41 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotto;
     }
     
+    public List<ProdottoBean> doRetrieveByNomeLike(String nome) throws SQLException {
+        List<ProdottoBean> prodotti = new ArrayList<>();
+        if (nome == null || nome.trim().isEmpty()) return prodotti;
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT * FROM Prodotto WHERE LOWER(nome) LIKE LOWER(?)";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + nome.trim() + "%");
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ProdottoBean prodotto = new ProdottoBean();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNome(resultSet.getString("nome"));
+                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotti.add(prodotto);
+            }
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return prodotti;
+    }
+    
     // Metodo per estrarre tutti i prodotti acquistati all'interno di uno specifico ordine
     public List<ProdottoBean> doRetrieveProdottiByOrdine(int idOrdine) throws java.sql.SQLException {
         java.sql.Connection connection = null;

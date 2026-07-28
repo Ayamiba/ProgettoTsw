@@ -42,8 +42,10 @@ public class CatalogoServlet extends HttpServlet {
         ProdottoDAO prodottoDAO = new ProdottoDAO();
         List<ProdottoBean> listaProdotti = null;
         
+        // il parametro "search" serve per la barra di ricerca
+        String testoRicerca = request.getParameter("search"); 
         String categoriaScelta = request.getParameter("categoria");
-        String sottoCategoriaScelta = request.getParameter("sottoCategoria"); // NUOVO PARAMETRO
+        String sottoCategoriaScelta = request.getParameter("sottoCategoria");
         String prezzoMaxStr = request.getParameter("prezzoMax");
         
         try {
@@ -57,14 +59,21 @@ public class CatalogoServlet extends HttpServlet {
                 }
             }
             
-            // CHIAMATA ALL'UNICO METODO UNIVERSALE!
-            listaProdotti = prodottoDAO.doRetrieveByAllFilters(categoriaScelta, sottoCategoriaScelta, prezzoMax);
+            // Se l'utente ha usato la barra di ricerca, cerchiamo per nome.
+            // Altrimenti applichiamo i soliti filtri della barra laterale.
+            if (testoRicerca != null && !testoRicerca.trim().isEmpty()) {
+                listaProdotti = prodottoDAO.doRetrieveByNomeLike(testoRicerca);
+            } else {
+                listaProdotti = prodottoDAO.doRetrieveByAllFilters(categoriaScelta, sottoCategoriaScelta, prezzoMax);
+            }
             
+            // 3. Impostiamo gli attributi per la JSP
             request.setAttribute("prodotti", listaProdotti);
+            request.setAttribute("ricercaAttiva", testoRicerca != null ? testoRicerca : ""); // Utile se vuoi mostrare "Risultati per: ..."
             request.setAttribute("categoriaAttiva", categoriaScelta);
-            request.setAttribute("sottoCategoriaAttiva", sottoCategoriaScelta); // Salviamo per la JSP
+            request.setAttribute("sottoCategoriaAttiva", sottoCategoriaScelta);
             request.setAttribute("prezzoAttivo", prezzoMax >= 0 ? String.valueOf(prezzoMax) : "");
- 
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/catalog/catalog.jsp");     
             dispatcher.forward(request, response);
         } catch (SQLException e) {
@@ -72,7 +81,6 @@ public class CatalogoServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il caricamento del catalogo.");
         }
     }
-    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
