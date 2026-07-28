@@ -15,7 +15,7 @@
 <header class="navbar">
     <div class="nav-left">
         <a href="HomeServlet" class="nav-logo">
-            <img src="img/SWsoloLogo.png" alt="Logo Sændwave" onerror="this.onerror=null; this.src='img/placeholder.png';">
+            <img src="<%= request.getContextPath() %>/img/SWsoloLogo.png" alt="Logo Sændwave" onerror="this.onerror=null; this.src='<%= request.getContextPath() %>/img/placeholder.png';">
         </a>
         
         <div class="nav-catalog">
