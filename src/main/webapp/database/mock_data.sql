@@ -1,3 +1,4 @@
+USE saendwave;
 INSERT INTO `saendwave`.`prodotto` (`nome`, `prezzo`, `descrizione`, `immagine`) VALUES ('Amp Designer', '2.50', 'Amp Deisgner simula il suono di pù di 20 famosi amplificatori per chitarra e speaker collegati. Ognuno preconfigurato come combinazione di testata, cabinet e equalizzatore. Processa il segnale direttamente riproducendo il suono attraverso questa combinazione. Testata, cabinet ed equalizzatore possono essere combinati in numerosi modi per alterare il suono. Inoltre, vengono simulati microfoni virtuali che catturano il suono direttamente dal cabinet sui quali si può scegliere tipo e posizione rispetto agli speaker.', 'img/prodotti/Amp_Designer.png');
 INSERT INTO `saendwave`.`prodotto` (`nome`, `prezzo`, `descrizione`, `immagine`) VALUES ('AU Distortion', '1.50', 'L\'AU Distortion sporca il suono nel modo giusto. Dal sottile calore armonico alla distruzione totale del segnale, applichiamo una saturazione su misura per dare aggressività, presenza e \"grit\" a linee di basso, batterie o sintetizzatori altrimenti troppo puliti e spenti', 'img/prodotti/AU_Distortion.png');
 INSERT INTO `saendwave`.`prodotto` (`nome`, `prezzo`, `descrizione`, `immagine`) VALUES ('Bass Amp Designer', '2.50', 'Il trattamento definitivo per la tua traccia di basso, Uniamo la pulizia di una Direct Box con la spinta e la profondità di un vero amplificatore microfonato. Garantisce basse frequenze solide, compatte e definite che \"bucano\" l\'impianto senza impastare il brano.', 'img/prodotti/Bass_Amp_Designer.png');
@@ -24,11 +25,11 @@ INSERT INTO `tipologia` VALUES (1,'amplificatore'),(3,'amplificatore'),(5,'compr
 
 INSERT INTO `utente` VALUES ('Admin','Gianni','adminGianni@saendwave.it','hPC6XUfMJVf9I3vsd/2YFGWoNGmheHDDrrioKaRIN2s=','1997-06-11','admin'),('Giovanni','Pro','g.professionista@saendwave.it','Dm3AOGalRYVBDqeaiwb9NvrQp41ILh8Pf08BKmetxF4=','1997-06-11','professionista'),('Mario','Rossi','m.rossi@gmail.com','tbMBeUL7idLBIU7D8zdm9mlS23xUBbjlmsCW0/GNz/I=','1999-08-21','utente registrato');
 
-INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav',0,'m.rossi@gmail.com');
+INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav','m.rossi@gmail.com');
 
 INSERT INTO `metodopagamento` VALUES (123,5333111111111111,'MARIO','ROSSI','12/30','m.rossi@gmail.com');
 
-INSERT INTO `ordine` VALUES (10,'2026-07-20',5.5,'In Lavorazione','Eq spazio voce pulizia, comp rotonditÃ  e potenza, verb per spazialitÃ ',7,5333111111111111,'g.professionista@saendwave.it');
+INSERT INTO `ordine` VALUES (10,'2026-07-20',5.5,'In Lavorazione','Eq spazio voce pulizia, comp rotonditÃ  e potenza, verb per spazialitÃ ','Baby_noFX.wav',7,5333111111111111,'g.professionista@saendwave.it');
 
 INSERT INTO `utilizzo` VALUES ('m.rossi@gmail.com',5333111111111111);
 
