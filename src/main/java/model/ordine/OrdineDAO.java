@@ -234,6 +234,28 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         }
         return ordini;
     }
+    
+ // Metodo per segnare un ordine come Completato
+    public boolean completaOrdine(int idOrdine) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int result = 0;
+
+        String query = "UPDATE Ordine SET stato = 'Completato' WHERE ID_ordine = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
+            
+            result = statement.executeUpdate();
+        } finally {
+            try { if (statement != null) statement.close(); } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
+        }
+        return result > 0;
+    }
 
     @Override
     public void doSave(OrdineBean ordine) throws SQLException {
