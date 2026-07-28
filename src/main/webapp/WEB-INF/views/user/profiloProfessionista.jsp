@@ -20,7 +20,7 @@
     <title>Sændwave – Area Professionista</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <script src="<%= request.getContextPath() %>/js/NotificaProfessionista.js"></script>
+  
 </head>
 <body>
 
@@ -30,6 +30,34 @@
         
         <h1 style="color: #c79a00;">Area Lavoro Professionisti</h1>
         <p class="subtitle">Bentornato in studio, <%= utente.getNome() %>. Gestisci la tua coda di mix e mastering e consegna i file finali.</p>
+        <%-- Notifica di Sistema a scomparsa (Toast) con JS integrato --%>
+        <% 
+            String messaggio = request.getParameter("messaggio");
+            if (messaggio != null && !messaggio.trim().isEmpty()) { 
+        %>
+            <div id="toast-notifica" style="background-color: #fff9e6; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #c79a00; font-weight: bold; transition: opacity 0.5s ease;">
+                🔔 <%= messaggio %>
+            </div>
+            
+            <script>
+                // Questo script esiste nella pagina SOLO se c'è un messaggio.
+                // Essendo inline, ignora la cache ed è a prova di bomba.
+                setTimeout(function() {
+                    var toast = document.getElementById("toast-notifica");
+                    if (toast) {
+                        toast.style.opacity = "0"; 
+                        setTimeout(function() { toast.remove(); }, 500);
+                    }
+                    
+                    // Pulizia URL
+                    if (window.history && window.history.replaceState) {
+                        const url = new URL(window.location.href);
+                        url.searchParams.delete('messaggio');
+                        window.history.replaceState(null, '', url.href);
+                    }
+                }, 4000);
+            </script>
+        <% } %>
         
        
         <div class="dashboard-grid">
