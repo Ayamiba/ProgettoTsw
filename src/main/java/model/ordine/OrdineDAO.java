@@ -24,7 +24,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         ResultSet resultSet = null;
         OrdineBean ordine = null;
 
-        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento FROM Ordine WHERE ID_ordine = ?";
+        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento, file_consegnato FROM Ordine WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -42,6 +42,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -60,7 +61,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento FROM Ordine";
+        String query = "SELECT ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento, file_consegnato FROM Ordine";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -76,6 +77,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 ordini.add(ordine);
             }
         } finally {
@@ -115,6 +117,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 ordini.add(ordine);
             }
         } finally {
@@ -183,7 +186,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
-                ordine.setfkEmailProfessionista(resultSet.getString("FK_email_professionista")); 
+                ordine.setfkEmailProfessionista(resultSet.getString("FK_email_professionista"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 
                 ordini.add(ordine);
             }
@@ -222,6 +226,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
                 ordine.setfkEmailProfessionista(resultSet.getString("FK_email_professionista"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 
                 ordini.add(ordine);
             }
@@ -236,17 +241,18 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
     }
     
  // Metodo per segnare un ordine come Completato
-    public boolean completaOrdine(int idOrdine) throws SQLException {
+    public boolean completaOrdine(int idOrdine, String nomeFileConsegnato) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         int result = 0;
 
-        String query = "UPDATE Ordine SET stato = 'Completato' WHERE ID_ordine = ?";
+        String query = "UPDATE Ordine SET stato = 'Completato', file_consegnato=? WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(query);
-            statement.setInt(1, idOrdine);
+            statement.setInt(2, idOrdine);
+            statement.setString(1, nomeFileConsegnato);
             
             result = statement.executeUpdate();
         } finally {
@@ -262,7 +268,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO Ordine (ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Ordine (ID_ordine, data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento, file_consegnato) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -275,6 +281,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setString(5, ordine.getDescrizione());
             statement.setInt(6, ordine.getfKTraccia());
             statement.setLong(7, ordine.getfKMetodoPagamento());
+            statement.setString(8, ordine.getFileConsegnato());
 
             statement.executeUpdate();
         } finally {
@@ -292,7 +299,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         int idGenerato = -1;
 
         // Rimuoviamo ID_ordine dalla INSERT perché è AUTO_INCREMENT
-        String query = "INSERT INTO Ordine (data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Ordine (data_ordine, totale, stato, descrizione, FK_traccia, FK_metodo_pagamento, file_consegnato) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -305,6 +312,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setString(4, ordine.getDescrizione());
             statement.setInt(5, ordine.getfKTraccia());
             statement.setLong(6, ordine.getfKMetodoPagamento());
+            statement.setString(7, ordine.getFileConsegnato());
 
             statement.executeUpdate();
 
@@ -330,7 +338,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ?, FK_metodo_pagamento = ? WHERE ID_ordine = ?";
+        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ?, FK_metodo_pagamento = ?, file_consegnato=? WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -343,6 +351,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setInt(5, ordine.getfKTraccia());
             statement.setInt(6, ordine.getIdOrdine());
             statement.setLong(7, ordine.getfKMetodoPagamento());
+            statement.setString(8, ordine.getFileConsegnato());
 
             statement.executeUpdate();
         } finally {
@@ -399,6 +408,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 lista.add(ordine);
             }
         } finally {
@@ -436,6 +446,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
                 ordine.setDescrizione(resultSet.getString("descrizione"));
                 ordine.setfKTraccia(resultSet.getInt("FK_traccia"));
                 ordine.setfKMetodoPagamento(resultSet.getLong("FK_metodo_pagamento"));
+                ordine.setFileConsegnato(resultSet.getString("file_consegnato"));
                 lista.add(ordine);
             }
         } finally {

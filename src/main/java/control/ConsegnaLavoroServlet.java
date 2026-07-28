@@ -83,7 +83,7 @@ public class ConsegnaLavoroServlet extends HttpServlet {
 
                 // 3. Aggiornamento dello stato nel Database
                 OrdineDAO ordineDAO = new OrdineDAO();
-                boolean successo = ordineDAO.completaOrdine(idOrdine);
+                boolean successo = ordineDAO.completaOrdine(idOrdine, nomeFileFinale);
                 
                 if(successo) {
                     response.sendRedirect("ProfiloProfessionistaServlet?messaggio=Lavoro per l'ordine " + idOrdine + " consegnato con successo!");

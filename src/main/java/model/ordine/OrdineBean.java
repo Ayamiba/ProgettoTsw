@@ -14,10 +14,11 @@ public class OrdineBean implements Serializable {
     private int fKTraccia;
     private long fKMetodoPagamento;
     private String fkEmailProfessionista;
+    private String file_consegnato;
 
     public OrdineBean() {}
 
-    public OrdineBean(int idOrdine, Date dataOrdine, float totale, String stato, String descrizione, int fKTraccia, long fKMetodoPagamento, String fkEmailProfessionista) {
+    public OrdineBean(int idOrdine, Date dataOrdine, float totale, String stato, String descrizione, String file_consegnato, int fKTraccia, long fKMetodoPagamento, String fkEmailProfessionista) {
         this.idOrdine = idOrdine;
         this.dataOrdine = dataOrdine;
         this.totale = totale;
@@ -26,6 +27,7 @@ public class OrdineBean implements Serializable {
         this.fKTraccia = fKTraccia;
         this.fKMetodoPagamento=fKMetodoPagamento;
         this.fkEmailProfessionista=fkEmailProfessionista;
+        this.file_consegnato=file_consegnato;
     }
 
     public int getIdOrdine() { 
@@ -82,6 +84,14 @@ public class OrdineBean implements Serializable {
     
     public void setfKMetodoPagamento(long fKMetodoPagamento) {
     	this.fKMetodoPagamento=fKMetodoPagamento;
+    }
+    
+    public String getFileConsegnato() {
+    	return file_consegnato;
+    }
+    
+    public void setFileConsegnato(String file_consegnato) {
+    	this.file_consegnato=file_consegnato;
     }
     
     public String getfkEmailProfessionista() {

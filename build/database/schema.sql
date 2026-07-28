@@ -68,6 +68,7 @@ CREATE TABLE Ordine (
                         totale FLOAT NOT NULL,
                         stato VARCHAR(20) NOT NULL DEFAULT 'In attesa',
                         descrizione TEXT,
+                        file_consegnato VARCHAR(75),
                         FK_traccia INT NOT NULL,
                         FK_metodo_pagamento BIGINT,
                         FK_email_professionista VARCHAR(45), -- per sapere quale professionista ha preso in carico la traccia
