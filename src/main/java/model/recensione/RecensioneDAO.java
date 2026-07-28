@@ -259,6 +259,65 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         return recensioniOrdine;
     }
 
+ // 1. Controlla se l'utente ha già recensito l'ordine
+    public boolean esisteRecensioneOrdine(String emailUtente, int idOrdine) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        boolean esiste = false;
+        
+        // Cerca una recensione legata a quell'utente e a quell'ordine specifico
+        String query = "SELECT COUNT(*) FROM Recensione WHERE FK_utente = ? AND FK_ordine = ? AND tipo = 'ordine'";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, emailUtente);
+            statement.setInt(2, idOrdine);
+            rs = statement.executeQuery();
+            
+            if (rs.next() && rs.getInt(1) > 0) {
+                esiste = true; // Ha già recensito!
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (statement != null) statement.close(); } catch (Exception e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return esiste;
+    }
+
+    // 2. Controlla se l'utente ha già recensito il prodotto
+    public boolean esisteRecensioneProdotto(String emailUtente, int idProdotto) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        boolean esiste = false;
+        
+        // Cerca una recensione legata a quell'utente e a quel prodotto specifico
+        String query = "SELECT COUNT(*) FROM Recensione WHERE FK_utente = ? AND FK_prodotto = ? AND tipo = 'prodotto'";
+        
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, emailUtente);
+            statement.setInt(2, idProdotto);
+            rs = statement.executeQuery();
+            
+            if (rs.next() && rs.getInt(1) > 0) {
+                esiste = true; // Ha già recensito!
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (statement != null) statement.close(); } catch (Exception e) {}
+            ConnectionPool.releaseConnection(connection);
+        }
+        return esiste;
+    }
     
     @Override
     public void doSave(RecensioneBean recensione) throws SQLException {

@@ -118,7 +118,6 @@ public class CheckoutServlet extends HttpServlet {
                         TracciaAudioBean nuovaTraccia = new TracciaAudioBean();
                         nuovaTraccia.setNomeFile(nomeFileOriginale);
                         nuovaTraccia.setPercorsoFile(nomeFileUnico);
-                        nuovaTraccia.setCheck(false);
                         nuovaTraccia.setfKUtente(utente.getEmail());
 
                         TracciaAudioDAO tracciaDAO = new TracciaAudioDAO();

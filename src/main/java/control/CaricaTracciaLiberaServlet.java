@@ -93,7 +93,7 @@ public class CaricaTracciaLiberaServlet extends HttpServlet {
             TracciaAudioBean nuovaTraccia = new TracciaAudioBean();
             nuovaTraccia.setNomeFile(nomeFileOriginale);
             nuovaTraccia.setPercorsoFile(percorsoDatabase);
-            nuovaTraccia.setCheck(false);
+        
             nuovaTraccia.setfKUtente(utente.getEmail());
 
             TracciaAudioDAO tracciaDAO = new TracciaAudioDAO();
