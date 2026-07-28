@@ -1,4 +1,4 @@
-		@charset "UTF-8";
+@charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Jost:wght@300;400;500&display=swap');
 
 /*font base*/
@@ -74,7 +74,7 @@ button{
 }
 
 /* ============================================================
-   NAVBAR
+   NAVBAR & CENTRAGGIO PERFETTO
    ============================================================ */
 .navbar { 
     background: #ffffff; 
@@ -88,22 +88,36 @@ button{
     z-index: 100;
 }
 
-.nav-left { display: flex; align-items: center; gap: 30px; }
+/* Blocchi laterali speculari con flex: 1 per bilanciare lo spazio */
+.nav-left, .nav-right { 
+    display: flex; 
+    align-items: center; 
+    flex: 1;
+    gap: 20px; 
+}
 
-/* LOGO NAVBAR: Ora usa solo l'onda pulita, niente più hack di scaling! */
+.nav-left { 
+    justify-content: flex-start; 
+}
+
+.nav-right { 
+    justify-content: flex-end; 
+}
+
+/* LOGO NAVBAR */
 .nav-logo {
     display: flex;
     align-items: center;
 }
 
 .nav-logo img { 
-    height: 45px; /* Altezza perfetta per l'onda */
+    height: 45px; 
     object-fit: contain; 
     transition: transform 0.2s;
 }
 
 .nav-logo img:hover {
-    transform: scale(1.05); /* Piccolo effetto di interazione */
+    transform: scale(1.05);
 }
 
 /* Menu a tendina Catalogo */
@@ -139,9 +153,35 @@ button{
 }
 .dropdown a:hover { background: #f4f5f7; color: #4134E7; font-weight: bold; }
 
-/* Barra di ricerca centrale */
-.nav-center { flex-grow: 1; max-width: 600px; margin: 0 30px; }
-.search-form { position:relative; display: flex; width: 100%; }
+/* Tasto Professionisti identico agli altri link (senza sottolineature) */
+.nav-professionisti {
+    margin-left: 10px;
+}
+.nav-professionisti a {
+    color: #1a1a2e;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95em;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+.nav-professionisti a:hover {
+    color: var(--colore-primario);
+}
+
+/* BARRA DI RICERCA CENTRALE (Matematicamente al centro) */
+.nav-center { 
+    display: flex;
+    justify-content: center;
+    flex: 1; 
+    max-width: 500px; 
+    margin: 0; 
+}
+.search-form { 
+    position: relative; 
+    display: flex; 
+    width: 100%; 
+}
 .search-bar { 
     width: 100%; 
     padding: 12px 20px; 
@@ -153,32 +193,27 @@ button{
 }
 .search-bar:focus { border-color: #4134E7; }
 
-.nav-right { display: flex; align-items: center; gap: 20px; }
 .nav-right a { text-decoration: none; color: #1a1a2e; font-weight: 600; font-size: 0.95em; }
 .nav-right a:hover { color: #4134E7; }
 .user-greeting { color: #6A32E8; font-weight: bold; }
 
 .dropdown-suggerimenti {
     position: absolute;
-    top: 100%; /* Si attacca esattamente sotto la barra */
+    top: 100%; 
     left: 0;
     width: 100%;
-    display: none; /* Gestito dal JavaScript */
-    
-    /* FIX FONDAMENTALI PER RENDERLO VISIBILE */
+    display: none; 
     background-color: white; 
-    z-index: 1000; /* Lo forza a stare "sopra" a tutto il resto della pagina */
-    
-    /* ESTETICA */
-    list-style: none; /* Rimuove i pallini classici delle liste HTML */
+    z-index: 1000; 
+    list-style: none; 
     margin: 0;
     padding: 0;
     border: 1.5px solid #e0e0e0;
-    border-top: none; /* Rimuove il bordo alto per fondersi con la barra di ricerca */
+    border-top: none; 
     border-radius: 0 0 20px 20px; 
     box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
     max-height: 250px;
-    overflow-y: auto; /* Aggiunge la rotellina di scorrimento se ci sono troppi risultati */
+    overflow-y: auto; 
 }
 
 .dropdown-suggerimenti li {
@@ -189,12 +224,10 @@ button{
     border-bottom: 1px solid #f4f5f7;
 }
 
-/* Rimuove la linea sotto l'ultimo suggerimento */
 .dropdown-suggerimenti li:last-child {
     border-bottom: none;
 }
 
-/* Corretto il punto mancante all'inizio della classe */
 .dropdown-suggerimenti li:hover {
     background-color: #f4f5f7;
     color: #4134E7;
@@ -204,12 +237,13 @@ button{
 .user-greeting { 
     color: var(--colore-secondario); 
     font-weight: bold; 
-    text-decoration: none; /* Evita che il nome venga sottolineato */
+    text-decoration: none; 
 }
 
 .user-greeting:hover {
-    color: var(--colore-primario); /* Cambia leggermente colore al passaggio del mouse */
+    color: var(--colore-primario); 
 }
+
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -223,8 +257,6 @@ button{
 .footer a { color: #52ADD4; text-decoration: none; font-weight: bold; margin: 0 10px; }
 .footer a:hover { text-decoration: underline; }
 
-/*Nasconsta link hamburger menu in desktop*/
-
 .hamburger-menu { display: none; }
 .mobile-sidebar { display: none; }
 
@@ -232,29 +264,26 @@ button{
    RESPONSIVE MOBILE NAVBAR (Solo sotto i 768px)
    ============================================================ */
 @media (max-width: 768px) {
-    /* 1. NASCONDIAMO ESPLICITAMENTE I TASTI DESKTOP */
     .nav-right, 
     .nav-left .nav-catalog,
     .desktop-only { 
         display: none !important; 
     }
 
-    /* 2. RIORGANIZZIAMO LA NAVBAR IN 2 RIGHE (Logo+Menu sopra, Ricerca sotto) */
     .navbar { 
         padding: 10px 20px; 
-        flex-wrap: wrap; /* Permette agli elementi di andare a capo */
+        flex-wrap: wrap; 
     }
 
     .nav-left {
-        flex: 1; /* Il logo spinge l'hamburger tutto a destra */
+        flex: 1; 
     }
 
-    /* 3. BARRA DI RICERCA SULLA SECONDA RIGA */
     .nav-center { 
         width: 100%; 
         max-width: 100%; 
-        margin: 15px 0 5px 0; /* Spazio sopra e sotto */
-        order: 3; /* Forza la barra di ricerca ad andare sotto logo e hamburger */
+        margin: 15px 0 5px 0; 
+        order: 3; 
     }
     
     .search-bar { 
@@ -262,14 +291,13 @@ button{
         padding: 10px 15px; 
     }
 
-    /* 4. L'HAMBURGER */
     .hamburger-menu {
         display: flex;
         flex-direction: column;
         gap: 5px;
         cursor: pointer;
         z-index: 1001; 
-        margin-top: 5px; /* Allineamento col logo */
+        margin-top: 5px; 
     }
     .hamburger-menu span {
         width: 25px;
@@ -279,7 +307,6 @@ button{
         transition: all 0.3s ease;
     }
 
-    /* 5. STILE DELLA SIDEBAR SCORREVOLE */
     .mobile-sidebar {
         display: flex;
         position: fixed;
@@ -323,7 +350,6 @@ button{
         margin-left: 15px;
     }
 
-    /* Animazione "X" Hamburger */
     .hamburger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
     .hamburger-menu.active span:nth-child(2) { opacity: 0; }
     .hamburger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
@@ -350,12 +376,11 @@ button{
     color: var(--colore-primario);
 }
 
-/* Il cerchietto con il numero di oggetti */
 .cart-badge {
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: #ff3b30; /* Rosso notifiche acceso */
+    background-color: #ff3b30; 
     color: white;
     font-size: 0.75em;
     font-weight: bold;
@@ -373,7 +398,7 @@ button{
    MINI CARRELLO A SCOMPARSA (ANTEPRIMA)
    ============================================================ */
 .mini-cart-dropdown {
-    display: none; /* Nascosto di base */
+    display: none; 
     position: absolute;
     top: 100%;
     right: 0;
@@ -386,7 +411,6 @@ button{
     z-index: 1000;
 }
 
-/* Mostra la tendina quando si passa il mouse sopra al wrapper del carrello */
 .cart-wrapper:hover .mini-cart-dropdown {
     display: block;
 }
@@ -401,8 +425,8 @@ button{
 }
 
 .mini-cart-items {
-    max-height: 200px; /* Evita che diventi troppo lungo */
-    overflow-y: auto;  /* Abilita lo scorrimento se ci sono molti elementi */
+    max-height: 200px; 
+    overflow-y: auto;  
     margin-bottom: 15px;
 }
 
@@ -447,7 +471,6 @@ button{
     padding: 15px 0;
 }
 
-/* Pulsante minimale per andare alla pagina carrello completa */
 .btn-goToCart {
     display: block;
     text-align: center;

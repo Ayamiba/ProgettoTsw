@@ -4,14 +4,9 @@
 <%@ page import="model.prodotto.ProdottoBean" %>
 <%@ page import="java.util.List" %>
 <%
-    // Recuperiamo l'utente in sessione per mostrare il nome o il tasto login
     UtenteBean utenteLoggato = (UtenteBean) session.getAttribute("user");
-	
-//Recuperiamo la lista dei prodotti effettivi inseriti nel carrello (creata dalle tue Servlet)
-List<ProdottoBean> prodottiNelCarrello = (List<ProdottoBean>) session.getAttribute("carrelloProdotti");
-
-// Contiamo quanti elementi ci sono per mostrare il numerino rosso
-int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.size() : 0;
+    List<ProdottoBean> prodottiNelCarrello = (List<ProdottoBean>) session.getAttribute("carrelloProdotti");
+    int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.size() : 0;
 %>
 <script src="<%= request.getContextPath() %>/js/Suggerimenti.js"></script>
 <script src="<%= request.getContextPath() %>/js/Navbar.js"></script>
@@ -30,6 +25,10 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
                 <a href="CatalogoServlet?categoria=Studio Tool">Studio Tools</a>
                 <a href="CatalogoServlet?categoria=bundle">Bundle Completi</a>
             </div>
+        </div>
+        
+        <div class="nav-professionisti">
+            <a href="NostriProfessionistiServlet">I nostri Professionisti</a>
         </div>
     </div>
 
@@ -76,15 +75,16 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
                 </div>
                 <a href="CarrelloServlet" class="btn-goToCart">Vai al Carrello</a>
             </div>
-            </div>
+        </div>
         
         <% if (utenteLoggato != null) { %>
-    <a href="ProfiloServlet" class="user-greeting"><%= utenteLoggato.getNome() %></a>
-    <a href="LogoutServlet" style="color: #d9534f; margin-left: 10px;">Logout</a>
-<% } else { %>
-    <a href="LoginServlet">Accedi / Registrati</a>
-<% } %>
+            <a href="ProfiloServlet" class="user-greeting"><%= utenteLoggato.getNome() %></a>
+            <a href="LogoutServlet" style="color: #d9534f; margin-left: 10px;">Logout</a>
+        <% } else { %>
+            <a href="LoginServlet">Accedi / Registrati</a>
+        <% } %>
     </div>
+    
     <div class="hamburger-menu" id="hamburger-menu">
         <span></span>
         <span></span>
@@ -99,6 +99,10 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
             <a href="CatalogoServlet?categoria=bundle" class="sub-link">- Bundle Completi</a>
         </div>
         
+        <div style="margin: 15px 0;">
+            <a href="NostriProfessionistiServlet" style="color: #1a1a2e; text-decoration: none; font-weight: 600;">I nostri Professionisti</a>
+        </div>
+        
         <hr class="mobile-divider">
         
         <a href="CarrelloServlet">Carrello</a>
@@ -106,8 +110,7 @@ int oggettiNelCarrello = (prodottiNelCarrello != null) ? prodottiNelCarrello.siz
             <a href="ProfiloServlet" class="user-greeting">Profilo</a>
             <a href="LogoutServlet" style="color: #d9534f;">Logout</a>
         <% } else { %>
-            <a href="login.jsp">Accedi / Registrati</a>
+            <a href="LoginServlet">Accedi / Registrati</a>
         <% } %>
     </div>
 </header>
-

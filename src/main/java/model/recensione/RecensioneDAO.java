@@ -319,6 +319,33 @@ public class RecensioneDAO implements DAOInterface<RecensioneBean, Integer> {
         return esiste;
     }
     
+    public List<RecensioneBean> doRetrieveRecensioniByProfessionista(String emailProfessionista) {
+        List<RecensioneBean> recensioni = new ArrayList<>();
+        // Prende le recensioni di tipo 'ordine' dove l'email del professionista nell'ordine corrisponde
+        String query = "SELECT r.* FROM Recensione r JOIN Ordine o ON r.FK_ordine = o.ID_ordine " +
+                       "WHERE o.FK_email_professionista = ? AND r.tipo = 'ordine' ORDER BY r.data_recensione DESC";
+        
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, emailProfessionista);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    RecensioneBean r = new RecensioneBean();
+                    r.setIdRecensione(rs.getInt("ID_recensione"));
+                    r.setVoto(rs.getInt("voto"));
+                    r.setCommento(rs.getString("commento"));
+                    r.setDataRecensione(rs.getDate("data_recensione"));
+                    r.setFkUtente(rs.getString("FK_utente")); // L'email del cliente che ha recensito
+                    recensioni.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recensioni;
+    }
+    
     @Override
     public void doSave(RecensioneBean recensione) throws SQLException {
         Connection connection = null;

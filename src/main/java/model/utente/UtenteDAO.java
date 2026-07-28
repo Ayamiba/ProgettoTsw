@@ -1,6 +1,5 @@
 package model.utente;
 
-
 import model.ConnectionPool;
 import model.DAOInterface;
 import java.sql.Connection;
@@ -17,42 +16,42 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 	
 	@Override
 	public UtenteBean doRetrieveByKey(String email) throws SQLException {
-		 Connection connection = null;
-	        PreparedStatement statement = null;
-	        ResultSet resultSet = null;
-	        UtenteBean utente = null;
-	        
-	        String query="SELECT email, nome, cognome, password, data_nascita, tipo FROM Utente WHERE email = ?";
-	        
-	        try {
-	        	connection = ConnectionPool.getConnection();
-	        	statement = connection.prepareStatement(query);
-	        	
-	        	statement.setString(1, email);
-	        	resultSet= statement.executeQuery();
-	        	
-	        	if(resultSet.next()) {
-	        	    utente = new UtenteBean();
-	        	    utente.setEmail(resultSet.getString("email"));
-	        	    utente.setNome(resultSet.getString("nome"));
-	        	    utente.setCognome(resultSet.getString("cognome"));
-	        	    utente.setPassword(resultSet.getString("password"));
-	        	    utente.setDataNascita(resultSet.getDate("data_nascita"));
-	        	    utente.setTipo(resultSet.getString("tipo"));
-	        	}
-	        } finally {
-	            try {
-	                if (resultSet != null) resultSet.close();
-	            } finally {
-	                try {
-	                    if (statement != null) statement.close();
-	                } finally {
-	                    ConnectionPool.releaseConnection(connection);
-	                }
-	            }
-	        }
-	        return utente;
-	    }
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		UtenteBean utente = null;
+		
+		String query="SELECT email, nome, cognome, password, data_nascita, tipo FROM Utente WHERE email = ?";
+		
+		try {
+			connection = ConnectionPool.getConnection();
+			statement = connection.prepareStatement(query);
+			
+			statement.setString(1, email);
+			resultSet= statement.executeQuery();
+			
+			if(resultSet.next()) {
+				utente = new UtenteBean();
+				utente.setEmail(resultSet.getString("email"));
+				utente.setNome(resultSet.getString("nome"));
+				utente.setCognome(resultSet.getString("cognome"));
+				utente.setPassword(resultSet.getString("password"));
+				utente.setDataNascita(resultSet.getDate("data_nascita"));
+				utente.setTipo(resultSet.getString("tipo"));
+			}
+		} finally {
+			try {
+				if (resultSet != null) resultSet.close();
+			} finally {
+				try {
+					if (statement != null) statement.close();
+				} finally {
+					ConnectionPool.releaseConnection(connection);
+				}
+			}
+		}
+		return utente;
+	}
 	
 	@Override
 	public List<UtenteBean> doRetrieveAll() throws SQLException { //usa una lista di utenti
@@ -173,78 +172,114 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 	//questo metodo restituisce l'utente se esso è presente, null se non lo è
 	public UtenteBean doRetrieveByLogin(String email, String password) throws SQLException {
 		System.out.println("--- [DEBUG DAO START] ---");
-	    System.out.println("Email ricevuta dal form: '" + email + "'");
-	    System.out.println("Password ricevuta dal form: '" + password + "'");
+		System.out.println("Email ricevuta dal form: '" + email + "'");
+		System.out.println("Password ricevuta dal form: '" + password + "'");
 
-	    if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-	        System.out.println("DEBUG DAO: Email o Password vuote! Esco subito.");
-	        return null;
-	    }
-	    Connection connection = null;
-	    PreparedStatement statement = null;
-	    ResultSet resultSet = null;
-	    UtenteBean utente=null;
+		if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+			System.out.println("DEBUG DAO: Email o Password vuote! Esco subito.");
+			return null;
+		}
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		UtenteBean utente = null;
 
-	    String query = "SELECT * FROM Utente WHERE email = ? AND password = ?"; //restituisce la riga corrispondente
+		String query = "SELECT * FROM Utente WHERE email = ? AND password = ?"; //restituisce la riga corrispondente
 
-	    try {
-	        connection = ConnectionPool.getConnection();
-	        statement = connection.prepareStatement(query);
-	        
-	        statement.setString(1, email);
-	        statement.setString(2, password);
+		try {
+			connection = ConnectionPool.getConnection();
+			statement = connection.prepareStatement(query);
+			
+			statement.setString(1, email);
+			statement.setString(2, password);
 
-	        resultSet = statement.executeQuery();
+			resultSet = statement.executeQuery();
 
-	        // Se nel DB c'è una riga entrerà nell if
-	        if (resultSet.next()) { //se la select produce una riga in output mettiamo a true la variabile
-	            utente = new UtenteBean();
-	            //settiamo tutti i valori di quell'utente nell'oggetto utente
-	            utente = new UtenteBean();
+			// Se nel DB c'è una riga entrerà nell if
+			if (resultSet.next()) { //se la select produce una riga in output mettiamo a true la variabile
+				utente = new UtenteBean();
 				utente.setEmail(resultSet.getString("email"));
 				utente.setNome(resultSet.getString("nome"));
 				utente.setCognome(resultSet.getString("cognome"));
 				utente.setPassword(resultSet.getString("password"));
 				utente.setDataNascita(resultSet.getDate("data_nascita"));
 				utente.setTipo(resultSet.getString("tipo"));
-	        }
-	        
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	        } finally {
-	            try {
-	                if (statement != null) statement.close();
-	            } finally {
-	                ConnectionPool.releaseConnection(connection);
-	            }
-	        }
-	    }
+			}
+			
+		} finally {
+			try {
+				if (resultSet != null) resultSet.close();
+			} finally {
+				try {
+					if (statement != null) statement.close();
+				} finally {
+					ConnectionPool.releaseConnection(connection);
+				}
+			}
+		}
 
-	    return utente; // Ritornerà l'utente se viene trovato, 'null' se non trovato
+		return utente; // Ritornerà l'utente se viene trovato, 'null' se non trovato
 	}
 	
 	public void doUpdateTipo(String email, String nuovoTipo) throws SQLException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        
-        // Modifichiamo solo il ruolo dell'utente
-        String query = "UPDATE Utente SET tipo = ? WHERE email = ?";
-        
-        try {
-            connection = ConnectionPool.getConnection();
-            statement = connection.prepareStatement(query);
-            statement.setString(1, nuovoTipo);
-            statement.setString(2, email);
-            
-            statement.executeUpdate();
-            
-        } finally {
-            try { if (statement != null) statement.close(); } finally {
-                ConnectionPool.releaseConnection(connection);
-            }
-        }
-    }
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		// Modifichiamo solo il ruolo dell'utente
+		String query = "UPDATE Utente SET tipo = ? WHERE email = ?";
+		
+		try {
+			connection = ConnectionPool.getConnection();
+			statement = connection.prepareStatement(query);
+			statement.setString(1, nuovoTipo);
+			statement.setString(2, email);
+			
+			statement.executeUpdate();
+			
+		} finally {
+			try { if (statement != null) statement.close(); } finally {
+				ConnectionPool.releaseConnection(connection);
+			}
+		}
+	}
+
+	// NUOVO METODO: Recupera solo gli utenti di tipo 'professionista'
+	public List<UtenteBean> doRetrieveProfessionisti() throws SQLException {
+		List<UtenteBean> professionisti = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+
+		String query = "SELECT email, nome, cognome, password, data_nascita, tipo FROM Utente WHERE tipo = 'professionista'";
+
+		try {
+			connection = ConnectionPool.getConnection();
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				UtenteBean utente = new UtenteBean();
+				utente.setEmail(resultSet.getString("email"));
+				utente.setNome(resultSet.getString("nome"));
+				utente.setCognome(resultSet.getString("cognome"));
+				utente.setPassword(resultSet.getString("password"));
+				utente.setDataNascita(resultSet.getDate("data_nascita"));
+				utente.setTipo(resultSet.getString("tipo"));
+				professionisti.add(utente);
+			}
+		} finally {
+			try {
+				if (resultSet != null) resultSet.close();
+			} finally {
+				try {
+					if (statement != null) statement.close();
+				} finally {
+					ConnectionPool.releaseConnection(connection);
+				}
+			}
+		}
+		return professionisti;
+	}
 	
 }
-
