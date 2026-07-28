@@ -208,28 +208,22 @@
                     <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
                     
                     <!-- colonna per il download della traccia caricata dal professionista -->
-					<td style="text-align: center;">
-    				<% if ("Completato".equalsIgnoreCase(ordine.getStato())) { 
-        			TracciaAudioBean tracciaPro = null;
-       				try {
-            			// Avvolgiamo la chiamata al DB in un try-catch per evitare l'errore 500
-            			tracciaPro = tracciaAudioDAO.doRetrieveTracciaProfessionistaByOrdine(ordine.getIdOrdine());
-        			} catch (Exception e) {
-            		e.printStackTrace();
-        		}
-        
-        		if (tracciaPro != null) {
-   				 %>
-        		<a href="<%= request.getContextPath() %>/<%= tracciaPro.getPercorsoFile() %>" download class="btn-text-success" style="font-weight: 600; color: #28a745; text-decoration: none;">
-            		🎵 Scarica 
-        		</a>
-    			<%  } else { %>
-        			<span style="color: #aaa;">Non disponibile</span>
-    			<%  } 
-       			} else { %>
-        		<span style="color: #888; font-style: italic; font-size: 0.85em;">In elaborazione...</span>
-    			<% } %>
-				</td>
+					<!-- colonna per il download della traccia caricata dal professionista -->
+<td style="text-align: center;">
+    <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
+        <!-- 
+          Puntiamo alla nostra Servlet dedicata! 
+          Sarà lei ad andare nella cartella sicura e forzare il download del file al browser.
+        -->
+        <a href="DownloadLavoroServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
+           class="btn-text-success" 
+           style="font-weight: 600; color: #28a745; text-decoration: none;">
+            🎵 Scarica 
+        </a>
+    <% } else { %>
+        <span style="color: #888; font-style: italic; font-size: 0.85em;">In elaborazione...</span>
+    <% } %>
+</td>
                     <!-- COLONNA PDF -->
                     <td style="text-align: center;">
                         <a href="GeneraFatturaServlet?id=<%= ordine.getIdOrdine() %>" class="dash-btn-download" title="Scarica Ricevuta">
