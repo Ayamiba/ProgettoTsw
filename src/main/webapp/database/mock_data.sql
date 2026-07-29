@@ -23,15 +23,16 @@ INSERT INTO `saendwave`.`categoria` (`nome`, `studio_tool`, `effetto`) VALUES ('
 
 INSERT INTO `tipologia` VALUES (1,'amplificatore'),(3,'amplificatore'),(5,'compressore'),(7,'delay'),(9,'delay'),(1,'distorsore'),(2,'distorsore'),(3,'distorsore'),(9,'distorsore'),(1,'equalizzatore'),(3,'equalizzatore'),(8,'equalizzatore'),(9,'equalizzatore'),(6,'filtro'),(9,'filtro'),(10,'filtro'),(9,'pedaliera'),(4,'riverbero'),(9,'riverbero');
 
-INSERT INTO `utente` VALUES ('Admin','Gianni','adminGianni@saendwave.it','hPC6XUfMJVf9I3vsd/2YFGWoNGmheHDDrrioKaRIN2s=','1997-06-11','admin'),('Giovanni','Pro','g.professionista@saendwave.it','Dm3AOGalRYVBDqeaiwb9NvrQp41ILh8Pf08BKmetxF4=','1997-06-11','professionista'),('Mario','Rossi','m.rossi@gmail.com','tbMBeUL7idLBIU7D8zdm9mlS23xUBbjlmsCW0/GNz/I=','1999-08-21','utente registrato');
+INSERT INTO `contenuto` VALUES (7,10,4,3),(8,10,5,2),(9,10,8,1),(10,11,7,1),(11,11,9,2);
 
-INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav','m.rossi@gmail.com');
+INSERT INTO `metodopagamento` VALUES (123,5333111111111111,'MARIO','ROSSI','12/30');
 
-INSERT INTO `metodopagamento` VALUES (123,5333111111111111,'MARIO','ROSSI','12/30','m.rossi@gmail.com');
+INSERT INTO `ordine` VALUES (10,'2026-07-20',5.5,'Completato','Eq spazio voce pulizia, comp rotonditÃ  e potenza, verb per spazialitÃ ',7,5333111111111111,'g.professionista@saendwave.it','master_ordine_10.wav'),(11,'2026-07-29',3.5,'In lavorazione','Nessuna istruzione particolare.',8,5333111111111111,NULL,NULL);
 
-INSERT INTO `ordine` VALUES (10,'2026-07-20',5.5,'In Lavorazione','Eq spazio voce pulizia, comp rotonditÃ  e potenza, verb per spazialitÃ ','Baby_noFX.wav',7,5333111111111111,'g.professionista@saendwave.it');
+INSERT INTO `recensione` VALUES (1,NULL,7,'m.rossi@gmail.com','prodotto',4,'Suono pulito e ben cadenzato in base alle ottave scelte!','2026-07-27'),(2,NULL,4,'m.rossi@gmail.com','prodotto',5,'Ottima spazializzazione, suono intenso e caldo','2026-07-28'),(3,NULL,5,'m.rossi@gmail.com','prodotto',5,'Profondo e potente!','2026-07-28'),(4,NULL,8,'m.rossi@gmail.com','prodotto',4,'Pulizia eccellente e ottimo risultato sulle armoniche','2026-07-28'),(5,10,NULL,'m.rossi@gmail.com','ordine',5,'Ottimo lavoro','2026-07-28');
+
+INSERT INTO `tracciaaudio` VALUES (7,'Baby_noFX.wav','1784194365841_Baby_noFX.wav','m.rossi@gmail.com'),(8,'Audio 1Vicarious_NO_FX.wav','1785320238306_Audio 1 Vicarious_NO_FX.wav','m.rossi@gmail.com');
+
+INSERT INTO `utente` VALUES ('Admin','Gianni','adminGianni@saendwave.it','hPC6XUfMJVf9I3vsd/2YFGWoNGmheHDDrrioKaRIN2s=','1997-06-11','admin'),('Admin','Mary','adminMary@saendwave.it','KesYRkNecN4kTMEMbCKRg0B49GW16DRsSw5iFxIQYcc=','2006-03-07','admin'),('Giovanni','Pro','g.professionista@saendwave.it','Dm3AOGalRYVBDqeaiwb9NvrQp41ILh8Pf08BKmetxF4=','1997-06-11','professionista'),('Mario','Rossi','m.rossi@gmail.com','tbMBeUL7idLBIU7D8zdm9mlS23xUBbjlmsCW0/GNz/I=','1999-08-21','utente registrato'),('Professionista','Mary','professionistaMary@saendwave.it','KesYRkNecN4kTMEMbCKRg0B49GW16DRsSw5iFxIQYcc=','2006-03-07','professionista');
 
 INSERT INTO `utilizzo` VALUES ('m.rossi@gmail.com',5333111111111111);
-
-INSERT INTO `Carrello` (`FK_utente`, `FK_prodotto`) VALUES ('g.professionista@saendwave.it', 7);
-

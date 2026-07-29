@@ -30,9 +30,7 @@ CREATE TABLE MetodoPagamento (
                                  numero_carta BIGINT PRIMARY KEY,
                                  nome VARCHAR(25) NOT NULL,
                                  cognome VARCHAR(25) NOT NULL,
-                                 scadenza VARCHAR(10) NOT NULL,
-								 FK_utente VARCHAR(75) NOT NULL, -- Il metodo di pagamento appartiene sempre a un utente
-								 FOREIGN KEY (FK_utente) REFERENCES Utente(email) ON DELETE CASCADE ON UPDATE CASCADE
+                                 scadenza VARCHAR(10) NOT NULL
 );
 
 -- tabella Categoria
