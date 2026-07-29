@@ -1,0 +1,82 @@
+//questa Servlet ci servirà per aggiungere i prodotti al carrello in base al fatto che l'utente sia loggato o meno
+//in LoginServlet poi ci occuperemo di trasferire che cose che stanno nei cookie dell'utente quando si registrerà
+package control;
+import model.carrello.*;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet("/AggiungiAlCarrelloHomeServlet")
+public class AggiungiAlCarrelloHomeServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        model.utente.UtenteBean utenteLoggato = (model.utente.UtenteBean) session.getAttribute("user"); //se session.getAttribute è uguale a null significa che l'utente non è loggato
+        
+        String idProdottoStr = request.getParameter("idProdotto"); // Riceve l'id del prodotto cliccato
+        boolean isAjax = "true".equals(request.getParameter("ajax"));
+        
+        if (idProdottoStr != null && !idProdottoStr.trim().isEmpty()) {
+            if (utenteLoggato != null) {
+                // CASO A: L'utente è loggato quindi viene fatta una INSERT nel DB usando il tuo CarrelloDAO
+                try {
+                	CarrelloDAO carrelloDAO = new CarrelloDAO();
+                    int idProdotto = Integer.parseInt(idProdottoStr);
+                    carrelloDAO.doSave(utenteLoggato.getEmail(), idProdotto);
+                    //stampa di verifica
+                    System.out.println("DEBUG: Prodotto " + idProdotto + " aggiunto al DB per l'utente " + utenteLoggato.getEmail());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // CASO B: L'utente è un ospite -> Aggiorniamo o creiamo il COOKIE
+            	Cookie[] cookies = request.getCookies();
+                String vecchioContenuto = "";
+                
+                if (cookies != null) {
+                    for (Cookie c : cookies) {
+                        if (c.getName().equals("carrello_ospite")) {
+                            vecchioContenuto = c.getValue();
+                            break;
+                        }
+                    }
+                }
+                
+                // Concatenazione libera: se c'era già roba, aggiungiamo un trattino e il nuovo ID
+                String nuovoContenuto = "";
+                if (vecchioContenuto.isEmpty()) {
+                    nuovoContenuto = idProdottoStr;
+                } else {
+                    nuovoContenuto = vecchioContenuto + "-" + idProdottoStr;
+                }
+                
+                // Creiamo o aggiorniamo il cookie sul browser dell'utente
+                Cookie cookieCarrello = new Cookie("carrello_ospite", nuovoContenuto);
+                cookieCarrello.setMaxAge(60 * 60 * 24 * 7); // 7 giorni
+                cookieCarrello.setPath(request.getContextPath()); 
+                
+                response.addCookie(cookieCarrello);
+            }
+        }
+        
+        if (isAjax) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"success\": true}");
+            return; // Termina qui l'esecuzione!
+        }
+        
+        response.sendRedirect("HomeServlet");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}

@@ -20,7 +20,7 @@
 </head>
 <body>
 
-    <jsp:include page="/WEB-INF/views/components/navbar.jsp" />
+    <%@ include file="/WEB-INF/views/components/navbar.jsp" %>
 
     <main>
         <section class="latest-products">
@@ -63,7 +63,7 @@
                                    € <%= String.format("%.2f", prodotto.getPrezzo()) %>
                                </span>
                                
-                               <form action="AggiungiAlCarrelloServlet" method="POST" style="margin-top: auto;">
+                               <form action="AggiungiAlCarrelloHomeServlet" method="POST" class="ajax-cart-form" style="margin-top: auto;">
                                    <input type="hidden" name="idProdotto" value="<%= prodotto.getIdProdotto() %>">
                                    <button type="submit" class="btn">Aggiungi al Carrello</button>
                                </form>
