@@ -20,13 +20,10 @@
     
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
+   
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admin.css">
     
-    <style>
-        .form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
-        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; }
-        textarea.form-input { resize: vertical; min-height: 120px; }
-        .current-image-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px;}
-    </style>
+    
 </head>
 <body>
 
@@ -34,13 +31,14 @@
 
     <main class="dashboard-container">
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-                <h1 style="color: #d9534f; margin-bottom: 5px;">Modifica: <%= prodotto.getNome() %></h1>
-                <p class="subtitle" style="margin: 0;">Aggiorna le specifiche, il prezzo o la grafica del prodotto.</p>
-            </div>
-            <a href="ProfiloAdminServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
-        </div>
+        <!-- Intestazione resa responsiva con flex-wrap e gap -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; width: 100%; box-sizing: border-box;">
+    <div style="flex: 1 1 auto; min-width: 0; word-break: break-word; overflow-wrap: break-word;">
+        <h1 style="color: #d9534f; margin-bottom: 5px;">Modifica: <%= prodotto.getNome() %></h1>
+        <p class="subtitle" style="margin: 0;">Aggiorna le specifiche, il prezzo o la grafica del prodotto.</p>
+    </div>
+    <a href="ProfiloServlet" class="btn-back" style="flex-shrink: 0;">&larr; Torna alla Dashboard</a>
+</div>
 
         <% if(request.getParameter("messaggio") != null) { %>
             <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
@@ -87,8 +85,9 @@
                             <input type="file" id="foto" name="foto" class="form-input" accept="image/*" style="padding: 7px;">
                         </div>
 
+                        <!-- Aggiunto width 100% al bottone -->
                         <div style="text-align: right; margin-top: 20px;">
-                            <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px;">Salva Modifiche</button>
+                            <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px; width: 100%;">Salva Modifiche</button>
                         </div>
                     </form>
                 </div>

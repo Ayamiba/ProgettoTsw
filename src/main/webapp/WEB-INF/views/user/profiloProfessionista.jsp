@@ -136,7 +136,7 @@
                 <div class="dash-card card-pro">
                     <h3>Ordini in Sospeso (Da elaborare)</h3>
                     <p class="card-desc">Tracce inviate dai clienti che richiedono servizi di Mix o Mastering. Accetta un lavoro per iniziare.</p>
-                    
+                    <div class="dash-table-wrapper">
                     <table class="dash-table">
                         <thead>
                             <tr>
@@ -170,12 +170,13 @@
                                } %>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <div class="dash-card card-pro">
                     <h3>Storico Lavori Completati</h3>
                     <p class="card-desc">Elenco delle tracce elaborate e consegnate ai clienti con successo.</p>
-                    
+                    <div class="dash-table-wrapper">
                     <table class="dash-table">
                         <thead>
                             <tr>
@@ -204,6 +205,7 @@
                                } %>
                         </tbody>
                     </table>
+                	</div>
                 </div>
 
             </div>

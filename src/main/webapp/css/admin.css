@@ -263,3 +263,181 @@
             color: #1a1a2e;
             border-color: #9ca3af;
         }
+/* ============================================================
+   TRASFORMAZIONE TABELLE IN CARDS SU MOBILE (Solo Pagine Admin)
+   ============================================================ */
+@media (max-width: 768px) {
+    
+    /* FIX TASTO "TORNA ALLA DASHBOARD" SU MOBILE */
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    /* 1. Forza la tabella e le righe a comportarsi come blocchi e non griglie */
+    .dash-table, 
+    .dash-table tbody, 
+    .dash-table tr, 
+    .dash-table td {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* 2. Nasconde l'intestazione classica del desktop */
+    .dash-table thead {
+        display: none !important; 
+    }
+
+    /* 3. Stile della singola "Card" utente/prodotto */
+    .dash-table tr {
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 5px;
+        background: #fbfbfb;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    /* 4. Layout interno della cella con flexbox per affiancare Etichetta e Valore */
+    .dash-table td {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        text-align: right;
+        padding: 12px 10px !important;
+        border-bottom: 1px solid #eee !important;
+    }
+
+    /* L'ultima riga della card (le azioni) non ha il bordo sotto */
+    .dash-table td:last-child {
+        border-bottom: none !important;
+        justify-content: flex-end !important;
+    }
+
+    /* 5. Inserisce dinamicamente l'etichetta letta dall'attributo HTML data-label */
+    .dash-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #777;
+        font-size: 0.85em;
+        text-align: left;
+        margin-right: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
+.form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
+textarea.form-input { resize: vertical; min-height: 120px; }
+.current-image-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px;}
+
+/* Impedisce al campo di caricamento foto di allargare la card */
+input[type="file"].form-input {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    /* Mettiamo in sicurezza il tasto */
+    .btn-back {
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+        box-sizing: border-box; 
+    }
+   
+    .dash-card table,
+    .dash-card table tbody,
+    .dash-card table tr {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .dash-card table td {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        border-bottom: 1px solid #eee !important;
+    }
+
+    .dash-card table thead {
+        display: none !important; 
+    }
+}
+
+/* ============================================================
+   INVENTARIO CATALOGO (listaProdottiAdmin.jsp)
+   ============================================================ */
+
+/* Intestazione responsiva: evita che il bottone esca dallo schermo */
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; 
+    gap: 15px;       
+}
+
+/* Contenitore della barra di ricerca live */
+.admin-search-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Miniatura immagine nella tabella */
+.thumb-admin {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+/* Messaggio di tabella vuota */
+.empty-table-msg {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 30px 0;
+}
+
+/* Stili specifici per i testi della tabella */
+.td-id {
+    font-weight: bold;
+    color: #666;
+}
+
+.td-bold {
+    font-weight: bold;
+}
+
+/* Bottoni testuali per Azioni (Modifica/Elimina) */
+.btn-text-edit {
+    color: #4134E7;
+    font-weight: bold;
+    text-decoration: none;
+}
+.btn-text-edit:hover { text-decoration: underline; }
+
+.btn-text-delete {
+    color: #d9534f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+}
+.btn-text-delete:hover { text-decoration: underline; }

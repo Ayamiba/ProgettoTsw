@@ -5,6 +5,9 @@
     max-width: 1200px;
     margin: 40px auto;
     padding: 0 20px;
+    /* FIX: Impedisce al contenitore di allargarsi */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dashboard-container h1 {
@@ -25,15 +28,18 @@
    ============================================================ */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
+   grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px;
     align-items: start;
+    /* FIX */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Se lo schermo scende sotto i 900px (Tablet/Mobile), passiamo a una colonna singola */
 @media (max-width: 900px) {
     .dashboard-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
@@ -45,9 +51,12 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    border-top: 4px solid var(--colore-primario); /* Di base usa il viola Sændwave */
+    border-top: 4px solid var(--colore-primario);
     transition: transform 0.2s, box-shadow 0.2s;
     margin-bottom: 10px;
+    /* FIX: Impedisce alla card di sforare la griglia */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dash-card:hover {
@@ -64,14 +73,21 @@
     padding-bottom: 10px;
 }
 
-/* Variant di colore superiore in base alla pagina del ruolo */
-.dash-card.card-admin { border-top-color: #d9534f; }       /* Rosso Amministratore */
-.dash-card.card-pro { border-top-color: #ecc94b; }         /* Oro/Giallo Professionista */
-.dash-card.card-user { border-top-color: var(--colore-primario); } /* Viola Utente */
+.dash-card.card-admin { border-top-color: #d9534f; }       
+.dash-card.card-pro { border-top-color: #ecc94b; }         
+.dash-card.card-user { border-top-color: var(--colore-primario); } 
 
 /* ============================================================
    TABELLE INTERNE DELLE DASHBOARD (Ordini, Prodotti, Coda)
    ============================================================ */
+/* FIX: WRAPPER AGGIUNTO PER EVITARE SFORAMENTO TABELLE */
+.dash-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 10px;
+}
+
 .dash-table {
     width: 100%;
     border-collapse: collapse;
@@ -96,7 +112,7 @@
 }
 
 /* ============================================================
-   BADGES DI STATO (Pronto, In Lavorazione, Sospeso)
+   BADGES DI STATO E BOTTONI
    ============================================================ */
 .status-badge {
     padding: 5px 10px;
@@ -106,25 +122,10 @@
     display: inline-block;
     text-transform: uppercase;
 }
+.status-badge.ready { background-color: #e8f5e9; color: #2e7d32; }
+.status-badge.pending { background-color: #fff3e0; color: #ef6c00; }
+.status-badge.working { background-color: #e3f2fd; color: #0d47a1; }
 
-.status-badge.ready {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.status-badge.pending {
-    background-color: #fff3e0;
-    color: #ef6c00;
-}
-
-.status-badge.working {
-    background-color: #e3f2fd;
-    color: #0d47a1;
-}
-
-/* ============================================================
-   BOTTONI E LINK DI AZIONE SPECIALI PER DASHBOARD
-   ============================================================ */
 .dash-btn-download {
     color: var(--colore-primario);
     text-decoration: none;
@@ -133,26 +134,22 @@
     align-items: center;
     gap: 5px;
 }
-
 .dash-btn-download:hover {
     color: var(--colore-secondario);
     text-decoration: underline;
 }
 
-/* Form veloci dentro le card (es. aggiunta prodotto o upload traccia) */
 .dash-form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin-bottom: 15px;
 }
-
 .dash-form-group label {
     font-size: 0.9em;
     font-weight: 600;
     color: #444;
 }
-
 .dash-form-group input, 
 .dash-form-group select, 
 .dash-form-group textarea {
@@ -161,109 +158,66 @@
     border-radius: 6px;
     font-family: inherit;
 }
-
 .dash-form-group input:focus {
     border-color: var(--colore-primario);
     outline: none;
 }
 
 /* ============================================================
-   UTENTE
+   UTENTE E INFORMAZIONI
    ============================================================ */
-   /* Stili specifici interni per ottimizzare i blocchi verticali delle informazioni */
-        .profile-info-block {
-            margin-bottom: 22px;
-        }
-        .profile-info-block:last-of-type {
-            margin-bottom: 10px;
-        }
-        .profile-info-block strong {
-            display: block;
-            font-size: 0.8em;
-            color: #777;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-        .profile-info-block span {
-            font-size: 1.05em;
-            color: #1a1a2e;
-            font-weight: 500;
-        }
-        
-        /* Lista di link d'azione verticali e minimali */
-        .dash-actions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 25px;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 15px;
-        }
-        .dash-link-action {
-            color: var(--colore-primario);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.2s;
-        }
-        .dash-link-action:hover {
-            color: var(--colore-secondario);
-            text-decoration: underline;
-        }
-        
-        /* Box per il caricamento indipendente dei file audio (Drag & Drop friendly) */
-        .upload-box {
-            border: 2px dashed #eaeaea;
-            border-radius: 8px;
-            padding: 35px 20px;
-            text-align: center;
-            background: #fbfbfb;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-        .upload-box:hover {
-            border-color: var(--colore-primario);
-            background-color: #f4f3ff;
-        }
-        .upload-box svg {
-            color: #999;
-            margin-bottom: 12px;
-            transition: color 0.2s;
-        }
-        .upload-box:hover svg {
-            color: var(--colore-primario);
-        }
-        .upload-box p {
-            font-size: 0.9em;
-            color: #444;
-            margin: 0 0 5px 0;
-        }
-        .file-input-hidden {
-            display: none;
-        }
-        
-        /* Lista tracce cloud veloci */
-        .cloud-tracks-list {
-            margin-top: 25px;
-        }
-        .cloud-track-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            background: #f8f9fa;
-            border: 1px solid #eef0f2;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-        
-     /* ============================================================
-   PAGINE DI IMPOSTAZIONE (Modifica Profilo, Sicurezza, ecc.)
+.profile-info-block {
+    margin-bottom: 22px;
+    /* FIX: blocca il contenitore e costringe il testo a capo */
+    width: 100%;
+    box-sizing: border-box;
+}
+.profile-info-block:last-of-type {
+    margin-bottom: 10px;
+}
+.profile-info-block strong {
+    display: block;
+    font-size: 0.8em;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.profile-info-block span {
+    font-size: 1.05em;
+    color: #1a1a2e;
+    font-weight: 500;
+    /* FIX: Se un'email è troppo lunga, la spezza */
+    word-wrap: break-word; 
+    word-break: break-word;
+    display: block;
+}
+
+.dash-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+.dash-link-action {
+    color: var(--colore-primario);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+.dash-link-action:hover {
+    color: var(--colore-secondario);
+    text-decoration: underline;
+}
+
+/* ============================================================
+   PAGINE DI IMPOSTAZIONE E FORM
    ============================================================ */
 .dash-settings-container {
     display: flex;
@@ -272,7 +226,6 @@
     padding: 40px 20px;
     min-height: 60vh;
 }
-
 .dash-settings-card {
     background: #ffffff;
     width: 100%;
@@ -281,15 +234,15 @@
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     border-top: 4px solid var(--colore-primario);
+    /* FIX */
+    box-sizing: border-box;
 }
-
 .dash-settings-card h2 {
     color: #1a1a2e;
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 1.8em;
 }
-
 .dash-settings-card .subtitle {
     color: #666;
     margin-bottom: 25px;
@@ -297,34 +250,17 @@
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 15px;
 }
-
-/* Griglia per affiancare input (es. Nome e Cognome) */
 .dash-form-row {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
 }
-
 .dash-form-row > div {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-
-.dash-form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.dash-form-group label, .dash-form-row label {
-    font-size: 0.9em;
-    font-weight: 600;
-    color: #333;
-}
-
 .dash-input {
     padding: 12px 15px;
     border: 1.5px solid #e0e0e0;
@@ -333,13 +269,8 @@
     font-family: inherit;
     transition: border-color 0.3s;
     width: 100%;
+    box-sizing: border-box; /* FIX */
 }
-
-.dash-input:focus {
-    border-color: var(--colore-primario);
-    outline: none;
-}
-
 .dash-input.readonly {
     background-color: #f8f9fa;
     color: #999;
@@ -347,12 +278,11 @@
     border-color: #eef0f2;
 }
 
-/* Pulsanti di salvataggio e annullamento */
 .dash-buttons-row {
     display: flex;
     gap: 15px;
     margin-top: 35px;
-    align-items: stretch; /* FORZA i due elementi ad avere esattamente la stessa altezza */
+    align-items: stretch;
 }
 .dash-btn-save {
     flex: 2;
@@ -365,19 +295,14 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
-    
-    
-    margin: 0; /* Annulla il "margin-top: 20px" del file style.css */
-    height: 50px; /* Altezza blindata */
+    margin: 0; 
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 25px;
 }
-
-.dash-btn-save:hover {
-    background-color: var(--colore-secondario);
-}
+.dash-btn-save:hover { background-color: var(--colore-secondario); }
 .dash-btn-cancel {
     flex: 1;
     background-color: #f4f5f7;
@@ -388,51 +313,45 @@
     font-weight: bold;
     border-radius: 6px;
     transition: background-color 0.2s;
-    
-    
     margin: 0; 
-    height: 50px; /* Altezza identica al bottone blu */
+    height: 50px; 
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 25px;
     white-space: nowrap;
 }
+.dash-btn-cancel:hover { background-color: #e0e0e0; }
 
-.dash-btn-cancel:hover {
-    background-color: #e0e0e0;
+.settings-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
 }
-        .settings-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 20px;
-        }
-        /* Campo in sola lettura */
-        .input-readonly {
-            background-color: #f4f5f7;
-            color: #888;
-            cursor: not-allowed;
-        }
-        
-        /* ============================================================
+.input-readonly {
+    background-color: #f4f5f7;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* ============================================================
    CLASSI DI SUPPORTO PER IL LAYOUT DELLE DASHBOARD
    ============================================================ */
-/* Colonna flessibile per la griglia */
 .dash-col {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    /* FIX */
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0; /* previene il flex overflow */
 }
-
-/* Descrizione interna alle card */
 .card-desc {
     font-size: 0.9em;
     color: #666;
     margin-bottom: 20px;
 }
-
-/* Box per stati vuoti (Nessun metodo, Nessun ordine, ecc.) */
 .empty-data-box {
     background: #f8f9fa;
     border: 1px solid #eef0f2;
@@ -442,27 +361,18 @@
     align-items: center;
     gap: 12px;
 }
-
-.empty-data-box span {
-    font-size: 0.9em;
-    color: #555;
-    font-weight: 500;
-}
-
-.empty-data-box svg {
-    color: #888;
-}
+.empty-data-box span { font-size: 0.9em; color: #555; font-weight: 500; }
+.empty-data-box svg { color: #888; }
 
 /* ============================================================
-   LISTA METODI DI PAGAMENTO
+   LISTA METODI DI PAGAMENTO E CLOUD
    ============================================================ */
 .payment-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-
-.payment-item {
+.payment-item, .cloud-track-item {
     background: #fbfbfb;
     border: 1px solid #e0e0e0;
     padding: 12px 15px;
@@ -470,133 +380,80 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* FIX */
+    width: 100%;
+    box-sizing: border-box;
 }
-
-.payment-info {
+.payment-info, .cloud-track-info {
     display: flex;
     align-items: center;
     gap: 12px;
+    /* FIX */
+    min-width: 0;
+    flex: 1;
 }
-
 .payment-icon-wrapper {
     background: var(--colore-primario);
     color: white;
     padding: 6px;
     border-radius: 4px;
 }
-
-.payment-text-title {
+.payment-text-title, .cloud-track-name {
     font-weight: 600;
     font-size: 0.95em;
     color: #333;
+    /* FIX: Taglia i testi troppo lunghi */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 .payment-text-sub {
     font-size: 0.8em;
     color: #777;
+    white-space: normal; /* Su mobile andrà a capo */
+    word-break: break-word;
 }
-
 .btn-text-danger {
     color: #d9534f;
     font-size: 0.85em;
     font-weight: bold;
     text-decoration: none;
+    flex-shrink: 0;
 }
+.btn-text-danger:hover { text-decoration: underline; }
 
-.btn-text-danger:hover {
-    text-decoration: underline;
-}
-
-/* ============================================================
-   SOVRASCRITTURE PER L'AUDIO CLOUD
-   ============================================================ */
 .upload-box {
     border: 2px dashed #eaeaea;
     border-radius: 8px;
-    padding: 20px 15px; /* Modificato: altezza ridotta */
+    padding: 20px 15px; 
     text-align: center;
     background: #fbfbfb;
     cursor: pointer;
     transition: border-color 0.2s, background-color 0.2s;
 }
+.upload-box p { font-size: 0.9em; color: #444; margin: 0 0 4px 0; }
+.upload-box svg { color: #999; margin-bottom: 8px; transition: color 0.2s; }
+.upload-hint { font-size: 0.75em; color: #888; }
+.cloud-tracks-list { margin-top: 25px; }
 
-.upload-box p {
-    font-size: 0.9em;
-    color: #444;
-    margin: 0 0 4px 0; /* Modificato */
-}
-
-.upload-box svg {
-    color: #999;
-    margin-bottom: 8px; /* Modificato */
-    transition: color 0.2s;
-}
-
-.upload-hint {
-    font-size: 0.75em;
-    color: #888;
-}
-
-.cloud-track-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: #fbfbfb;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    margin-bottom: 8px;
-}
-
-.cloud-track-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    max-width: 80%;
-}
-
-.cloud-track-name {
-    font-weight: 500;
-    font-size: 0.9em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.cloud-track-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-
-
+.cloud-track-actions { display: flex; align-items: center; gap: 12px; }
 .btn-play-audio {
     background: none;
     border: none;
     color: var(--colore-primario);
-    font-size: 1.2em; /* Leggermente più grande per visibilità */
+    font-size: 1.2em; 
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centra l'icona orizzontalmente */
-    width: 30px;  /* Area cliccabile fissa */
-    height: 30px; /* Area cliccabile fissa */
-    padding: 0;   /* Rimuoviamo padding casuali */
+    justify-content: center; 
+    width: 30px;  
+    height: 30px; 
+    padding: 0;   
     transition: color 0.2s, transform 0.1s;
-    line-height: 1; /* Schiaccia gli spazi vuoti del font */
+    line-height: 1; 
 }
-
-
-.btn-play-audio .play-icon {
-    display: inline-block;
-    transform: translateY(-1px); 
-}
-
-
-.btn-play-audio:active {
-    transform: scale(0.9);
-}
+.btn-play-audio .play-icon { display: inline-block; transform: translateY(-1px); }
+.btn-play-audio:active { transform: scale(0.9); }
 
 /* ============================================================
    CHECKOUT E RIEPILOGO ORDINE
@@ -606,7 +463,6 @@
     grid-template-columns: 2fr 1fr;
     gap: 30px;
 }
-
 .checkout-label {
     font-weight: 600;
     font-size: 0.9em;
@@ -614,14 +470,11 @@
     margin-bottom: 10px;
     color: #333;
 }
-
 .checkout-hint {
     font-size: 0.9em;
     color: #555;
     margin-bottom: 10px;
 }
-
-/* Catena Audio - Il fix per le immagini giganti è qui */
 .plugin-chain-item {
     display: flex;
     align-items: center;
@@ -632,334 +485,158 @@
     margin-bottom: 10px;
     background: #fbfbfb;
 }
-
-.plugin-chain-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.plugin-chain-info img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    border-radius: 4px;
-}
-
-.plugin-title {
-    display: block;
-    font-size: 0.95em;
-    font-weight: bold;
-    color: #1a1a2e;
-}
-
-.pos-label {
-    font-size: 0.8em;
-    margin-right: 10px;
-    color: #555;
-}
-
+.plugin-chain-info { display: flex; align-items: center; gap: 15px; }
+.plugin-chain-info img { width: 50px; height: 50px; object-fit: contain; border-radius: 4px; }
+.plugin-title { display: block; font-size: 0.95em; font-weight: bold; color: #1a1a2e; }
+.pos-label { font-size: 0.8em; margin-right: 10px; color: #555; }
 .pos-input {
-    width: 60px;
-    padding: 8px;
-    text-align: center;
-    border: 1.5px solid var(--colore-primario);
-    border-radius: 4px;
-    font-weight: bold;
-    outline: none;
+    width: 60px; padding: 8px; text-align: center; border: 1.5px solid var(--colore-primario);
+    border-radius: 4px; font-weight: bold; outline: none;
 }
-
-/* Box di Selezione (Cloud vs Nuova Traccia) */
 .checkout-option-box {
-    background: #fbfbfb;
-    border: 1px solid #e0e0e0;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 15px;
+    background: #fbfbfb; border: 1px solid #e0e0e0; padding: 15px;
+    border-radius: 6px; margin-bottom: 15px;
 }
-
-.checkout-option-box.highlight {
-    background: #f4f3ff;
-    border-color: var(--colore-primario);
-}
-
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-}
-
-.radio-label strong {
-    font-size: 1em;
-    color: #333;
-}
-
+.checkout-option-box.highlight { background: #f4f3ff; border-color: var(--colore-primario); }
+.radio-label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.radio-label strong { font-size: 1em; color: #333; }
 .checkout-upload-area {
-    padding: 20px 15px;
-    border: 2px dashed #ccc;
-    border-radius: 6px;
-    text-align: center;
-    margin-top: 15px;
+    padding: 20px 15px; border: 2px dashed #ccc; border-radius: 6px;
+    text-align: center; margin-top: 15px;
 }
-
-/* Box Riepilogo Pagamento */
-.totals-box {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 25px;
-}
-
-.totals-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
+.totals-box { background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 25px; }
+.totals-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
 .totals-row.final-total {
-    font-size: 1.2em;
-    border-top: 1px solid #ddd;
-    padding-top: 10px;
-    color: var(--colore-primario);
-    font-weight: bold;
-    margin-bottom: 0;
+    font-size: 1.2em; border-top: 1px solid #ddd; padding-top: 10px;
+    color: var(--colore-primario); font-weight: bold; margin-bottom: 0;
 }
-
-/* Form inputs e Bottoni Checkout */
-.input-full {
-    width: 100%;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-
+.input-full { width: 100%; margin-bottom: 10px; margin-top: 10px; }
 .btn-checkout {
-    width: 100%;
-    height: 50px;
-    font-size: 1.1em;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%; height: 50px; font-size: 1.1em; border-radius: 30px;
+    display: flex; align-items: center; justify-content: center;
 }
-
-/* Classi Utility */
 .d-none { display: none !important; }
 .mt-30 { margin-top: 30px; }
 .mb-25 { margin-bottom: 25px; }
 
-/* Responsive per schermi piccoli */
+/* ============================================================
+   AZIONI TABELLA E RECENSIONI
+   ============================================================ */
+.table-actions {
+    display: flex; align-items: center; justify-content: center; gap: 15px;
+}
+.table-actions form, .table-actions button {
+    margin: 0; padding: 0; display: flex; align-items: center; line-height: normal;
+}
+.order-row-hidden { display: none; }
+.btn-show-more {
+    background: none; border: none; color: #6f42c1; font-weight: 600;
+    font-size: 0.88em; cursor: pointer; padding: 6px 12px; transition: color 0.2s;
+}
+.btn-show-more:hover { text-decoration: underline; color: #59319c; }
+.card-divider {
+    border: 0; height: 1px; background: #e9ecef; margin: 22px 0 10px 0;
+}
+
+.reviews-inline-list {
+    display: flex; flex-direction: column; gap: 10px; margin-top: 10px;
+}
+.review-inline-item {
+    background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px;
+    padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+}
+.review-inline-header { display: flex; align-items: center; gap: 10px; font-size: 0.88em; }
+.review-stars { color: #f39c12; font-size: 0.95em; }
+.review-date-sm { color: #888; font-size: 0.8em; }
+.review-comment-sm { margin: 4px 0 0 0; font-size: 0.85em; color: #555; word-break: break-word;}
+.btn-delete-review {
+    color: #dc3545; font-size: 1.4em; font-weight: bold; text-decoration: none;
+    padding: 0 6px; line-height: 1; border-radius: 4px; transition: background 0.2s;
+}
+.btn-delete-review:hover { background: #f8d7da; }
+
+/* ============================================================
+   RESPONSIVE / MOBILE VIEW COMPLETA
+   ============================================================ */
 @media (max-width: 768px) {
+    /* 1. Neutralizza scroll orizzontale */
+    body, main {
+        overflow-x: hidden;
+    }
+    
     .checkout-grid {
         grid-template-columns: 1fr;
     }
-}
 
-/* ============================================================
-   AZIONI TABELLA (MODIFICA / ELIMINA)
-   ============================================================ */
-.table-actions {
-    display: flex;
-    align-items: center; /* Allinea verticalmente i due testi al centro esatto */
-    justify-content: center;
-    gap: 15px; /* Spazio tra Modifica ed Elimina */
-}
-
-.table-actions form {
-    display: flex;
-    align-items: center;
-    margin: 0; /* Rimuove i margini invisibili di default del form */
-    padding: 0;
-}
-
-/* ============================================================
-   AZIONI TABELLA (MODIFICA / ELIMINA)
-   ============================================================ */
-.table-actions {
-    display: flex;
-    align-items: center; /* Centra verticalmente gli elementi */
-    justify-content: center;
-    gap: 15px; /* Spazio esatto tra Modifica ed Elimina */
-}
-
-.table-actions form {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center; /* Assicura che il bottone nel form sia in asse */
-}
-
-.table-actions button {
-    margin: 0;
-    line-height: normal; /* Evita che altezze di testo strane spingano il bottone */
-    display: flex;
-    align-items: center;
-}
-
-/* Nascondi gli ordini extra */
-.order-row-hidden {
-    display: none;
-}
-
-/* Pulsante Altri Ordini */
-.btn-show-more {
-    background: none;
-    border: none;
-    color: #6f42c1;
-    font-weight: 600;
-    font-size: 0.88em;
-    cursor: pointer;
-    padding: 6px 12px;
-    transition: color 0.2s;
-}
-
-.btn-show-more:hover {
-    text-decoration: underline;
-    color: #59319c;
-}
-
-/* Linea che separa gli ordini e le recensioni */
-.card-divider {
-    border: 0;
-    height: 1px;
-    background: #e9ecef;
-    margin: 22px 0 10px 0;
-}
-
-/* Stili sezione recensioni */
-.reviews-inline-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.review-inline-item {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 10px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.review-inline-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.88em;
-}
-
-.review-stars {
-    color: #f39c12;
-    font-size: 0.95em;
-}
-
-.review-date-sm {
-    color: #888;
-    font-size: 0.8em;
-}
-
-.review-comment-sm {
-    margin: 4px 0 0 0;
-    font-size: 0.85em;
-    color: #555;
-}
-
-.btn-delete-review {
-    color: #dc3545;
-    font-size: 1.4em;
-    font-weight: bold;
-    text-decoration: none;
-    padding: 0 6px;
-    line-height: 1;
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-
-.btn-delete-review:hover {
-    background: #f8d7da;
-}
-
-/* ============================================================
-   RESPONSIVE / MOBILE VIEW COMPLETA (Dashboard, Settings, Checkout, Liste)
-   ============================================================ */
-@media (max-width: 768px) {
-    /* Container generali della dashboard e impostazioni */
+    /* 2. Container e Grid adattati e vincolati */
     .dashboard-container,
     .dash-settings-container {
-        padding: 20px 10px;
-        margin: 20px auto;
+        padding: 15px 10px;
+        margin: 15px auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .dashboard-grid {
+        gap: 15px; /* Gap ridotto per non spingere gli elementi fuori */
+    }
+
+    /* 3. Padding Card ridotti per schermi stretti */
+    .dash-card {
+        padding: 20px 15px;
+        margin-bottom: 15px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .dash-settings-card {
-        padding: 25px 20px;
+        padding: 25px 15px;
+        box-sizing: border-box;
     }
 
-    .dash-settings-card h2 {
-        font-size: 1.5em;
-    }
+    .dash-settings-card h2 { font-size: 1.5em; }
+    .dash-form-row { flex-direction: column; gap: 15px; }
 
-    /* I campi affiancati del form (es. Nome e Cognome) vanno in colonna */
-    .dash-form-row {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    /* Tabelle della dashboard adattate per mobile */
+    /* 4. Font tabelle leggermente più piccoli */
     .dash-table th, .dash-table td {
-        padding: 10px 8px;
-        font-size: 0.88em;
+        padding: 10px 6px;
+        font-size: 0.85em;
+        white-space: nowrap;
     }
 
-    /* Elementi delle tracce cloud e metodi di pagamento */
+    /* 5. Le righe affiancate collassano in verticale se non c'è spazio */
     .cloud-track-item,
-    .payment-item {
+    .payment-item,
+    .review-inline-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-        padding: 12px;
     }
 
-    .cloud-track-info {
-        max-width: 100%;
-    }
+    .cloud-track-info, .payment-info { max-width: 100%; }
 
     .cloud-track-actions,
-    .payment-item > div:last-child {
+    .payment-item > div:last-child,
+    .review-inline-item > div:last-child {
         width: 100%;
         display: flex;
         justify-content: flex-end;
     }
-
-    /* Sezione recensioni in-line */
-    .review-inline-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .review-inline-item > div:last-child {
-        align-self: flex-end;
-    }
 }
 
 @media (max-width: 480px) {
-    /* Su smartphone molto stretti, i bottoni Salva/Annulla si mettono in colonna */
+    .dashboard-container h1 { font-size: 1.6em; }
+    .dashboard-container .subtitle { font-size: 0.9em; margin-bottom: 20px; }
+    
     .dash-buttons-row {
         flex-direction: column;
         gap: 10px;
     }
-
-    .dash-btn-save, 
-    .dash-btn-cancel {
+    .dash-btn-save, .dash-btn-cancel {
         width: 100%;
         flex: none;
     }
-
-    /* Riduce ulteriormente i padding interni delle card della dashboard */
     .dash-card {
-        padding: 20px 15px;
+        padding: 15px 12px;
     }
 }

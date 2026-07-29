@@ -266,29 +266,35 @@ button{
 @media (max-width: 768px) {
     .nav-right, 
     .nav-left .nav-catalog,
+    .nav-professionisti,
     .desktop-only { 
         display: none !important; 
     }
 
     .navbar { 
-        padding: 10px 20px; 
-        flex-wrap: wrap; 
+        padding: 10px 15px; 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap; /* Impedisce che la barra vada a capo in modo disordinato */
+        gap: 10px;
     }
 
     .nav-left {
-        flex: 1; 
+        flex: 0 0 auto; 
     }
 
+    /* La barra di ricerca si posiziona al centro occupant lo spazio disponibile */
     .nav-center { 
-        width: 100%; 
+        flex: 1; 
         max-width: 100%; 
-        margin: 15px 0 5px 0; 
-        order: 3; 
+        margin: 0; 
+        order: 2; 
     }
     
     .search-bar { 
-        font-size: 0.9em; 
-        padding: 10px 15px; 
+        font-size: 0.85em; 
+        padding: 8px 12px; 
     }
 
     .hamburger-menu {
@@ -297,8 +303,11 @@ button{
         gap: 5px;
         cursor: pointer;
         z-index: 1001; 
-        margin-top: 5px; 
+        margin-top: 0;
+        flex: 0 0 auto;
+        order: 3;
     }
+    
     .hamburger-menu span {
         width: 25px;
         height: 3px;
@@ -331,6 +340,7 @@ button{
         font-weight: 600; 
         font-size: 1.1em;
     }
+    
     .mobile-divider {
         border: 0;
         border-top: 1px solid #eee;
@@ -354,7 +364,6 @@ button{
     .hamburger-menu.active span:nth-child(2) { opacity: 0; }
     .hamburger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
 }
-
 /* ============================================================
    CONTENITORE CARRELLO E BADGE DI NOTIFICA
    ============================================================ */

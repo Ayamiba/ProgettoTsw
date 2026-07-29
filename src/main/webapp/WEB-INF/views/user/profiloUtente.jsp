@@ -181,20 +181,21 @@
                     </div>
                 </div>
 
-<div class="dash-card card-user">
+				<div class="dash-card card-user">
                     <h3>Storico Ordini</h3>
-                    <table class="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Codice</th>
-                                <th>Data</th>
-                                <th>Stato</th>
-                                <th>Totale</th>
-                                <th style="text-align: center;">Download</th>
-                                <th style="text-align: center;">PDF</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="dash-table-wrapper">
+                    	<table class="dash-table">
+                        	<thead>
+                            	<tr>
+                                	<th>Codice</th>
+                                	<th>Data</th>
+                                	<th>Stato</th>
+                                	<th>Totale</th>
+                                	<th style="text-align: center;">Download</th>
+                                	<th style="text-align: center;">PDF</th>
+                            	</tr>
+                        	</thead>
+                        	<tbody>
                             <%
                                 OrdineDAO ordineDAO = new OrdineDAO();
                                 List<OrdineBean> ordiniUtente = ordineDAO.doRetrieveByUtente(utente.getEmail());
@@ -238,6 +239,7 @@
                                } %>
                         </tbody>
                     </table>
+                    </div>
 
                     <% if (ordiniUtente != null && ordiniUtente.size() > 3) { %>
                         <div style="text-align: center; margin-top: 10px;">

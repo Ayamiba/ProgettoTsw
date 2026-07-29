@@ -12,62 +12,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Ordini - Sændwave Admin</title>
+    
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
+    <!-- Aggiunto admin.css per ereditare le funzioni mobile (es. btn-back e tabelle a card) -->
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admin.css">
 </head>
 <body>
 
     <jsp:include page="/WEB-INF/views/components/navbar.jsp" />
 
     <main class="dashboard-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        
+        <!-- Intestazione pulita e responsiva tramite admin.css -->
+        <div class="admin-page-header">
             <div>
                 <h1 style="color: #d9534f; margin-bottom: 5px;">Archivio Ordini Globale</h1>
                 <p class="subtitle" style="margin: 0;">Visualizza e gestisci l'intero storico degli acquisti.</p>
             </div>
-            <a href="ProfiloServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
+            <a href="ProfiloServlet" class="btn-back">&larr; Torna alla Dashboard</a>
         </div>
 
         <div class="dash-card card-admin">
-            <table class="dash-table">
-                <thead>
-                    <tr>
-                        <th>ID Ordine</th>
-                        <th>Data Acquisto</th>
-                        <th>Stato Lavorazione</th>
-                        <th>Totale Pagato</th>
-                        <th style="text-align: center;">Azioni</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (listaOrdini == null || listaOrdini.isEmpty()) { %>
+            
+            <!-- Wrapper protettivo per lo scorrimento mobile in caso di emergenza -->
+            <div class="dash-table-wrapper">
+                <table class="dash-table">
+                    <thead>
                         <tr>
-                            <td colspan="5" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                Nessun ordine nel database.
-                            </td>
+                            <th>ID Ordine</th>
+                            <th>Data Acquisto</th>
+                            <th>Stato Lavorazione</th>
+                            <th>Totale Pagato</th>
+                            <th style="text-align: center;">Azioni</th>
                         </tr>
-                    <% } else { 
-                        for(OrdineBean ordine : listaOrdini) { 
-                            String statoClasse = "pending";
-                            if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
-                            else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
-                    %>
-                        <tr>
-                            <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
-                            <td><%= ordine.getDataOrdine() %></td>
-                            <td>
-                                <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
-                            </td>
-                            <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
-                            <td style="text-align: center;">
-                                <!-- Questo bottone servirà in futuro per aprire il dettaglio dell'ordine e cambiare lo stato -->
-                                <a href="DettaglioOrdineAdminServlet?id=<%= ordine.getIdOrdine() %>" class="btn-text" style="color: #4134E7;">Gestisci</a>
-                            </td>
-                        </tr>
-                    <%  } 
-                       } %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% if (listaOrdini == null || listaOrdini.isEmpty()) { %>
+                            <tr>
+                                <td colspan="5" class="empty-table-msg">
+                                    Nessun ordine nel database.
+                                </td>
+                            </tr>
+                        <% } else { 
+                            for(OrdineBean ordine : listaOrdini) { 
+                                String statoClasse = "pending";
+                                if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                                else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+                        %>
+                            <tr>
+                                <!-- I data-label attivano la trasformazione in card su mobile -->
+                                <td data-label="ID Ordine" class="td-id">#<%= ordine.getIdOrdine() %></td>
+                                <td data-label="Data Acquisto"><%= ordine.getDataOrdine() %></td>
+                                <td data-label="Stato Lavorazione">
+                                    <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
+                                </td>
+                                <td data-label="Totale Pagato" class="td-bold">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                                <td data-label="Azioni" style="text-align: center;">
+                                    <!-- Questo bottone usa la classe testuale unificata -->
+                                    <a href="DettaglioOrdineAdminServlet?id=<%= ordine.getIdOrdine() %>" class="btn-text-edit">Gestisci</a>
+                                </td>
+                            </tr>
+                        <%  } 
+                           } %>
+                    </tbody>
+                </table>
+            </div> <!-- Fine dash-table-wrapper -->
+            
         </div>
     </main>
 

@@ -18,7 +18,7 @@
             <img src="<%= request.getContextPath() %>/img/SWsoloLogo.png" alt="Logo Sændwave" onerror="this.onerror=null; this.src='<%= request.getContextPath() %>/img/placeholder.png';">
         </a>
         
-        <div class="nav-catalog">
+        <div class="nav-catalog desktop-only">
             <a href="CatalogoServlet">Catalogo &#9662;</a>
             <div class="dropdown">
                 <a href="CatalogoServlet?categoria=Effetto">Effetti</a>
@@ -27,7 +27,8 @@
             </div>
         </div>
         
-        <div class="nav-professionisti">
+        <!-- Aggiunta classe desktop-only qui -->
+        <div class="nav-professionisti desktop-only">
             <a href="NostriProfessionistiServlet">I nostri Professionisti</a>
         </div>
     </div>

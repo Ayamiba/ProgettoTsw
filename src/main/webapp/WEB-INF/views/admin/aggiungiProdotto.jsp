@@ -12,10 +12,13 @@
     
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
+    <!-- Aggiunto admin.css per la classe btn-back coerente con il resto -->
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admin.css">
     
     <style>
         .form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
-        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; }
+        /* Aggiunto box-sizing: border-box per evitare che l'input sbordi dal contenitore su mobile */
+        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
         textarea.form-input { resize: vertical; min-height: 120px; }
     </style>
 </head>
@@ -25,12 +28,14 @@
 
     <main class="dashboard-container">
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <!-- Aggiunto flex-wrap e gap per gestire il layout su schermi stretti (il bottone andrà a capo) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
             <div>
                 <h1 style="color: #d9534f; margin-bottom: 5px;">Inserisci Nuovo Prodotto</h1>
                 <p class="subtitle" style="margin: 0;">Aggiungi un plugin o tool alla vetrina del catalogo.</p>
             </div>
-            <a href="ProfiloServlet" class="dash-btn-cancel" style="text-decoration: none;">&larr; Torna alla Dashboard</a>
+            <!-- Cambiata la classe in btn-back -->
+            <a href="ProfiloServlet" class="btn-back">&larr; Torna alla Dashboard</a>
         </div>
 
         <% if(request.getParameter("messaggio") != null) { %>
@@ -65,7 +70,7 @@
                         </div>
 
                         <div style="text-align: right; margin-top: 20px;">
-                            <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px;">Pubblica nel Catalogo</button>
+                            <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px; width: 100%;">Pubblica nel Catalogo</button>
                         </div>
                     </form>
                 </div>

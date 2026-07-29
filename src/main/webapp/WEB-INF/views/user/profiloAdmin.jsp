@@ -26,7 +26,8 @@
         
         <div class="dashboard-grid">
             
-            <div style="display: flex; flex-direction: column; gap: 30px;">
+            <!-- PRIMA COLONNA: Usiamo la classe CSS standard dash-col -->
+            <div class="dash-col">
                 
                 <div class="dash-card card-admin">
                     <h3>Informazioni Personali</h3>
@@ -74,7 +75,8 @@
 
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 30px;">
+            <!-- SECONDA COLONNA: Usiamo la classe CSS standard dash-col -->
+            <div class="dash-col">
                 
                 <div class="dash-card card-admin">
                     <h3>Gestione Catalogo</h3>
@@ -90,56 +92,58 @@
                     <h3>Registro Ordini Globale (Ultimi 5)</h3>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Visualizza gli ordini più recenti effettuati sulla piattaforma.</p>
                     
-                    <table class="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Cod.</th>
-                                <th>Data</th>
-                                <th>Stato</th>
-                                <th>Totale</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                OrdineDAO ordineDAO = new OrdineDAO();
-                                List<OrdineBean> tuttiOrdini = ordineDAO.doRetrieveAll(); // Recupera tutti gli ordini
-                                
-                                if (tuttiOrdini == null || tuttiOrdini.isEmpty()) {
-                            %>
+                    <!-- AGGIUNTO WRAPPER RESPONSIVE PER LA TABELLA -->
+                    <div class="dash-table-wrapper">
+                        <table class="dash-table">
+                            <thead>
                                 <tr>
-                                    <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
-                                        Nessun ordine attualmente registrato nel sistema.
-                                    </td>
+                                    <th>Cod.</th>
+                                    <th>Data</th>
+                                    <th>Stato</th>
+                                    <th>Totale</th>
                                 </tr>
-                            <%  } else { 
-                                    int count = 0;
-                                    for(OrdineBean ordine : tuttiOrdini) { 
-                                        if(count >= 5) break; // Mostra solo gli ultimi 5 nella dashboard principale
-                                        count++;
-                                        
-                                        // Assegna il colore del badge in base allo stato
-                                        String statoClasse = "pending";
-                                        if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
-                                        else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
-                            %>
-                                <tr>
-                                    <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
-                                    <td><%= ordine.getDataOrdine() %></td>
-                                    <td>
-                                        <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
-                                    </td>
-                                    <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
-                                </tr>
-                            <%      } 
-                                } %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <%
+                                    OrdineDAO ordineDAO = new OrdineDAO();
+                                    List<OrdineBean> tuttiOrdini = ordineDAO.doRetrieveAll();
+                                    
+                                    if (tuttiOrdini == null || tuttiOrdini.isEmpty()) {
+                                %>
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; color: #aaa; font-style: italic; padding: 25px 0;">
+                                            Nessun ordine attualmente registrato nel sistema.
+                                        </td>
+                                    </tr>
+                                <%  } else { 
+                                        int count = 0;
+                                        for(OrdineBean ordine : tuttiOrdini) { 
+                                            if(count >= 5) break;
+                                            count++;
+                                            
+                                            String statoClasse = "pending";
+                                            if ("Completato".equalsIgnoreCase(ordine.getStato())) statoClasse = "ready";
+                                            else if ("In Lavorazione".equalsIgnoreCase(ordine.getStato())) statoClasse = "working";
+                                %>
+                                    <tr>
+                                        <td style="font-weight: bold;">#<%= ordine.getIdOrdine() %></td>
+                                        <td><%= ordine.getDataOrdine() %></td>
+                                        <td>
+                                            <span class="status-badge <%= statoClasse %>"><%= ordine.getStato() %></span>
+                                        </td>
+                                        <td style="font-weight: 600;">€ <%= String.format("%.2f", ordine.getTotale()) %></td>
+                                    </tr>
+                                <%      } 
+                                    } %>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <div style="margin-top: 15px; text-align: right;">
-    					<a href="GestioneOrdiniServlet" class="dash-link-action" style="color: #d9534f; display: inline-flex; justify-content: flex-end;">
-        					Vedi storico completo &rarr;
-    					</a>
-					</div>
+                        <a href="GestioneOrdiniServlet" class="dash-link-action" style="color: #d9534f; display: inline-flex; justify-content: flex-end;">
+                            Vedi storico completo &rarr;
+                        </a>
+                    </div>
                 </div>
 
             </div>
