@@ -46,7 +46,9 @@ CREATE TABLE Prodotto (
                           nome VARCHAR(100) NOT NULL,
                           prezzo FLOAT NOT NULL,
                           descrizione TEXT NOT NULL,
-                          immagine VARCHAR(255) NOT NULL
+                          immagine VARCHAR(255) NOT NULL,
+                          demo_dry VARCHAR(255),
+                          demo_wet VARCHAR(255)
 );
 
 -- tabella Traccia
