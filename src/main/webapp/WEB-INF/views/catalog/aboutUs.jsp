@@ -3,6 +3,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Siamo - Sændwave</title>
     <!-- CSS Generale del sito -->
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
