@@ -1,0 +1,133 @@
+/* Hero Section (Stesso stile di About Us) */
+.about-hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: #D5C6B2;
+    color: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.about-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #4134E7;
+}
+
+.about-hero p {
+    font-size: 1.2rem;
+    color: #6A32E8;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Griglia Contatti */
+.contatti-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+/* Card Contatti (Stile coerente con i valori di About Us) */
+.contatti-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    border-left: 5px solid #6366f1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.contatti-card h3 {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.contatti-card p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Badge decorativo in alto a destra della card */
+.card-badge {
+    align-self: flex-start;
+    background-color: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.card-badge.admin-badge {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+/* Styling per le Email */
+.email-box {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.email-box a, .admin-item a {
+    color: #6366f1;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    word-break: break-all;
+}
+
+.email-box a:hover, .admin-item a:hover {
+    color: #4f46e5;
+    text-decoration: underline;
+}
+
+/* Lista Admin */
+.admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
+}
+
+.admin-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+}
+
+.admin-item span {
+    font-weight: bold;
+    color: #334155;
+    font-size: 0.85rem;
+}
+
+/* Messaggio di successo */
+.alert-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    text-align: center;
+    border: 1px solid #10b981;
+    font-weight: bold;
+}
+
+/* Responsive per schermi piccoli */
+@media (max-width: 768px) {
+    .contatti-grid {
+        grid-template-columns: 1fr;
+    }
+}
