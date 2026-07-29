@@ -34,11 +34,31 @@
             <div class="product-image-box">
                 <img src="<%= prodotto.getImmagine() %>" alt="<%= prodotto.getNome() %>" onerror="this.src='img/placeholder.png'">
                 
-                <h4 style="margin-top: 20px; color: var(--colore-secondario);">Ascolta la Demo</h4>
-                <audio controls class="audio-demo">
-                    <source src="uploads/demo_<%= prodotto.getIdProdotto() %>.mp3" type="audio/mpeg">
-                    Il tuo browser non supporta l'elemento audio.
-                </audio>
+               <div class="audio-demos-container">
+    <h4 style="color: var(--colore-secondario); margin-bottom: 15px;">Ascolta le Demo</h4>
+    
+    <!-- Player 1: Senza Effetto (Dry) -->
+    <% if (prodotto.getDemoDry() != null && !prodotto.getDemoDry().trim().isEmpty()) { %>
+        <div class="audio-player-wrapper">
+            <span class="audio-label">Senza Effetto (Dry)</span>
+            <audio controls class="audio-demo">
+                <source src="<%= request.getContextPath() %>/<%= prodotto.getDemoDry() %>" type="audio/mpeg">
+                Il tuo browser non supporta l'elemento audio.
+            </audio>
+        </div>
+    <% } %>
+
+    <!-- Player 2: Con Effetto (Wet) -->
+    <% if (prodotto.getDemoWet() != null && !prodotto.getDemoWet().trim().isEmpty()) { %>
+        <div class="audio-player-wrapper">
+            <span class="audio-label">Con Effetto (Wet)</span>
+            <audio controls class="audio-demo">
+                <source src="<%= request.getContextPath() %>/<%= prodotto.getDemoWet() %>" type="audio/mpeg">
+                Il tuo browser non supporta l'elemento audio.
+            </audio>
+        </div>
+    <% } %>
+</div>
             </div>
 
             <div class="product-info-box">

@@ -85,7 +85,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
         String descrizione = request.getParameter("descrizione");
         float prezzo = Float.parseFloat(request.getParameter("prezzo"));
 
-        // 2. Gestiamo l'immagine
+        // 2. Gestiamo l'immagine di copertina
         Part filePart = request.getPart("foto");
         String nomeOriginale = filePart.getSubmittedFileName();
         String nomeImmagineUnivoco = "default.jpg";
@@ -106,7 +106,6 @@ public class AggiungiProdottoServlet extends HttpServlet {
             File serverFile = new File(serverDir, nomeImmagineUnivoco);
 
             try (InputStream input = filePart.getInputStream()) {
-                // Copia nel server temporaneo
                 java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 
                 // B. Nel Workspace (Se il path è stato caricato correttamente dal file properties)
@@ -115,14 +114,64 @@ public class AggiungiProdottoServlet extends HttpServlet {
                     if (!workspaceDir.exists()) workspaceDir.mkdirs();
                     File workspaceFile = new File(workspaceDir, nomeImmagineUnivoco);
                     java.nio.file.Files.copy(serverFile.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                    System.out.println("Immagine salvata nel Workspace: " + workspaceFile.getAbsolutePath());
-                } else {
-                    System.out.println("Attenzione: workspacePath nullo. Salvato solo su Tomcat.");
                 }
-                
-                System.out.println("✅ Prodotto aggiunto con successo!");
             } catch (IOException e) {
-                System.out.println("❌ Errore durante il salvataggio dell'immagine.");
+                e.printStackTrace();
+                throw e;
+            }
+        }
+
+        // 2b. Gestiamo la traccia audio Dry (Senza effetto)
+        Part filePartDry = request.getPart("demoDry");
+        String nomeOriginaleDry = (filePartDry != null) ? filePartDry.getSubmittedFileName() : null;
+        String pathDemoDry = null;
+
+        if (nomeOriginaleDry != null && !nomeOriginaleDry.isEmpty()) {
+            String estensioneDry = "";
+            int indexDry = nomeOriginaleDry.lastIndexOf('.');
+            if (indexDry > 0) {
+                estensioneDry = nomeOriginaleDry.substring(indexDry);
+                nomeOriginaleDry = nomeOriginaleDry.substring(0, indexDry).replaceAll("\\s+", "_");
+            }
+            String nomeDryUnivoco = "dry_" + System.currentTimeMillis() + "_" + nomeOriginaleDry + estensioneDry;
+
+            String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+            File uploadDir = new File(serverPathUploads);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+            File serverFileDry = new File(uploadDir, nomeDryUnivoco);
+
+            try (InputStream input = filePartDry.getInputStream()) {
+                java.nio.file.Files.copy(input, serverFileDry.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                pathDemoDry = "uploads/" + nomeDryUnivoco;
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        }
+
+        // 2c. Gestiamo la traccia audio Wet (Con effetto)
+        Part filePartWet = request.getPart("demoWet");
+        String nomeOriginaleWet = (filePartWet != null) ? filePartWet.getSubmittedFileName() : null;
+        String pathDemoWet = null;
+
+        if (nomeOriginaleWet != null && !nomeOriginaleWet.isEmpty()) {
+            String estensioneWet = "";
+            int indexWet = nomeOriginaleWet.lastIndexOf('.');
+            if (indexWet > 0) {
+                estensioneWet = nomeOriginaleWet.substring(indexWet);
+                nomeOriginaleWet = nomeOriginaleWet.substring(0, indexWet).replaceAll("\\s+", "_");
+            }
+            String nomeWetUnivoco = "wet_" + System.currentTimeMillis() + "_" + nomeOriginaleWet + estensioneWet;
+
+            String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+            File uploadDir = new File(serverPathUploads);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+            File serverFileWet = new File(uploadDir, nomeWetUnivoco);
+
+            try (InputStream input = filePartWet.getInputStream()) {
+                java.nio.file.Files.copy(input, serverFileWet.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                pathDemoWet = "uploads/" + nomeWetUnivoco;
+            } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
             }
@@ -134,9 +183,12 @@ public class AggiungiProdottoServlet extends HttpServlet {
         nuovoProdotto.setDescrizione(descrizione);
         nuovoProdotto.setPrezzo(prezzo);
         nuovoProdotto.setImmagine("img/prodotti/" + nomeImmagineUnivoco); 
+        nuovoProdotto.setDemoDry(pathDemoDry);
+        nuovoProdotto.setDemoWet(pathDemoWet);
 
         try {
             prodottoDAO.doSave(nuovoProdotto);
+            System.out.println("✅ Prodotto aggiunto con successo!");
             response.sendRedirect("AggiungiProdottoServlet?messaggio=Prodotto aggiunto al catalogo con successo!");
         } catch (SQLException e) {
             e.printStackTrace();

@@ -104,8 +104,9 @@ public class ModificaProdottoServlet extends HttpServlet {
         String descrizione = request.getParameter("descrizione");
         float prezzo = Float.parseFloat(request.getParameter("prezzo"));
     
+        // 1. Gestione Immagine
         Part filePart = request.getPart("foto");
-        String nomeOriginale = filePart.getSubmittedFileName();
+        String nomeOriginale = (filePart != null) ? filePart.getSubmittedFileName() : null;
         String nomeImmagineUnivoco = null;
 
         if (nomeOriginale != null && !nomeOriginale.isEmpty()) {
@@ -116,6 +117,36 @@ public class ModificaProdottoServlet extends HttpServlet {
                 nomeOriginale = nomeOriginale.substring(0, index).replaceAll("\\s+", "_"); 
             }
             nomeImmagineUnivoco = System.currentTimeMillis() + "_" + nomeOriginale + estensione;
+        }
+
+        // 2. Gestione Audio Dry (Senza effetto)
+        Part filePartDry = request.getPart("demoDry");
+        String nomeOriginaleDry = (filePartDry != null) ? filePartDry.getSubmittedFileName() : null;
+        String nomeDryUnivoco = null;
+
+        if (nomeOriginaleDry != null && !nomeOriginaleDry.isEmpty()) {
+            String estensioneDry = "";
+            int indexDry = nomeOriginaleDry.lastIndexOf('.');
+            if (indexDry > 0) {
+                estensioneDry = nomeOriginaleDry.substring(indexDry);
+                nomeOriginaleDry = nomeOriginaleDry.substring(0, indexDry).replaceAll("\\s+", "_");
+            }
+            nomeDryUnivoco = "dry_" + System.currentTimeMillis() + "_" + nomeOriginaleDry + estensioneDry;
+        }
+
+        // 3. Gestione Audio Wet (Con effetto)
+        Part filePartWet = request.getPart("demoWet");
+        String nomeOriginaleWet = (filePartWet != null) ? filePartWet.getSubmittedFileName() : null;
+        String nomeWetUnivoco = null;
+
+        if (nomeOriginaleWet != null && !nomeOriginaleWet.isEmpty()) {
+            String estensioneWet = "";
+            int indexWet = nomeOriginaleWet.lastIndexOf('.');
+            if (indexWet > 0) {
+                estensioneWet = nomeOriginaleWet.substring(indexWet);
+                nomeOriginaleWet = nomeOriginaleWet.substring(0, indexWet).replaceAll("\\s+", "_");
+            }
+            nomeWetUnivoco = "wet_" + System.currentTimeMillis() + "_" + nomeOriginaleWet + estensioneWet;
         }
 
         try {
@@ -131,18 +162,16 @@ public class ModificaProdottoServlet extends HttpServlet {
             prodottoAggiornato.setDescrizione(descrizione);
             prodottoAggiornato.setPrezzo(prezzo);
 
-            // GESTIONE IMMAGINE
+            // GESTIONE SALVATAGGIO IMMAGINE
             if (nomeImmagineUnivoco != null) {
                 String serverPath = request.getServletContext().getRealPath("/img/prodotti");
                 File serverDir = new File(serverPath);
                 if (!serverDir.exists()) serverDir.mkdirs();
                 File serverFile = new File(serverDir, nomeImmagineUnivoco);
 
-                try (java.io.InputStream input = filePart.getInputStream()) {
-                    // Salva nel Server
+                try (InputStream input = filePart.getInputStream()) {
                     java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                     
-                    // Salva nel Workspace
                     if (workspacePath != null && !workspacePath.trim().isEmpty()) {
                         File workspaceDir = new File(workspacePath);
                         if (!workspaceDir.exists()) workspaceDir.mkdirs();
@@ -150,15 +179,42 @@ public class ModificaProdottoServlet extends HttpServlet {
                         java.nio.file.Files.copy(serverFile.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                     }
                 }
-                // Aggiorniamo il path immagine
                 prodottoAggiornato.setImmagine("img/prodotti/" + nomeImmagineUnivoco);
             } else {
-                // L'admin NON ha caricato nuove foto: manteniamo la vecchia!
                 prodottoAggiornato.setImmagine(prodottoEsistente.getImmagine());
             }
 
+            // GESTIONE SALVATAGGIO AUDIO DRY
+            if (nomeDryUnivoco != null) {
+                String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+                File uploadDir = new File(serverPathUploads);
+                if (!uploadDir.exists()) uploadDir.mkdirs();
+                File serverFileDry = new File(uploadDir, nomeDryUnivoco);
+
+                try (InputStream input = filePartDry.getInputStream()) {
+                    java.nio.file.Files.copy(input, serverFileDry.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+                prodottoAggiornato.setDemoDry("uploads/" + nomeDryUnivoco);
+            } else {
+                prodottoAggiornato.setDemoDry(prodottoEsistente.getDemoDry());
+            }
+
+            // GESTIONE SALVATAGGIO AUDIO WET
+            if (nomeWetUnivoco != null) {
+                String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+                File uploadDir = new File(serverPathUploads);
+                if (!uploadDir.exists()) uploadDir.mkdirs();
+                File serverFileWet = new File(uploadDir, nomeWetUnivoco);
+
+                try (InputStream input = filePartWet.getInputStream()) {
+                    java.nio.file.Files.copy(input, serverFileWet.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+                prodottoAggiornato.setDemoWet("uploads/" + nomeWetUnivoco);
+            } else {
+                prodottoAggiornato.setDemoWet(prodottoEsistente.getDemoWet());
+            }
+
             prodottoDAO.doUpdate(prodottoAggiornato);
-            // Rimandiamo alla pagina di modifica con l'ID per far vedere le modifiche apportate
             response.sendRedirect("ModificaProdottoServlet?id=" + idProdotto + "&messaggio=Prodotto aggiornato con successo!");
 
         } catch (SQLException e) {

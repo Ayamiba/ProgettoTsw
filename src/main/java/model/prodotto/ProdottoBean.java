@@ -10,15 +10,19 @@ public class ProdottoBean implements Serializable {
     private float prezzo;
     private String descrizione;
     private String immagine;
+    private String demoDry;
+    private String demoWet;
 
     public ProdottoBean() {}
 
-    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione, String immagine) {
+    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione, String immagine, String demoDry, String demoWet) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.prezzo = prezzo;
         this.descrizione = descrizione;
         this.immagine=immagine;
+        this.demoDry=demoDry;
+        this.demoWet=demoWet;
     }
 
     public int getIdProdotto() { 
@@ -59,6 +63,22 @@ public class ProdottoBean implements Serializable {
 
     public void setImmagine(String immagine) {
         this.immagine = immagine;
+    }
+    
+    public String getDemoDry() {
+        return demoDry;
+    }
+
+    public void setDemoDry(String demoDry) {
+        this.demoDry = demoDry;
+    }
+
+    public String getDemoWet() {
+        return demoWet;
+    }
+
+    public void setDemoWet(String demoWet) {
+        this.demoWet = demoWet;
     }
 
     @Override

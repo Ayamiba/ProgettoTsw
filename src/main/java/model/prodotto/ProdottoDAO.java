@@ -23,7 +23,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         ResultSet resultSet = null;
         ProdottoBean prodotto = null;
 
-        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine FROM Prodotto WHERE ID_prodotto = ?";
+        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet FROM Prodotto WHERE ID_prodotto = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -39,6 +39,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -57,7 +59,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine FROM Prodotto";
+        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet FROM Prodotto";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -71,6 +73,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 prodotti.add(prodotto);
             }
         } finally {
@@ -124,6 +128,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 
                 prodotti.add(prodotto);
             }
@@ -160,6 +166,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
     			prodotto.setDescrizione(resultSet.getString("descrizione"));
     			prodotto.setImmagine(resultSet.getString("immagine"));
+    			prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
     			prodotti.add(prodotto);
             }
         } finally {
@@ -214,6 +222,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 prodotti.add(prodotto);
             }
         } finally {
@@ -248,6 +258,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
     			prodotto.setDescrizione(resultSet.getString("descrizione"));
     			prodotto.setImmagine(resultSet.getString("immagine"));
+    			prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -282,6 +294,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 prodotti.add(prodotto);
             }
         } finally {
@@ -301,7 +315,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         java.sql.ResultSet resultSet = null;
         List<ProdottoBean> prodotti = new java.util.ArrayList<>();
 
-        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
+        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine, p.demo_dry, p.demo_wet " +
                        "FROM Prodotto p " +
                        "JOIN Contenuto c ON p.ID_prodotto = c.FK_prodotto " +
                        "WHERE c.FK_ordine = ? " +
@@ -321,6 +335,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 
                 prodotti.add(prodotto);
             }
@@ -343,7 +359,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
 
         // Query base con DISTINCT e le tre JOIN per navigare il database
         StringBuilder query = new StringBuilder(
-            "SELECT DISTINCT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
+            "SELECT DISTINCT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine, p.demo_dry, p.demo_wet " +
             "FROM Prodotto p " +
             "LEFT JOIN Tipologia t ON p.ID_prodotto = t.FK_prodotto " +
             "LEFT JOIN Categoria c ON t.FK_categoria = c.nome " +
@@ -395,6 +411,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 prodotti.add(prodotto);
             }
         } finally {
@@ -431,6 +449,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setPrezzo(resultSet.getFloat("prezzo"));
                 prodotto.setDescrizione(resultSet.getString("descrizione"));
                 prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setDemoWet(resultSet.getString("demo_wet"));
                 prodotti.add(prodotto);
             }
         } finally {
@@ -446,7 +466,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO Prodotto (ID_prodotto, nome, prezzo, descrizione, immagine) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Prodotto (ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -457,6 +477,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             statement.setFloat(3, prodotto.getPrezzo());
             statement.setString(4, prodotto.getDescrizione());
             statement.setString(5, prodotto.getImmagine());
+            statement.setString(6, prodotto.getDemoDry());
+            statement.setString(7, prodotto.getDemoWet());
 
             statement.executeUpdate();
         } finally {
@@ -471,7 +493,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE Prodotto SET nome = ?, prezzo = ?, descrizione = ?, immagine = ? WHERE ID_prodotto = ?";
+        String query = "UPDATE Prodotto SET nome = ?, prezzo = ?, descrizione = ?, immagine = ?, demo_dry = ?, demo_wet = ? WHERE ID_prodotto = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -481,7 +503,10 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             statement.setFloat(2, prodotto.getPrezzo());
             statement.setString(3, prodotto.getDescrizione());
             statement.setString(4, prodotto.getImmagine());
-            statement.setInt(5, prodotto.getIdProdotto());
+            statement.setString(6, prodotto.getDemoWet());
+            statement.setString(5, prodotto.getDemoDry());
+            statement.setInt(7, prodotto.getIdProdotto());
+            
 
             statement.executeUpdate();
         } finally {
