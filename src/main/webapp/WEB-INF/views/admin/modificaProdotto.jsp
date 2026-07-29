@@ -20,9 +20,7 @@
     
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
-   
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admin.css">
-    
     
 </head>
 <body>
@@ -32,13 +30,13 @@
     <main class="dashboard-container">
         
         <!-- Intestazione resa responsiva con flex-wrap e gap -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; width: 100%; box-sizing: border-box;">
-    <div style="flex: 1 1 auto; min-width: 0; word-break: break-word; overflow-wrap: break-word;">
-        <h1 style="color: #d9534f; margin-bottom: 5px;">Modifica: <%= prodotto.getNome() %></h1>
-        <p class="subtitle" style="margin: 0;">Aggiorna le specifiche, il prezzo o la grafica del prodotto.</p>
-    </div>
-    <a href="ProfiloServlet" class="btn-back" style="flex-shrink: 0;">&larr; Torna alla Dashboard</a>
-</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; width: 100%; box-sizing: border-box;">
+            <div style="flex: 1 1 auto; min-width: 0; word-break: break-word; overflow-wrap: break-word;">
+                <h1 style="color: #d9534f; margin-bottom: 5px;">Modifica: <%= prodotto.getNome() %></h1>
+                <p class="subtitle" style="margin: 0;">Aggiorna le specifiche, il prezzo, la grafica o le demo audio del prodotto.</p>
+            </div>
+            <a href="ProfiloServlet" class="btn-back" style="flex-shrink: 0;">&larr; Torna alla Dashboard</a>
+        </div>
 
         <% if(request.getParameter("messaggio") != null) { %>
             <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
@@ -62,7 +60,6 @@
 
                         <div class="form-group">
                             <label for="prezzo">Prezzo di Vendita (€)</label>
-                            <%-- Sostituiamo la virgola con il punto per evitare conflitti HTML --%>
                             <input type="number" id="prezzo" name="prezzo" class="form-input" step="0.01" min="0" value="<%= String.valueOf(prodotto.getPrezzo()).replace(",", ".") %>" required>
                         </div>
 
@@ -78,14 +75,34 @@
                                    String imgPath = prodotto.getImmagine();
                                    if(imgPath == null || imgPath.isEmpty()) imgPath = "img/placeholder.png";
                                 %>
-                                <img src="<%= request.getContextPath() %>/<%= imgPath %>" class="current-image-preview" alt="Attuale">
+                                <img src="<%= request.getContextPath() %>/<%= imgPath %>" class="current-image-preview" alt="Attuale" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
                                 <span style="font-size: 0.85em; color: #666;">Immagine in uso</span>
                             </div>
-                            <!-- Rimosso il tag required -->
                             <input type="file" id="foto" name="foto" class="form-input" accept="image/*" style="padding: 7px;">
                         </div>
 
-                        <!-- Aggiunto width 100% al bottone -->
+                        <!-- AGGIUNTO: Aggiorna Traccia Audio Senza Effetto (Dry) -->
+                        <div class="form-group">
+                            <label for="demoDry">Traccia Audio Senza Effetto (Dry) - WAV</label>
+                            <% if (prodotto.getDemoDry() != null && !prodotto.getDemoDry().isEmpty()) { %>
+                                <div style="font-size: 0.85em; color: #666; margin-bottom: 5px;">
+                                    In uso: <code><%= prodotto.getDemoDry() %></code>
+                                </div>
+                            <% } %>
+                            <input type="file" id="demoDry" name="demoDry" class="form-input" accept=".wav, audio/wav" style="padding: 7px;">
+                        </div>
+
+                        <!-- AGGIUNTO: Aggiorna Traccia Audio Con Effetto (Wet) -->
+                        <div class="form-group">
+                            <label for="demoWet">Traccia Audio Con Effetto (Wet) - WAV</label>
+                            <% if (prodotto.getDemoWet() != null && !prodotto.getDemoWet().isEmpty()) { %>
+                                <div style="font-size: 0.85em; color: #666; margin-bottom: 5px;">
+                                    In uso: <code><%= prodotto.getDemoWet() %></code>
+                                </div>
+                            <% } %>
+                            <input type="file" id="demoWet" name="demoWet" class="form-input" accept=".wav, audio/wav" style="padding: 7px;">
+                        </div>
+
                         <div style="text-align: right; margin-top: 20px;">
                             <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px; width: 100%;">Salva Modifiche</button>
                         </div>
@@ -98,8 +115,8 @@
                     <h3 style="color: #4134E7;">Info di Sistema</h3>
                     <ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-top: 15px;">
                         <li><strong>ID Database:</strong> #<%= prodotto.getIdProdotto() %></li>
-                        <li>Se non carichi una nuova immagine, il sistema manterrà intatta l'immagine precedente senza generare errori.</li>
-                        <li>Le modifiche avranno effetto immediato su tutto il catalogo e sui carrelli degli utenti attivi.</li>
+                        <li>Se lasci vuoti i campi file (copertina o demo audio), il sistema manterrà intatti i file precedenti senza generare errori.</li>
+                        <li>Le modifiche avranno effetto immediato sulla pagina di dettaglio del prodotto e sui player audio pubblici.</li>
                     </ul>
                 </div>
             </div>

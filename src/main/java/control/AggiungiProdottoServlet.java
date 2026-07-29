@@ -22,14 +22,15 @@ import model.utente.UtenteBean;
 
 @WebServlet("/AggiungiProdottoServlet")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-    maxFileSize = 1024 * 1024 * 10,      // 10MB
-    maxRequestSize = 1024 * 1024 * 50    // 50MB
-)
+	    fileSizeThreshold = 1024 * 1024 * 5,  // 5MB di buffer in memoria
+	    maxFileSize = 1024 * 1024 * 50,       // 50MB massimo per singolo file (WAV)
+	    maxRequestSize = 1024 * 1024 * 120    // 120MB massimo per l'intera richiesta (Copertina + Dry + Wet)
+	)
 public class AggiungiProdottoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProdottoDAO prodottoDAO;
     private String workspacePath;
+    private String workspaceDemoPath; // Aggiunta variabile per i path audio
 
     public void init() throws ServletException {
         super.init();
@@ -49,6 +50,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
             } else {
                 prop.load(input);
                 workspacePath = prop.getProperty("upload.path.prodotti");
+                workspaceDemoPath = prop.getProperty("upload.path.demo.prodotti"); // Caricamento del nuovo path
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -108,7 +110,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
             try (InputStream input = filePart.getInputStream()) {
                 java.nio.file.Files.copy(input, serverFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 
-                // B. Nel Workspace (Se il path è stato caricato correttamente dal file properties)
+                // B. Nel Workspace
                 if (workspacePath != null && !workspacePath.trim().isEmpty()) {
                     File workspaceDir = new File(workspacePath);
                     if (!workspaceDir.exists()) workspaceDir.mkdirs();
@@ -135,14 +137,25 @@ public class AggiungiProdottoServlet extends HttpServlet {
             }
             String nomeDryUnivoco = "dry_" + System.currentTimeMillis() + "_" + nomeOriginaleDry + estensioneDry;
 
-            String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+            // Salvataggio Tomcat
+            String serverPathUploads = request.getServletContext().getRealPath("/uploads/demoProdotti");
             File uploadDir = new File(serverPathUploads);
             if (!uploadDir.exists()) uploadDir.mkdirs();
             File serverFileDry = new File(uploadDir, nomeDryUnivoco);
 
             try (InputStream input = filePartDry.getInputStream()) {
                 java.nio.file.Files.copy(input, serverFileDry.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                pathDemoDry = "uploads/" + nomeDryUnivoco;
+                
+                // Salvataggio Workspace (Persistenza)
+                if (workspaceDemoPath != null && !workspaceDemoPath.trim().isEmpty()) {
+                    File workspaceDir = new File(workspaceDemoPath);
+                    if (!workspaceDir.exists()) workspaceDir.mkdirs();
+                    File workspaceFile = new File(workspaceDir, nomeDryUnivoco);
+                    java.nio.file.Files.copy(serverFileDry.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+                
+                // Questo è il path che salviamo nel database
+                pathDemoDry = "uploads/demoProdotti/" + nomeDryUnivoco;
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
@@ -163,14 +176,25 @@ public class AggiungiProdottoServlet extends HttpServlet {
             }
             String nomeWetUnivoco = "wet_" + System.currentTimeMillis() + "_" + nomeOriginaleWet + estensioneWet;
 
-            String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+            // Salvataggio Tomcat
+            String serverPathUploads = request.getServletContext().getRealPath("/uploads/demoProdotti");
             File uploadDir = new File(serverPathUploads);
             if (!uploadDir.exists()) uploadDir.mkdirs();
             File serverFileWet = new File(uploadDir, nomeWetUnivoco);
 
             try (InputStream input = filePartWet.getInputStream()) {
                 java.nio.file.Files.copy(input, serverFileWet.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                pathDemoWet = "uploads/" + nomeWetUnivoco;
+                
+                // Salvataggio Workspace (Persistenza)
+                if (workspaceDemoPath != null && !workspaceDemoPath.trim().isEmpty()) {
+                    File workspaceDir = new File(workspaceDemoPath);
+                    if (!workspaceDir.exists()) workspaceDir.mkdirs();
+                    File workspaceFile = new File(workspaceDir, nomeWetUnivoco);
+                    java.nio.file.Files.copy(serverFileWet.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+                
+                // Questo è il path che salviamo nel database
+                pathDemoWet = "uploads/demoProdotti/" + nomeWetUnivoco;
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;

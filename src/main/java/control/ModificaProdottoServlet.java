@@ -22,14 +22,15 @@ import model.utente.UtenteBean;
 
 @WebServlet("/ModificaProdottoServlet")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,
-    maxFileSize = 1024 * 1024 * 10,
-    maxRequestSize = 1024 * 1024 * 50
-)
+	    fileSizeThreshold = 1024 * 1024 * 5,  // 5MB di buffer in memoria
+	    maxFileSize = 1024 * 1024 * 50,       // 50MB massimo per singolo file (WAV)
+	    maxRequestSize = 1024 * 1024 * 120    // 120MB massimo per l'intera richiesta (Copertina + Dry + Wet)
+	)
 public class ModificaProdottoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProdottoDAO prodottoDAO;
     private String workspacePath;
+    private String workspaceDemoPath; // Aggiunta variabile per i path audio
 
     public void init() throws ServletException {
         super.init();
@@ -47,6 +48,7 @@ public class ModificaProdottoServlet extends HttpServlet {
             if (input != null) {
                 prop.load(input);
                 workspacePath = prop.getProperty("upload.path.prodotti");
+                workspaceDemoPath = prop.getProperty("upload.path.demo.prodotti"); // Caricamento del nuovo path
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -186,30 +188,44 @@ public class ModificaProdottoServlet extends HttpServlet {
 
             // GESTIONE SALVATAGGIO AUDIO DRY
             if (nomeDryUnivoco != null) {
-                String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+                String serverPathUploads = request.getServletContext().getRealPath("/uploads/demoProdotti");
                 File uploadDir = new File(serverPathUploads);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
                 File serverFileDry = new File(uploadDir, nomeDryUnivoco);
 
                 try (InputStream input = filePartDry.getInputStream()) {
                     java.nio.file.Files.copy(input, serverFileDry.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    
+                    if (workspaceDemoPath != null && !workspaceDemoPath.trim().isEmpty()) {
+                        File workspaceDir = new File(workspaceDemoPath);
+                        if (!workspaceDir.exists()) workspaceDir.mkdirs();
+                        File workspaceFile = new File(workspaceDir, nomeDryUnivoco);
+                        java.nio.file.Files.copy(serverFileDry.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    }
                 }
-                prodottoAggiornato.setDemoDry("uploads/" + nomeDryUnivoco);
+                prodottoAggiornato.setDemoDry("uploads/demoProdotti/" + nomeDryUnivoco);
             } else {
                 prodottoAggiornato.setDemoDry(prodottoEsistente.getDemoDry());
             }
 
             // GESTIONE SALVATAGGIO AUDIO WET
             if (nomeWetUnivoco != null) {
-                String serverPathUploads = request.getServletContext().getRealPath("/uploads");
+                String serverPathUploads = request.getServletContext().getRealPath("/uploads/demoProdotti");
                 File uploadDir = new File(serverPathUploads);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
                 File serverFileWet = new File(uploadDir, nomeWetUnivoco);
 
                 try (InputStream input = filePartWet.getInputStream()) {
                     java.nio.file.Files.copy(input, serverFileWet.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    
+                    if (workspaceDemoPath != null && !workspaceDemoPath.trim().isEmpty()) {
+                        File workspaceDir = new File(workspaceDemoPath);
+                        if (!workspaceDir.exists()) workspaceDir.mkdirs();
+                        File workspaceFile = new File(workspaceDir, nomeWetUnivoco);
+                        java.nio.file.Files.copy(serverFileWet.toPath(), workspaceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    }
                 }
-                prodottoAggiornato.setDemoWet("uploads/" + nomeWetUnivoco);
+                prodottoAggiornato.setDemoWet("uploads/demoProdotti/" + nomeWetUnivoco);
             } else {
                 prodottoAggiornato.setDemoWet(prodottoEsistente.getDemoWet());
             }

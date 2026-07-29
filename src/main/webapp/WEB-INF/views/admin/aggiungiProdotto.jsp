@@ -69,6 +69,18 @@
                             <input type="file" id="foto" name="foto" class="form-input" accept="image/*" required style="padding: 7px;">
                         </div>
 
+                        <!-- AGGIUNTO: Traccia Audio Senza Effetto (Dry) -->
+                        <div class="form-group">
+                            <label for="demoDry">Traccia Audio Senza Effetto (Dry) - WAV</label>
+                            <input type="file" id="demoDry" name="demoDry" class="form-input" accept=".wav, audio/wav" style="padding: 7px;">
+                        </div>
+
+                        <!-- AGGIUNTO: Traccia Audio Con Effetto (Wet) -->
+                        <div class="form-group">
+                            <label for="demoWet">Traccia Audio Con Effetto (Wet) - WAV</label>
+                            <input type="file" id="demoWet" name="demoWet" class="form-input" accept=".wav, audio/wav" style="padding: 7px;">
+                        </div>
+
                         <div style="text-align: right; margin-top: 20px;">
                             <button type="submit" class="dash-btn-save" style="font-size: 1.1em; padding: 12px 30px; width: 100%;">Pubblica nel Catalogo</button>
                         </div>
@@ -78,12 +90,11 @@
             
             <div class="dash-col" style="flex: 1;">
                 <div class="dash-card card-admin" style="background: #f8f9fa;">
-                    <h3 style="color: #4134E7;">Linee Guida Copertina</h3>
+                    <h3 style="color: #4134E7;">Linee Guida Caricamento</h3>
                     <ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-top: 15px;">
-                        <li>Usa formati standard come <strong>PNG</strong> o <strong>JPG</strong>.</li>
-                        <li>Risoluzione quadrata raccomandata: <strong>800x800 pixel</strong>.</li>
-                        <li>Uno sfondo trasparente o bianco garantisce la resa ottimale all'interno del catalogo.</li>
-                        <li>Il file non deve superare i <strong>2 MB</strong> di peso per non rallentare l'e-commerce.</li>
+                        <li><strong>Copertina:</strong> PNG o JPG, risoluzione consigliata 800x800px (max 2 MB).</li>
+                        <li><strong>Demo Audio (Dry/Wet):</strong> Carica file in formato <strong>.wav</strong> per consentire l'ascolto delle anteprime direttamente nella pagina del prodotto.</li>
+                        <li>I campi delle demo audio possono essere lasciati vuoti se il plugin non prevede tracce dimostrative immediate.</li>
                     </ul>
                 </div>
             </div>
