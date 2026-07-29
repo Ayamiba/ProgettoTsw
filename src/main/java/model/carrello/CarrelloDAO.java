@@ -10,54 +10,57 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import model.prodotto.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo metodo
 	
 	public CarrelloDAO() { } 
 	
-	public List<ProdottoBean> doRetrieveByCarrello (String emailUtente) throws SQLException{
-		List<ProdottoBean> prodottiCarrello = new ArrayList<>();
-		
-		if (emailUtente == null || emailUtente.trim().isEmpty()) {
-	        return prodottiCarrello;
+	public Map<Integer, ProdottoBean> doRetrieveByCarrello(String emailUtente) throws SQLException {
+	    Map<Integer, ProdottoBean> carrelloMap = new LinkedHashMap<>();
+	    
+	    if (emailUtente == null || emailUtente.trim().isEmpty()) {
+	        return carrelloMap;
 	    }
-		
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+	    
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    ResultSet resultSet = null;
 
-        String query = "SELECT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
-                "FROM Prodotto p " +
-                "JOIN Carrello c ON p.ID_prodotto = c.FK_prodotto " +
-                "WHERE c.FK_utente = ?";
-        
-        try {
-            connection = ConnectionPool.getConnection();
-            statement = connection.prepareStatement(query);
-            statement.setString(1, emailUtente);
-            
-            resultSet = statement.executeQuery();
+	    String query = "SELECT c.ID_riga_carrello, p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine " +
+	            "FROM Prodotto p " +
+	            "JOIN Carrello c ON p.ID_prodotto = c.FK_prodotto " +
+	            "WHERE c.FK_utente = ?";
+	    
+	    try {
+	        connection = ConnectionPool.getConnection();
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, emailUtente);
+	        
+	        resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                ProdottoBean prodotto = new ProdottoBean();
-                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
-                prodotto.setNome(resultSet.getString("nome"));
-                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
-                prodotto.setDescrizione(resultSet.getString("descrizione"));
-                prodotto.setImmagine(resultSet.getString("immagine"));
-                
-                prodottiCarrello.add(prodotto);
-            }
-        } finally {
-            try { if (resultSet != null) resultSet.close(); } finally {
-                try { if (statement != null) statement.close(); } finally {
-                    ConnectionPool.releaseConnection(connection);
-                }
-            }
-        }
-        return prodottiCarrello;
-    }
-	
+	        while (resultSet.next()) {
+	            int idRiga = resultSet.getInt("ID_riga_carrello");
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+	            prodotto.setNome(resultSet.getString("nome"));
+	            prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+	            prodotto.setDescrizione(resultSet.getString("descrizione"));
+	            prodotto.setImmagine(resultSet.getString("immagine"));
+	            
+	            carrelloMap.put(idRiga, prodotto);
+	        }
+	    } finally {
+	        try { if (resultSet != null) resultSet.close(); } finally {
+	            try { if (statement != null) statement.close(); } finally {
+	                ConnectionPool.releaseConnection(connection);
+	            }
+	        }
+	    }
+	    return carrelloMap;
+	}
 	public void doSave(String emailUtente, int idProdotto) throws SQLException {
 	    if (emailUtente == null || emailUtente.trim().isEmpty() || idProdotto <= 0) {
 	        return; // Controllo di sicurezza preventivo
@@ -121,6 +124,29 @@ public class CarrelloDAO{ //non implemento DAOInterface perchè ci serve un solo
 	        preparedStatement = connection.prepareStatement(deleteSQL);
 	        preparedStatement.setString(1, emailUtente);
 	        preparedStatement.setInt(2, idProdotto);
+
+	        result = preparedStatement.executeUpdate();
+	    } finally {
+	        try {
+	            if (preparedStatement != null) preparedStatement.close();
+	        } finally {
+	            ConnectionPool.releaseConnection(connection);
+	        }
+	    }
+	    return (result != 0);
+	}
+	
+	public synchronized boolean doDeleteByRiga(int idRigaCarrello) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    int result = 0;
+
+	    String deleteSQL = "DELETE FROM carrello WHERE ID_riga_carrello = ?";
+
+	    try {
+	        connection = ConnectionPool.getConnection();
+	        preparedStatement = connection.prepareStatement(deleteSQL);
+	        preparedStatement.setInt(1, idRigaCarrello);
 
 	        result = preparedStatement.executeUpdate();
 	    } finally {

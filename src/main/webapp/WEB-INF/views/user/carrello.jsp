@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.prodotto.ProdottoBean" %>
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 
 <%
-    List<ProdottoBean> prodottiCarrello = (List<ProdottoBean>) request.getAttribute("prodottiCarrello");
+    Map<Integer, ProdottoBean> prodottiCarrello = (Map<Integer, ProdottoBean>) request.getAttribute("prodottiCarrello");
 
     double totaleLordo = 0.0;
     double totaleImponibile = 0.0;
@@ -41,7 +41,10 @@
                         </thead>
                         <tbody>
                             <% 
-                                for (ProdottoBean p : prodottiCarrello) { 
+                                for (Map.Entry<Integer, ProdottoBean> entry : prodottiCarrello.entrySet()) { 
+                                    int idRiga = entry.getKey();
+                                    ProdottoBean p = entry.getValue();
+
                                     double lordoRiga = p.getPrezzo();
                                     double nettoRiga = lordoRiga / 1.22; 
                                     double ivaRiga = lordoRiga - nettoRiga; 
@@ -61,7 +64,8 @@
                                         <td class="col-fiscal desktop-only-col">€ <%= String.format("%.2f", ivaRiga) %></td>
                                         <td class="cart-price-cell">€ <%= String.format("%.2f", lordoRiga) %></td>
                                         <td style="text-align: center;">
-                                            <a href="RimuoviDalCarrelloServlet?idProdotto=<%= p.getIdProdotto() %>" class="btn-remove" title="Rimuovi elemento">&times;</a>
+                                            <!-- Passa l'ID della riga specifica -->
+                                            <a href="RimuoviDalCarrelloServlet?idRiga=<%= idRiga %>" class="btn-remove" title="Rimuovi elemento">&times;</a>
                                         </td>
                                     </tr>
                             <% } %>
