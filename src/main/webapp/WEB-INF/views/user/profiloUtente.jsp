@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="<%= request.getContextPath() %>/js/AscoltaAudio.js" defer></script>
     <script src="${pageContext.request.contextPath}/js/Recensioni-In-Profilo.js"></script>
+    <script src="<%= request.getContextPath() %>/js/dashboard.js" defer></script>
 </head>
 <body>
 
