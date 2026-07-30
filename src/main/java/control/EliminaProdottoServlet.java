@@ -39,7 +39,7 @@ public class EliminaProdottoServlet extends HttpServlet {
                 prodottoDAO.doDelete(idProdotto);
                 
                 // Reindirizziamo l'admin se funziona con un messaggio di successo
-                response.sendRedirect("paginaAdmin.jsp?messaggio=Prodotto eliminato con successo!");
+                response.sendRedirect("GestioneCatalogoAdminServlet?messaggio=Prodotto eliminato con successo!");
                 return;
                 
             } catch (NumberFormatException e) {
