@@ -23,7 +23,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         ResultSet resultSet = null;
         ProdottoBean prodotto = null;
 
-        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet FROM Prodotto WHERE ID_prodotto = ?";
+        // Recuperiamo anche 'eliminato'
+        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet, eliminato FROM Prodotto WHERE ID_prodotto = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -41,6 +42,9 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
                 prodotto.setImmagine(resultSet.getString("immagine"));
                 prodotto.setDemoDry(resultSet.getString("demo_dry"));
                 prodotto.setDemoWet(resultSet.getString("demo_wet"));
+                
+                // Imposta lo stato di eliminazione
+                prodotto.setEliminato(resultSet.getBoolean("eliminato"));
             }
         } finally {
             try { if (resultSet != null) resultSet.close(); } finally {
@@ -51,7 +55,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         }
         return prodotto;
     }
-
+    
     @Override
     public List<ProdottoBean> doRetrieveAll() throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
@@ -59,7 +63,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet FROM Prodotto";
+        // Escludiamo gli eliminati
+        String query = "SELECT ID_prodotto, nome, prezzo, descrizione, immagine, demo_dry, demo_wet FROM Prodotto WHERE eliminato = false";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -95,22 +100,21 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         
         String query = "";
         
-        // Aggiunto DISTINCT per eliminare i duplicati e controlli per i valori minuscoli della JSP
+        // Aggiunto controllo Prodotto.eliminato = false
         if ("Effetto".equalsIgnoreCase(nomeCategoria) || "effetto".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
-                    "WHERE Categoria.effetto = 1";
+                    "WHERE Categoria.effetto = 1 AND Prodotto.eliminato = false";
                     
         } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria) || "studio_tool".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
-                    "WHERE Categoria.studio_tool = 1";
+                    "WHERE Categoria.studio_tool = 1 AND Prodotto.eliminato = false";
                     
         } else if ("bundle".equalsIgnoreCase(nomeCategoria)) {
-            // Se cerchi i bundle, cerca la parola "bundle" nel nome o nella descrizione
-            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE nome LIKE '%bundle%' OR descrizione LIKE '%bundle%'";
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE (nome LIKE '%bundle%' OR descrizione LIKE '%bundle%') AND eliminato = false";
         } else {
             return prodotti; 
         }
@@ -150,7 +154,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         
-        String query = "SELECT * FROM Prodotto WHERE prezzo <= ?";
+        // Aggiunto eliminato = false
+        String query = "SELECT * FROM Prodotto WHERE prezzo <= ? AND eliminato = false";
         
         try {
             connection = ConnectionPool.getConnection();
@@ -160,22 +165,22 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             resultSet = statement.executeQuery();
             
             while(resultSet.next()) {
-            	ProdottoBean prodotto = new ProdottoBean();
-    			prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
-    			prodotto.setNome(resultSet.getString("nome"));
-    			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
-    			prodotto.setDescrizione(resultSet.getString("descrizione"));
-    			prodotto.setImmagine(resultSet.getString("immagine"));
-    			prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                ProdottoBean prodotto = new ProdottoBean();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNome(resultSet.getString("nome"));
+                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
                 prodotto.setDemoWet(resultSet.getString("demo_wet"));
-    			prodotti.add(prodotto);
+                prodotti.add(prodotto);
             }
         } finally {
-        	try { if (resultSet != null) resultSet.close(); } finally {
-				try { if (statement != null) statement.close(); } finally {
-					ConnectionPool.releaseConnection(connection);
-				}
-			}
+            try { if (resultSet != null) resultSet.close(); } finally {
+                try { if (statement != null) statement.close(); } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
         }
         return prodotti;
     }
@@ -188,21 +193,21 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         
         String query = "";
         
-        // Aggiunto DISTINCT e controlli per la JSP
+        // Aggiunto Prodotto.eliminato = false
         if ("Effetto".equalsIgnoreCase(nomeCategoria) || "effetto".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
-                    "WHERE Categoria.effetto = 1 AND Prodotto.prezzo <= ?";
+                    "WHERE Categoria.effetto = 1 AND Prodotto.prezzo <= ? AND Prodotto.eliminato = false";
                     
         } else if ("Studio Tool".equalsIgnoreCase(nomeCategoria) || "studio_tool".equalsIgnoreCase(nomeCategoria)) {
             query = "SELECT DISTINCT Prodotto.* FROM Prodotto " +
                     "JOIN Tipologia ON Prodotto.ID_prodotto = Tipologia.FK_prodotto " +
                     "JOIN Categoria ON Tipologia.FK_categoria = Categoria.nome " +
-                    "WHERE Categoria.studio_tool = 1 AND Prodotto.prezzo <= ?";
+                    "WHERE Categoria.studio_tool = 1 AND Prodotto.prezzo <= ? AND Prodotto.eliminato = false";
                     
         } else if ("bundle".equalsIgnoreCase(nomeCategoria)) {
-            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE (nome LIKE '%bundle%' OR descrizione LIKE '%bundle%') AND prezzo <= ?";
+            query = "SELECT DISTINCT Prodotto.* FROM Prodotto WHERE (nome LIKE '%bundle%' OR descrizione LIKE '%bundle%') AND prezzo <= ? AND eliminato = false";
         } else {
             return prodotti;
         }
@@ -243,7 +248,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         ResultSet resultSet = null;
         ProdottoBean prodotto = null;
 
-        String query = "SELECT * FROM Prodotto WHERE nome = ?";
+        // Aggiunto eliminato = false
+        String query = "SELECT * FROM Prodotto WHERE nome = ? AND eliminato = false";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -254,11 +260,11 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             if (resultSet.next()) {
                 prodotto = new ProdottoBean();
                 prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
-    			prodotto.setNome(resultSet.getString("nome"));
-    			prodotto.setPrezzo(resultSet.getFloat("prezzo"));
-    			prodotto.setDescrizione(resultSet.getString("descrizione"));
-    			prodotto.setImmagine(resultSet.getString("immagine"));
-    			prodotto.setDemoDry(resultSet.getString("demo_dry"));
+                prodotto.setNome(resultSet.getString("nome"));
+                prodotto.setPrezzo(resultSet.getFloat("prezzo"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setImmagine(resultSet.getString("immagine"));
+                prodotto.setDemoDry(resultSet.getString("demo_dry"));
                 prodotto.setDemoWet(resultSet.getString("demo_wet"));
             }
         } finally {
@@ -279,7 +285,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String query = "SELECT * FROM Prodotto WHERE LOWER(nome) LIKE LOWER(?)";
+        // Aggiunto eliminato = false
+        String query = "SELECT * FROM Prodotto WHERE LOWER(nome) LIKE LOWER(?) AND eliminato = false";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -309,6 +316,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
     }
     
     // Metodo per estrarre tutti i prodotti acquistati all'interno di uno specifico ordine
+    // NON TOCCATO: Serve per lo storico
     public List<ProdottoBean> doRetrieveProdottiByOrdine(int idOrdine) throws java.sql.SQLException {
         java.sql.Connection connection = null;
         java.sql.PreparedStatement statement = null;
@@ -350,20 +358,20 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotti;
     }
     
- // Gestisce tutte le combinazioni di filtri (Categoria, SottoCategoria, Prezzo)
+    // Gestisce tutte le combinazioni di filtri (Categoria, SottoCategoria, Prezzo)
     public List<ProdottoBean> doRetrieveByAllFilters(String categoria, String sottoCategoria, float prezzoMax) throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        // Query base con DISTINCT e le tre JOIN per navigare il database
+        // MODIFICATO: Aggiunto p.eliminato = false alla base della query
         StringBuilder query = new StringBuilder(
             "SELECT DISTINCT p.ID_prodotto, p.nome, p.prezzo, p.descrizione, p.immagine, p.demo_dry, p.demo_wet " +
             "FROM Prodotto p " +
             "LEFT JOIN Tipologia t ON p.ID_prodotto = t.FK_prodotto " +
             "LEFT JOIN Categoria c ON t.FK_categoria = c.nome " +
-            "WHERE 1=1"
+            "WHERE p.eliminato = false"
         );
 
         // 1. Filtro Categoria Principale
@@ -425,7 +433,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         return prodotti;
     }
     
- // Metodo per ottenere tutti i prodotti acquistati in un determinato ordine
+    // Metodo per ottenere tutti i prodotti acquistati in un determinato ordine
+    // NON TOCCATO: Serve per lo storico
     public List<ProdottoBean> doRetrieveByOrdine(int idOrdine) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -515,7 +524,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
             }
         }
     }
-
+    
     @Override
     public void doDelete(Integer idProdotto) throws SQLException {
         if (idProdotto == null) return;
@@ -523,7 +532,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "DELETE FROM Prodotto WHERE ID_prodotto = ?";
+        // MODIFICATO: Sostituito DELETE con UPDATE
+        String query = "UPDATE Prodotto SET eliminato = true WHERE ID_prodotto = ?";
 
         try {
             connection = ConnectionPool.getConnection();

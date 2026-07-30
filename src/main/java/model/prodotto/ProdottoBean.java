@@ -12,10 +12,11 @@ public class ProdottoBean implements Serializable {
     private String immagine;
     private String demoDry;
     private String demoWet;
+    private boolean eliminato;
 
     public ProdottoBean() {}
 
-    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione, String immagine, String demoDry, String demoWet) {
+    public ProdottoBean(int idProdotto, String nome, float prezzo, String descrizione, String immagine, String demoDry, String demoWet, boolean eliminato) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.prezzo = prezzo;
@@ -23,6 +24,7 @@ public class ProdottoBean implements Serializable {
         this.immagine=immagine;
         this.demoDry=demoDry;
         this.demoWet=demoWet;
+        this.eliminato=eliminato;
     }
 
     public int getIdProdotto() { 
@@ -80,6 +82,9 @@ public class ProdottoBean implements Serializable {
     public void setDemoWet(String demoWet) {
         this.demoWet = demoWet;
     }
+    
+    public boolean isEliminato() { return eliminato; }
+    public void setEliminato(boolean eliminato) { this.eliminato = eliminato; }
 
     @Override
     public String toString() {
