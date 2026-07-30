@@ -191,6 +191,7 @@
                                 	<th>Data</th>
                                 	<th>Stato</th>
                                 	<th>Totale</th>
+                                	<th style="text-align: center;">Recensione</th>
                                 	<th style="text-align: center;">Download</th>
                                 	<th style="text-align: center;">PDF</th>
                             	</tr>
@@ -234,6 +235,17 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                         </a>
                                     </td>
+                                     <!-- COLONNA RECENSIONE -->
+                    <td style="text-align: center;">
+                        <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
+                            <a href="InviaRecensioneServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
+                               style="background-color: #6f42c1; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85em; font-weight: bold; white-space: nowrap;">
+                                Lascia Recensione
+                            </a>
+                        <% } else { %>
+                            <span style="color: #ccc;">–</span>
+                        <% } %>
+                    </td>
                                 </tr>
                             <%  } 
                                } %>

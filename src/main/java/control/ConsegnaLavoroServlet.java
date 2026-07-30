@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import model.ConnectionPool;
+import model.carrello.CarrelloDAO;
 import model.ordine.OrdineDAO;
 import model.utente.UtenteBean;
 
@@ -27,6 +29,16 @@ import model.utente.UtenteBean;
 public class ConsegnaLavoroServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    public void init() throws ServletException {
+        super.init();
+        try {
+            ConnectionPool.init(5);
+        } catch (SQLException e) {
+            System.out.println("Errore fatale: Impossibile avviare il Connection Pool!");
+            e.printStackTrace();
+        }
+    }
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         // 1. Controllo sicurezza sessione
