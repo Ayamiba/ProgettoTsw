@@ -157,7 +157,34 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         // Ritorna true se l'aggiornamento è andato a buon fine (almeno 1 riga modificata)
         return result > 0;
     }
-    
+ // Metodo per recuperare l'email del cliente a partire dall'ID dell'ordine
+    public String doRetrieveEmailClienteByOrdine(int idOrdine) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        String emailCliente = "Email Sconosciuta"; // Valore di fallback
+
+        // Join tra Ordine e la tabella ponte Utilizzo per trovare l'utente
+        String query = "SELECT u.FK_utente FROM Ordine o " +
+                       "JOIN utilizzo u ON o.FK_metodo_pagamento = u.FK_metodopagamento " +
+                       "WHERE o.ID_ordine = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idOrdine);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                emailCliente = resultSet.getString("FK_utente");
+            }
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            ConnectionPool.releaseConnection(connection);
+        }
+        return emailCliente;
+    }
  // 2. Estrae gli ordini di uno specifico professionista in base allo stato
     public List<OrdineBean> doRetrieveByProfessionistaAndStato(String emailProfessionista, String stato) throws java.sql.SQLException {
         java.sql.Connection connection = null;
@@ -338,7 +365,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ?, FK_metodo_pagamento = ?, file_consegnato=? WHERE ID_ordine = ?";
+        // Abbiamo aggiunto FK_email_professionista = ? prima del WHERE
+        String query = "UPDATE Ordine SET data_ordine = ?, totale = ?, stato = ?, descrizione = ?, FK_traccia = ?, FK_metodo_pagamento = ?, file_consegnato = ?, FK_email_professionista = ? WHERE ID_ordine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -349,9 +377,15 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             statement.setString(3, ordine.getStato());
             statement.setString(4, ordine.getDescrizione());
             statement.setInt(5, ordine.getfKTraccia());
-            statement.setInt(6, ordine.getIdOrdine());
-            statement.setLong(7, ordine.getfKMetodoPagamento());
-            statement.setString(8, ordine.getFileConsegnato());
+            statement.setLong(6, ordine.getfKMetodoPagamento());
+            statement.setString(7, ordine.getFileConsegnato());
+            
+            // Parametro 8: Passiamo l'email del professionista. 
+            // Se nel Bean è "null", Java inserirà automaticamente "NULL" nel database!
+            statement.setString(8, ordine.getfkEmailProfessionista());
+            
+            // Parametro 9: L'ID dell'ordine (WHERE)
+            statement.setInt(9, ordine.getIdOrdine());
 
             statement.executeUpdate();
         } finally {
@@ -360,7 +394,6 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Integer> {
             }
         }
     }
-
     @Override
     public void doDelete(Integer idOrdine) throws SQLException {
         if (idOrdine == null) return;

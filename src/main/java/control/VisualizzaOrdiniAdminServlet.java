@@ -74,7 +74,7 @@ public class VisualizzaOrdiniAdminServlet extends HttpServlet{
 	            }
 
 	            request.setAttribute("listaOrdini", listaOrdini);
-	            request.getRequestDispatcher("/VisualizzaOrdiniAdmin.jsp").forward(request, response);
+	            request.getRequestDispatcher("/gestioneOrdini.jsp").forward(request, response);
         } catch (SQLException e) {
         	e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il caricamento del catalogo.");
