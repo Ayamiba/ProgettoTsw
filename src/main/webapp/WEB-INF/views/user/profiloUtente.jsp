@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="<%= request.getContextPath() %>/js/AscoltaAudio.js" defer></script>
-    <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+    <script src="${pageContext.request.contextPath}/js/Recensioni-In-Profilo.js"></script>
 </head>
 <body>
 
