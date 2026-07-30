@@ -112,7 +112,11 @@
                                             <div class="payment-text-sub">Scadenza: <%= carta.getScadenza() %> • <%= carta.getNome() %> <%= carta.getCognome() %></div>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn-text-danger">Rimuovi</a>
+                                    <a href="RimuoviMetodoPagamentoServlet?numeroCarta=<%= carta.getNumeroCarta() %>" 
+   										class="btn-text-danger" 
+   									onclick="return confirm('Sei sicuro di voler rimuovere questa carta?');">
+   									Rimuovi
+									</a>
                                 </div>
                             <% } %>
                         </div>
