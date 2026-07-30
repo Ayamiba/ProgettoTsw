@@ -278,7 +278,7 @@
                                                 <% if (rec.getFkOrdine() != null && rec.getFkOrdine() > 0) { %>
                                                     Ordine #<%= rec.getFkOrdine() %>
                                                 <% } else { %>
-                                                    Recensione
+                                                    Recensione  
                                                 <% } %>
                                             </strong>
                                             <span class="review-stars">
