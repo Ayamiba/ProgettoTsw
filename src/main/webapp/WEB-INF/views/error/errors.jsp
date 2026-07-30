@@ -44,7 +44,7 @@
         </a>
        
         <!-- Seconda immagine in basso -->
-        <img src="<%= request.getContextPath() %>/img/SXSoloScritta.png" alt="Scritta Sændwave" class="error-img error-img-bottom" onerror="this.onerror=null; this.src='<%= request.getContextPath() %>/img/SWSoloScritta.png';">
+        <img src="<%= request.getContextPath() %>/img/SWSoloScritta.png" alt="Scritta Sændwave" class="error-img error-img-bottom" onerror="this.onerror=null; this.src='<%= request.getContextPath() %>/img/SWSoloScritta.png';">
     </main>
 
     <jsp:include page="/WEB-INF/views/components/footer.jsp" />
