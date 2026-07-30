@@ -148,22 +148,70 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 	}
 
 	@Override
-	public void doDelete(String email) throws SQLException { //cancella il record
+	public void doDelete(String email) throws SQLException { // cancella il record e le sue dipendenze
 		Connection connection = null;
-		PreparedStatement statement = null;
+		PreparedStatement stmtRecensioni = null;
+		PreparedStatement stmtOrdini = null;
+		PreparedStatement stmtTracce = null;
+		PreparedStatement stmtUtente = null;
 
-		String query = "DELETE FROM Utente WHERE email = ?";
+		// 1. Elimina le recensioni legate all'utente o agli ordini associati alle sue tracce
+		String deleteRecensioni = "DELETE FROM Recensione WHERE FK_utente = ? OR FK_ordine IN "
+				+ "(SELECT ID_ordine FROM Ordine WHERE FK_traccia IN "
+				+ "(SELECT ID_traccia FROM TracciaAudio WHERE FK_utente = ?))";
+
+		// 2. Elimina gli ordini che referenziano le tracce dell'utente
+		String deleteOrdini = "DELETE FROM Ordine WHERE FK_traccia IN "
+				+ "(SELECT ID_traccia FROM TracciaAudio WHERE FK_utente = ?)";
+
+		// 3. Elimina le tracce audio dell'utente
+		String deleteTracce = "DELETE FROM TracciaAudio WHERE FK_utente = ?";
+
+		// 4. Elimina l'utente
+		String deleteUtente = "DELETE FROM Utente WHERE email = ?";
 
 		try {
 			connection = ConnectionPool.getConnection();
-			statement = connection.prepareStatement(query);
+			connection.setAutoCommit(false); // Avvia la transazione
 
-			statement.setString(1, email);
-			statement.executeUpdate();
+			// 1. Cancella Recensioni
+			stmtRecensioni = connection.prepareStatement(deleteRecensioni);
+			stmtRecensioni.setString(1, email);
+			stmtRecensioni.setString(2, email);
+			stmtRecensioni.executeUpdate();
+
+			// 2. Cancella Ordini vincolati
+			stmtOrdini = connection.prepareStatement(deleteOrdini);
+			stmtOrdini.setString(1, email);
+			stmtOrdini.executeUpdate();
+
+			// 3. Cancella Tracce Audio
+			stmtTracce = connection.prepareStatement(deleteTracce);
+			stmtTracce.setString(1, email);
+			stmtTracce.executeUpdate();
+
+			// 4. Cancella Utente
+			stmtUtente = connection.prepareStatement(deleteUtente);
+			stmtUtente.setString(1, email);
+			stmtUtente.executeUpdate();
+
+			connection.commit(); // Conferma tutte le eliminazioni
+		} catch (SQLException e) {
+			if (connection != null) {
+				try {
+					connection.rollback(); // Annulla la transazione se qualcosa va in errore
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+			throw e;
 		} finally {
-			try {
-				if (statement != null) statement.close();
-			} finally {
+			try { if (stmtRecensioni != null) stmtRecensioni.close(); } catch (Exception e) {}
+			try { if (stmtOrdini != null) stmtOrdini.close(); } catch (Exception e) {}
+			try { if (stmtTracce != null) stmtTracce.close(); } catch (Exception e) {}
+			try { if (stmtUtente != null) stmtUtente.close(); } catch (Exception e) {}
+			if (connection != null) {
+				try { connection.setAutoCommit(true); } catch (Exception e) {}
 				ConnectionPool.releaseConnection(connection);
 			}
 		}
