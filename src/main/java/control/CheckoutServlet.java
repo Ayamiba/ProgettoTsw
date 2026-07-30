@@ -141,7 +141,7 @@ public class CheckoutServlet extends HttpServlet {
             OrdineBean nuovoOrdine = new OrdineBean();
             nuovoOrdine.setDataOrdine(new Date(System.currentTimeMillis()));
             nuovoOrdine.setTotale(totale);
-            nuovoOrdine.setStato("In Lavorazione");
+            nuovoOrdine.setStato("In attesa");
             nuovoOrdine.setDescrizione(descrizioneOrdine); // Salviamo le istruzioni utente!
             nuovoOrdine.setfKTraccia(idTracciaFinale);
             nuovoOrdine.setfKMetodoPagamento(numeroCarta);
