@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 //tutte le servlet e le JSP da proteggere
-@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/AggiungiProdotto.jsp", "/ModificaProdottoServlet", "/ModificaProdotto.jsp","/EliminaProdottoServlet","/EliminaProdotto.jsp","/VisualizzaOrdiniAdmin.jsp","/VisualizzaOrdiniAdminServlet", "/paginaAdmin.jsp", "/GestioneUtentiServlet"})
+@WebFilter(urlPatterns = {"/AggiungiProdottoServlet", "/aggiungiProdotto.jsp", "/ModificaProdottoServlet", "/modificaProdotto.jsp","/EliminaProdottoServlet","/gestioneOrdini.jsp","/VisualizzaOrdiniAdminServlet", "/parofiloAdmin.jsp", "/GestioneUtentiServlet","/GestioneOrdiniServlet", "/GestioneCatalogoAdminServlet", "/listaProdottiAdmin.jsp"})
 public class AdminFilter implements Filter{
 	//Filterchain serve per dare conferma che il controllo sia andato a buon fine
 	@Override
@@ -38,7 +38,8 @@ public class AdminFilter implements Filter{
         //Se l'utente non è admin non ha i permessi 
         if(isAdmin==false) {
         	System.out.println("L'utente non è autorizzato");
-        	httpResponse.sendRedirect(httpRequest.getContextPath() + "/errore404.jsp");
+        	httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Accesso negato.");
+        	return;
         }
         else {
         	//conferma che utente è admin

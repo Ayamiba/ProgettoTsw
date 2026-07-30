@@ -1,4 +1,4 @@
-/*package control;
+package control;
 
 import model.utente.UtenteBean;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 //tutte le servlet e le JSP da proteggere
-@WebFilter(urlPatterns = {"/CheckServlet", "/paginaProfessionista.jsp"})
+@WebFilter(urlPatterns = {"/CheckServlet", "/profiloProfessionista.jsp","/ConsegnaLavoroServlet"})
 public class ProfessionistaFilter implements Filter{
 	//Filterchain serve per dare conferma che il controllo sia andato a buon fine
 	@Override
@@ -38,12 +38,13 @@ public class ProfessionistaFilter implements Filter{
         //Se l'utente non è un professionista non ha i permessi 
         if(isProfessionista==false) {
         	System.out.println("L'utente non è autorizzato");
-        	httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
+        	httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Accesso negato.");
+        	return;
         }
         else {
         	//conferma che utente è un professionista
         	chain.doFilter(request, response);
         }
 	}
-}  */
+}  
 
