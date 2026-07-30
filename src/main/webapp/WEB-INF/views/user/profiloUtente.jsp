@@ -240,7 +240,7 @@
                         <% if ("Completato".equalsIgnoreCase(ordine.getStato())) { %>
                             <a href="InviaRecensioneServlet?idOrdine=<%= ordine.getIdOrdine() %>" 
                                style="background-color: #6f42c1; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85em; font-weight: bold; white-space: nowrap;">
-                                Lascia Recensione
+                                Lascia Recensione 
                             </a>
                         <% } else { %>
                             <span style="color: #ccc;">–</span>
