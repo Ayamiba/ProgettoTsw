@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.utente.UtenteBean" %>
 <%@ page import="model.ordine.OrdineBean" %>
+<%@ page import="model.prodotto.ProdottoBean" %>
+<%@ page import="model.prodotto.ProdottoDAO" %>
+<%@ page import="java.util.List" %>
 <% 
     UtenteBean utenteloggato = (UtenteBean) session.getAttribute("user"); 
     OrdineBean ordine = (OrdineBean) request.getAttribute("ordine");
@@ -9,6 +12,15 @@
     if(ordine == null) {
         response.sendRedirect(request.getContextPath() + "/GestioneOrdiniServlet");
         return;
+    }
+    
+    // Recupero i prodotti associati a questo ordine specifico usando il DAO
+    ProdottoDAO prodottoDAO = new ProdottoDAO();
+    List<ProdottoBean> prodottiAcquistati = null;
+    try {
+        prodottiAcquistati = prodottoDAO.doRetrieveByOrdine(ordine.getIdOrdine());
+    } catch (Exception e) {
+        // Gestione base errore DB
     }
 %>
 <!DOCTYPE html>
@@ -22,11 +34,6 @@
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/dashboard.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admin.css">
     
-    <style>
-        .form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
-        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
-        .status-badge-large { padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block; }
-    </style>
 </head>
 <body>
 
@@ -56,8 +63,10 @@
 
         <div class="dashboard-grid">
             
-            <!-- COLONNA SINISTRA: Riepilogo Dati -->
+            <!-- COLONNA SINISTRA: Riepilogo Dati e Prodotti -->
             <div class="dash-col" style="flex: 2;">
+                
+                <!-- Box Dettagli Cliente -->
                 <div class="dash-card card-admin">
                     <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px;">Dettagli Cliente e Transazione</h3>
                     
@@ -65,15 +74,38 @@
                         <span class="status-badge-large" style="background-color: #e2e3e5; color: #383d41;"><%= ordine.getStato() %></span>
                     </p>
                     <p><strong>Totale Pagato:</strong> € <%= String.format("%.2f", ordine.getTotale()) %></p>
-						<p><strong>Cliente:</strong> <%= emailCliente %></p>                    
-                    <!-- Eventuale file caricato dal cliente per il Mix/Master -->
-                    <%-- Sostituisci getFileCaricatoUtente() col metodo reale se gestito nell'ordine --%>
-                    <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #4134E7;">
-                        <h4>File sorgenti del cliente</h4>
-                        <p style="font-size: 0.9em; color: #666;">Se l'ordine include un servizio Mix/Master, scarica qui le tracce.</p>
-                        <a href="#" class="dash-btn" style="background: #6c757d;">⬇️ Scarica Zip Tracce (Demo)</a>
-                    </div>
+                    <p style="margin-bottom: 0;"><strong>Cliente:</strong> <%= emailCliente %></p>                    
                 </div>
+                
+                <!-- Box Prodotti Acquistati -->
+                <div class="dash-card card-admin" style="margin-top: 20px;">
+                    <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 5px;">Prodotti nell'Ordine</h3>
+                    
+                    <% if (prodottiAcquistati == null || prodottiAcquistati.isEmpty()) { %>
+                        <p style="color: #888; font-style: italic; margin-top: 15px;">Nessun prodotto trovato per questo ordine (o è stato acquistato un servizio senza prodotti).</p>
+                    <% } else { %>
+                        <ul class="order-product-list">
+                            <% for (ProdottoBean prod : prodottiAcquistati) { 
+                                String imgSrc = prod.getImmagine();
+                                if (imgSrc == null || imgSrc.isEmpty()) imgSrc = "img/placeholder.png";
+                            %>
+                                <li class="order-product-item">
+                                    <img src="<%= request.getContextPath() %>/<%= imgSrc %>" class="order-product-img" alt="Immagine Prodotto">
+                                    <div class="order-product-details">
+                                        <div class="order-product-title">
+                                            <%= prod.getNome() %> 
+                                            <% if (prod.isEliminato()) { %>
+                                                <span style="color: #dc3545; font-size: 0.8em; font-weight: normal; margin-left: 5px;">(Ritirato dal mercato)</span>
+                                            <% } %>
+                                        </div>
+                                        <div class="order-product-price">ID Prodotto: #<%= prod.getIdProdotto() %> | Prezzo: € <%= String.format("%.2f", prod.getPrezzo()) %></div>
+                                    </div>
+                                </li>
+                            <% } %>
+                        </ul>
+                    <% } %>
+                </div>
+                
             </div>
             
             <!-- COLONNA DESTRA: Azioni di Lavorazione -->
@@ -91,7 +123,6 @@
                                 <option value="In attesa" <%= "In attesa".equals(ordine.getStato()) ? "selected" : "" %>>⏳ In Attesa</option>
                                 <option value="In lavorazione" <%= "In lavorazione".equals(ordine.getStato()) ? "selected" : "" %>>🛠️ In Lavorazione</option>
                                 <option value="Completato" <%= "Completato".equals(ordine.getStato()) ? "selected" : "" %>>✅ Completato</option>
-                                
                             </select>
                         </div>
                         <button type="submit" class="dash-btn" style="width: 100%;">Salva Stato</button>

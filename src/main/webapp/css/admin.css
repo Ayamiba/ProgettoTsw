@@ -441,3 +441,45 @@ input[type="file"].form-input {
     font-weight: bold;
 }
 .btn-text-delete:hover { text-decoration: underline; }
+
+.form-group label { font-weight: bold; margin-bottom: 5px; display: block; color: #333; }
+        .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
+        .status-badge-large { padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block; }
+        
+        /* Stili aggiuntivi per la lista prodotti nell'ordine */
+        .order-product-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+            border-top: 1px solid #eee;
+        }
+        .order-product-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-product-item:last-child {
+            border-bottom: none;
+        }
+        .order-product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-right: 15px;
+        }
+        .order-product-details {
+            flex: 1;
+        }
+        .order-product-title {
+            font-weight: bold;
+            color: #1a1a2e;
+            margin-bottom: 3px;
+            font-size: 0.95em;
+        }
+        .order-product-price {
+            color: #666;
+            font-size: 0.9em;
+        }
